@@ -15,8 +15,6 @@
 ** limitations under the License.
 */
 
-#define _GNU_SOURCE /* for asprintf */
-
 #include <arpa/inet.h>
 #include <assert.h>
 #include <ctype.h>
