@@ -17,6 +17,8 @@
 #include <fcntl.h>
 #include <stdarg.h>
 #include <time.h>
+#include <stdlib.h>
+#include <signal.h>
 
 #include <log/logger.h>
 #include <private/android_filesystem_config.h>

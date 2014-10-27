@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
+#include <errno.h>
 #include <stdbool.h>
 #include <fcntl.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/socket.h>
 #include <unistd.h>
 
 #include <cutils/debugger.h>

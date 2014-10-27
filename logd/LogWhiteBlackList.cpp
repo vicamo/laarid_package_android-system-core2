@@ -15,6 +15,7 @@
  */
 
 #include <ctype.h>
+#include <stdlib.h>
 
 #include <utils/String8.h>
 

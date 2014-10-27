@@ -20,6 +20,7 @@
 #include <string.h>
 #include <sys/user.h>
 #include <time.h>
+#include <limits.h>
 #include <unistd.h>
 
 #include <cutils/properties.h>
