@@ -19,7 +19,6 @@
 
 #include <sys/cdefs.h>
 #include <stddef.h>
-#include <sys/system_properties.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -125,21 +124,6 @@ int property_get(const char *key, char *value, const char *default_value) {
 }
 
 #endif
-
-#ifdef HAVE_SYSTEM_PROPERTY_SERVER
-/*
- * We have an external property server instead of built-in libc support.
- * Used by the simulator.
- */
-#define SYSTEM_PROPERTY_PIPE_NAME       "/tmp/android-sysprop"
-
-enum {
-    kSystemPropertyUnknown = 0,
-    kSystemPropertyGet,
-    kSystemPropertySet,
-    kSystemPropertyList
-};
-#endif /*HAVE_SYSTEM_PROPERTY_SERVER*/
 
 
 #ifdef __cplusplus

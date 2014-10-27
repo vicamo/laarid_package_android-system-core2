@@ -171,6 +171,19 @@ int property_list(
 #include <sys/un.h>
 #include <pthread.h>
 
+/*
+ * We have an external property server instead of built-in libc support.
+ * Used by the simulator.
+ */
+#define SYSTEM_PROPERTY_PIPE_NAME       "/tmp/android-sysprop"
+
+enum {
+    kSystemPropertyUnknown = 0,
+    kSystemPropertyGet,
+    kSystemPropertySet,
+    kSystemPropertyList
+};
+
 static pthread_once_t gInitOnce = PTHREAD_ONCE_INIT;
 static pthread_mutex_t gPropertyFdLock = PTHREAD_MUTEX_INITIALIZER;
 static int gPropFd = -1;
