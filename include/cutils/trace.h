@@ -80,7 +80,7 @@ __BEGIN_DECLS
 #error ATRACE_TAG must be defined to be one of the tags defined in cutils/trace.h
 #endif
 
-#ifdef HAVE_ANDROID_OS
+#if defined(__linux__)
 /**
  * Maximum size of a message that can be logged to the trace buffer.
  * Note this message includes a tag, the pid, and the string given as the name.
@@ -276,7 +276,7 @@ static inline void atrace_int64(uint64_t tag, const char* name, int64_t value)
     }
 }
 
-#else // not HAVE_ANDROID_OS
+#else // !__linux__
 
 #define ATRACE_INIT()
 #define ATRACE_GET_ENABLED_TAGS()
@@ -287,7 +287,7 @@ static inline void atrace_int64(uint64_t tag, const char* name, int64_t value)
 #define ATRACE_ASYNC_END(name, cookie)
 #define ATRACE_INT(name, value)
 
-#endif // not HAVE_ANDROID_OS
+#endif // !__linux__
 
 __END_DECLS
 
