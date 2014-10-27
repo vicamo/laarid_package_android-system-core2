@@ -107,7 +107,7 @@ LogBuffer::LogBuffer(LastLogTimes *times)
     }
 
     log_id_for_each(i) {
-        char key[PROP_NAME_MAX];
+        char key[PROPERTY_KEY_MAX];
 
         snprintf(key, sizeof(key), "%s.%s",
                  global_tuneable, android_log_id_to_name(i));

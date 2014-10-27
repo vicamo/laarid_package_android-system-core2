@@ -141,8 +141,8 @@ struct property_list_callback_data
 
 static void property_list_callback(const prop_info *pi, void *cookie)
 {
-    char name[PROP_NAME_MAX];
-    char value[PROP_VALUE_MAX];
+    char name[PROPERTY_KEY_MAX];
+    char value[PROPERTY_VALUE_MAX];
     struct property_list_callback_data *data = cookie;
 
     __system_property_read(pi, name, value);

@@ -95,7 +95,7 @@ void keychord_init()
 void handle_keychord()
 {
     struct service *svc;
-    char adb_enabled[PROP_VALUE_MAX];
+    char adb_enabled[PROPERTY_VALUE_MAX];
     int ret;
     __u16 id;
 

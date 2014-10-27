@@ -208,8 +208,8 @@ int expand_props(char *dst, const char *src, int dst_size)
      */
     while (*src_ptr && left > 0) {
         char *c;
-        char prop[PROP_NAME_MAX + 1];
-        char prop_val[PROP_VALUE_MAX];
+        char prop[PROPERTY_KEY_MAX + 1];
+        char prop_val[PROPERTY_VALUE_MAX];
         int prop_len = 0;
         int prop_val_len;
 
@@ -238,11 +238,11 @@ int expand_props(char *dst, const char *src, int dst_size)
 
         if (*c == '{') {
             c++;
-            while (*c && *c != '}' && prop_len < PROP_NAME_MAX)
+            while (*c && *c != '}' && prop_len < PROPERTY_KEY_MAX)
                 prop[prop_len++] = *(c++);
             if (*c != '}') {
                 /* failed to find closing brace, abort. */
-                if (prop_len == PROP_NAME_MAX)
+                if (prop_len == PROPERTY_KEY_MAX)
                     ERROR("prop name too long during expansion of '%s'\n",
                           src);
                 else if (*c == '\0')
@@ -253,9 +253,9 @@ int expand_props(char *dst, const char *src, int dst_size)
             prop[prop_len] = '\0';
             c++;
         } else if (*c) {
-            while (*c && prop_len < PROP_NAME_MAX)
+            while (*c && prop_len < PROPERTY_KEY_MAX)
                 prop[prop_len++] = *(c++);
-            if (prop_len == PROP_NAME_MAX && *c != '\0') {
+            if (prop_len == PROPERTY_KEY_MAX && *c != '\0') {
                 ERROR("prop name too long in '%s'\n", src);
                 goto err;
             }
@@ -546,10 +546,10 @@ void queue_all_property_triggers()
             const char* name = act->name + strlen("property:");
             const char* equals = strchr(name, '=');
             if (equals) {
-                char prop_name[PROP_NAME_MAX + 1];
-                char value[PROP_VALUE_MAX];
+                char prop_name[PROPERTY_KEY_MAX + 1];
+                char value[PROPERTY_VALUE_MAX];
                 int length = equals - name;
-                if (length > PROP_NAME_MAX) {
+                if (length > PROPERTY_KEY_MAX) {
                     ERROR("property name too long in trigger %s", act->name);
                 } else {
                     int ret;

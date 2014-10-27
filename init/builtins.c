@@ -609,7 +609,7 @@ int do_setprop(int nargs, char **args)
 {
     const char *name = args[1];
     const char *value = args[2];
-    char prop_val[PROP_VALUE_MAX];
+    char prop_val[PROPERTY_VALUE_MAX];
     int ret;
 
     ret = expand_props(prop_val, value, sizeof(prop_val));
@@ -663,7 +663,7 @@ int do_restart(int nargs, char **args)
 
 int do_powerctl(int nargs, char **args)
 {
-    char command[PROP_VALUE_MAX];
+    char command[PROPERTY_VALUE_MAX];
     int res;
     int len = 0;
     int cmd = 0;
@@ -737,7 +737,7 @@ int do_write(int nargs, char **args)
 {
     const char *path = args[1];
     const char *value = args[2];
-    char prop_val[PROP_VALUE_MAX];
+    char prop_val[PROPERTY_VALUE_MAX];
     int ret;
 
     ret = expand_props(prop_val, value, sizeof(prop_val));
@@ -897,7 +897,7 @@ int do_setsebool(int nargs, char **args) {
 
 int do_loglevel(int nargs, char **args) {
     int log_level;
-    char log_level_str[PROP_VALUE_MAX] = "";
+    char log_level_str[PROPERTY_VALUE_MAX] = "";
     if (nargs != 2) {
         ERROR("loglevel: missing argument\n");
         return -EINVAL;

@@ -343,7 +343,7 @@ static int set_verified_property(char *name) {
         ERROR("Error formatting verified property");
         return ret;
     }
-    ret = PROP_NAME_MAX - strlen(key);
+    ret = PROPERTY_KEY_MAX - strlen(key);
     if (ret < 0) {
         ERROR("Verified property name is too long");
         return -1;

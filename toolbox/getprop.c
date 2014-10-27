@@ -8,7 +8,7 @@
 static void record_prop(const char* key, const char* name, void* opaque)
 {
     strlist_t* list = opaque;
-    char temp[PROP_VALUE_MAX + PROP_NAME_MAX + 16];
+    char temp[PROPERTY_VALUE_MAX + PROPERTY_KEY_MAX + 16];
     snprintf(temp, sizeof temp, "[%s]: [%s]", key, name);
     strlist_append_dup(list, temp);
 }

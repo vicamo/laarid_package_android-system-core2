@@ -45,8 +45,8 @@ static void add_to_watchlist(Hashmap *watchlist, const char *name,
 static void populate_watchlist(const prop_info *pi, void *cookie)
 {
     Hashmap *watchlist = cookie;
-    char name[PROP_NAME_MAX];
-    char value_unused[PROP_VALUE_MAX];
+    char name[PROPERTY_KEY_MAX];
+    char value_unused[PROPERTY_VALUE_MAX];
 
     __system_property_read(pi, name, value_unused);
     add_to_watchlist(watchlist, name, pi);
@@ -55,8 +55,8 @@ static void populate_watchlist(const prop_info *pi, void *cookie)
 static void update_watchlist(const prop_info *pi, void *cookie)
 {
     Hashmap *watchlist = cookie;
-    char name[PROP_NAME_MAX];
-    char value[PROP_VALUE_MAX];
+    char name[PROPERTY_KEY_MAX];
+    char value[PROPERTY_VALUE_MAX];
     unsigned *serial;
 
     __system_property_read(pi, name, value);

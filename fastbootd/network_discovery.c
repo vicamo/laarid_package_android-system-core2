@@ -79,7 +79,7 @@ static int register_service() {
     const char *domain = FASTBOOTD_DOMAIN;
     const char *type = FASTBOOTD_TYPE;
     const char *host = NULL;
-    char name[PROP_VALUE_MAX];
+    char name[PROPERTY_VALUE_MAX];
     uint16_t port = 22;
     int flags = 0;
     DNSServiceErrorType result;

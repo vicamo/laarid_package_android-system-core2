@@ -127,7 +127,7 @@ static int check_control_mac_perms(const char *name, char *sctx)
      *  property service backend labeling while avoiding
      *  mislabels based on true property prefixes.
      */
-    char ctl_name[PROP_VALUE_MAX+4];
+    char ctl_name[PROPERTY_VALUE_MAX+4];
     int ret = snprintf(ctl_name, sizeof(ctl_name), "ctl.%s", name);
 
     if (ret < 0 || (size_t) ret >= sizeof(ctl_name))
@@ -182,7 +182,7 @@ static void write_persistent_property(const char *name, const char *value)
 static bool is_legal_property_name(const char* name, size_t namelen)
 {
     size_t i;
-    if (namelen >= PROP_NAME_MAX) return false;
+    if (namelen >= PROPERTY_KEY_MAX) return false;
     if (namelen < 1) return false;
     if (name[0] == '.') return false;
     if (name[namelen - 1] == '.') return false;
@@ -214,7 +214,7 @@ int property_set(const char *name, const char *value)
     size_t valuelen = strlen(value);
 
     if (!is_legal_property_name(name, namelen)) return -1;
-    if (valuelen >= PROP_VALUE_MAX) return -1;
+    if (valuelen >= PROPERTY_VALUE_MAX) return -1;
 
     pi = (prop_info*) __system_property_find(name);
 
@@ -306,8 +306,8 @@ void handle_property_set_fd()
 
     switch(msg.cmd) {
     case PROP_MSG_SETPROP:
-        msg.name[PROP_NAME_MAX-1] = 0;
-        msg.value[PROP_VALUE_MAX-1] = 0;
+        msg.name[PROPERTY_KEY_MAX-1] = 0;
+        msg.value[PROPERTY_VALUE_MAX-1] = 0;
 
         if (!is_legal_property_name(msg.name, strlen(msg.name))) {
             ERROR("sys_prop: illegal property name. Got: \"%s\"\n", msg.name);
@@ -439,7 +439,7 @@ static void load_persistent_properties()
     DIR* dir = opendir(PERSISTENT_PROPERTY_DIR);
     int dir_fd;
     struct dirent*  entry;
-    char value[PROP_VALUE_MAX];
+    char value[PROPERTY_VALUE_MAX];
     int fd, length;
     struct stat sb;
 
@@ -513,7 +513,7 @@ int properties_inited(void)
 
 static void load_override_properties() {
 #ifdef ALLOW_LOCAL_PROP_OVERRIDE
-    char debuggable[PROP_VALUE_MAX];
+    char debuggable[PROPERTY_VALUE_MAX];
     int ret;
 
     ret = property_get("ro.debuggable", debuggable);

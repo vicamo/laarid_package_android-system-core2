@@ -238,7 +238,7 @@ static int fs_match(char *in1, char *in2)
 
 static int device_is_debuggable() {
     int ret = -1;
-    char value[PROP_VALUE_MAX];
+    char value[PROPERTY_VALUE_MAX];
     ret = __system_property_get("ro.debuggable", value);
     if (ret < 0)
         return ret;

@@ -28,12 +28,9 @@ extern "C" {
 /* System properties are *small* name value pairs managed by the
 ** property service.  If your data doesn't fit in the provided
 ** space it is not appropriate for a system property.
-**
-** WARNING: system/bionic/include/sys/system_properties.h also defines
-**          these, but with different names.  (TODO: fix that)
 */
-#define PROPERTY_KEY_MAX   PROP_NAME_MAX
-#define PROPERTY_VALUE_MAX  PROP_VALUE_MAX
+#define PROPERTY_KEY_MAX    32
+#define PROPERTY_VALUE_MAX  92
 
 /* property_get: returns the length of the value which will never be
 ** greater than PROPERTY_VALUE_MAX - 1 and will always be zero terminated.

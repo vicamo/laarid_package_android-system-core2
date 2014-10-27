@@ -79,16 +79,16 @@ static struct listnode *command_queue = NULL;
 
 void notify_service_state(const char *name, const char *state)
 {
-    char pname[PROP_NAME_MAX];
+    char pname[PROPERTY_KEY_MAX];
     int len = strlen(name);
-    if ((len + 10) > PROP_NAME_MAX)
+    if ((len + 10) > PROPERTY_KEY_MAX)
         return;
     snprintf(pname, sizeof(pname), "init.svc.%s", name);
     property_set(pname, state);
 }
 
 static int have_console;
-static char console_name[PROP_VALUE_MAX] = "/dev/console";
+static char console_name[PROPERTY_VALUE_MAX] = "/dev/console";
 static time_t process_needs_restart;
 
 static const char *ENV[32];
@@ -718,7 +718,7 @@ static void import_kernel_nv(char *name, int for_emulator)
     if (for_emulator) {
         /* in the emulator, export any kernel option with the
          * ro.kernel. prefix */
-        char buff[PROP_NAME_MAX];
+        char buff[PROPERTY_KEY_MAX];
         int len = snprintf( buff, sizeof(buff), "ro.kernel.%s", name );
 
         if (len < (int)sizeof(buff))
@@ -730,18 +730,18 @@ static void import_kernel_nv(char *name, int for_emulator)
         strlcpy(qemu, value, sizeof(qemu));
     } else if (!strncmp(name, "androidboot.", 12) && name_len > 12) {
         const char *boot_prop_name = name + 12;
-        char prop[PROP_NAME_MAX];
+        char prop[PROPERTY_KEY_MAX];
         int cnt;
 
         cnt = snprintf(prop, sizeof(prop), "ro.boot.%s", boot_prop_name);
-        if (cnt < PROP_NAME_MAX)
+        if (cnt < PROPERTY_KEY_MAX)
             property_set(prop, value);
     }
 }
 
 static void export_kernel_boot_props(void)
 {
-    char tmp[PROP_VALUE_MAX];
+    char tmp[PROPERTY_VALUE_MAX];
     int ret;
     unsigned i;
     struct {
@@ -778,7 +778,7 @@ static void export_kernel_boot_props(void)
         strlcpy(hardware, tmp, sizeof(hardware));
     property_set("ro.hardware", hardware);
 
-    snprintf(tmp, PROP_VALUE_MAX, "%d", revision);
+    snprintf(tmp, PROPERTY_VALUE_MAX, "%d", revision);
     property_set("ro.revision", tmp);
 
     /* TODO: these are obsolete. We should delete them */
@@ -889,7 +889,7 @@ void selinux_init_all_handles(void)
 static bool selinux_is_disabled(void)
 {
 #ifdef ALLOW_DISABLE_SELINUX
-    char tmp[PROP_VALUE_MAX];
+    char tmp[PROPERTY_VALUE_MAX];
 
     if (access("/sys/fs/selinux", F_OK) != 0) {
         /* SELinux is not compiled into the kernel, or has been disabled
@@ -910,7 +910,7 @@ static bool selinux_is_disabled(void)
 static bool selinux_is_enforcing(void)
 {
 #ifdef ALLOW_DISABLE_SELINUX
-    char tmp[PROP_VALUE_MAX];
+    char tmp[PROPERTY_VALUE_MAX];
 
     if (property_get("ro.boot.selinux", tmp) == 0) {
         /* Property is not set.  Assume enforcing */
