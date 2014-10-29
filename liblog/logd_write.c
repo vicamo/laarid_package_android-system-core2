@@ -35,6 +35,8 @@
 #include <android/set_abort_message.h>
 #endif
 
+#include <bionic/bionic.h>
+
 #include <log/logd.h>
 #include <log/logger.h>
 #include <log/log_read.h>
