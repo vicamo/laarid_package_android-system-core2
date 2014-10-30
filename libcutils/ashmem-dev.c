@@ -28,6 +28,7 @@
 #include <fcntl.h>
 
 #include <linux/ashmem.h>
+#include <bionic/bionic.h>
 #include <cutils/ashmem.h>
 
 #define ASHMEM_DEVICE	"/dev/ashmem"

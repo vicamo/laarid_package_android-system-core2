@@ -29,6 +29,8 @@ typedef int  socklen_t;
 #include <sys/socket.h>
 #endif
 
+#include <bionic/bionic.h> /* for strlcpy */
+
 #define ANDROID_SOCKET_ENV_PREFIX	"ANDROID_SOCKET_"
 #define ANDROID_SOCKET_DIR		"/dev/socket"
 
@@ -51,16 +53,9 @@ static inline int android_get_control_socket(const char *name)
 	int fd;
 
 	/* build our environment variable, counting cycles like a wolf ... */
-#if HAVE_STRLCPY
 	strlcpy(key + sizeof(ANDROID_SOCKET_ENV_PREFIX) - 1,
 		name,
 		sizeof(key) - sizeof(ANDROID_SOCKET_ENV_PREFIX));
-#else	/* for the host, which may lack the almightly strncpy ... */
-	strncpy(key + sizeof(ANDROID_SOCKET_ENV_PREFIX) - 1,
-		name,
-		sizeof(key) - sizeof(ANDROID_SOCKET_ENV_PREFIX));
-	key[sizeof(key)-1] = '\0';
-#endif
 
 	val = getenv(key);
 	if (!val)
