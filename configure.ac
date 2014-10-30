@@ -31,6 +31,9 @@ m4_define([systemcore_release_number], [systemcore_major_version])
 m4_define([systemcore_version],
   [systemcore_major_version.systemcore_minor_version.systemcore_micro_version])
 
+# Require autoconf 2.69 for aarch64
+AC_PREREQ(2.69)
+
 AC_INIT([android-system-core], [systemcore_version],
   [https://github.com/laarid/platform_system_core/issues], [],
   [https://github.com/laarid/platform_system_core])
@@ -58,7 +61,45 @@ AC_SUBST([SYSTEMCORE_RELEASE_NUMBER])
 # Define _GNU_SOURCE etc. where appropriate, e.g. for strptime() on glibc
 AC_USE_SYSTEM_EXTENSIONS
 
+# Host environment
+# ----------------
+AC_CANONICAL_HOST
+
+os_linux=no
+case "$host" in
+  *-*-linux*)
+    os_linux=yes
+    ;;
+esac
+
+AM_CONDITIONAL(OS_LINUX, test "$os_linux" = "yes")
+
+cpu_arm=no
+cpu_aarch64=no
+cpu_x86=no
+cpu_x86_64=no
+case "$host_cpu" in
+  arm*)
+    cpu_arm=yes
+    ;;
+  aarch64*)
+    cpu_aarch64=yes
+    ;;
+  i?86 | x86)
+    cpu_x86=yes
+    ;;
+  x86_64 | amd64)
+    cpu_x86_64=yes
+    ;;
+esac
+
+AM_CONDITIONAL(CPU_ARM, test "$cpu_arm" = "yes")
+AM_CONDITIONAL(CPU_AARCH64, test "$cpu_aarch64" = "yes")
+AM_CONDITIONAL(CPU_X86, test "$cpu_x86" = "yes")
+AM_CONDITIONAL(CPU_X86_64, test "$cpu_x86_64" = "yes")
+
 AM_PROG_AR
+AM_PROG_AS
 AC_PROG_CC
 AC_PROG_CXX
 
@@ -83,11 +124,22 @@ LT_OUTPUT
 
 # Required libraries
 # ------------------
-PKG_CHECK_MODULES([BIONIC], [android-bionic-0.0])
+BIONIC_REQUIRED_VERSION=0.0.2
+AC_SUBST([BIONIC_REQUIRED_VERSION])
+
+PKG_CHECK_MODULES([BIONIC], [android-bionic-0.0 >= $BIONIC_REQUIRED_VERSION])
+CFLAGS="$CFLAGS $BIONIC_CFLAGS"
+LIBS="$LIBS $BIONIC_LIBS"
+AC_SUBST([BIONIC_CFLAGS])
+AC_SUBST([BIONIC_LIBS])
+
+# Required headers
+# ----------------
+AC_CHECK_HEADERS([linux/ioprio.h sched.h sys/socket.h])
 
 # Required functions
 # ------------------
-AC_CHECK_FUNCS([localtime_r strndup])
+AC_CHECK_FUNCS([localtime_r prctl strndup])
 
 # Thread implementation
 # ---------------------
@@ -113,8 +165,45 @@ if test x$my_cv_pf_local = xyes; then
     [Define to 1 if we have Linux-style non-filesystem Unix domain sockets.])
 fi
 
+# Android Anonymous Shared Memory(ashmem) support
+# -----------------------------------------------
+AC_ARG_ENABLE([ashmem],
+  [AS_HELP_STRING([--enable-ashmem],
+    [Enable Android Anonymous Shared Memory(ashmem) support])],
+  [],
+  [enable_ashmem=check])
+if test x$enable_ashmem = xcheck; then
+  AC_CHECK_HEADER([linux/ashmem.h], [enable_ashmem=yes], [enable_ashmem=no])
+fi
+AM_CONDITIONAL([HAVE_ASHMEM], [test x$enable_ashmem = xyes])
+
+# Android system properties
+# -------------------------
+AC_CHECK_FUNCS([__system_property_get __system_property_set __system_property_read __system_property_foreach], [], [break])
+if test x$ac_cv_func___system_property_foreach = xyes; then
+  AC_DEFINE([HAVE_LIBC_SYSTEM_PROPERTIES], [1],
+    [Define to 1 if bionic includes Android system properties implementation.])
+else
+  if test x$ax_pthread_ok = xyes; then
+    AC_CACHE_CHECK([for PF_LOCAL],
+      [my_cv_pf_unix],
+      [AC_COMPILE_IFELSE(
+        [AC_LANG_PROGRAM([#include <sys/socket.h>],
+          [int sock = socket (PF_LOCAL, SOCK_DGRAM, 0);]
+        )],
+        [my_cv_pf_unix=yes]
+      )]
+    )
+  fi
+  if test x$my_cv_pf_unix = xyes; then
+    AC_DEFINE([HAVE_SYSTEM_PROPERTY_SERVER], [1],
+      [Define to 1 if system provides a system property server.])
+  fi
+fi
+
 AC_CONFIG_FILES([
   Makefile
   android-log-$SYSTEMCORE_API_VERSION.pc
+  android-cutils-$SYSTEMCORE_API_VERSION.pc
 ])
 AC_OUTPUT
