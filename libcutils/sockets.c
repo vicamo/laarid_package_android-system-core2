@@ -14,6 +14,18 @@
  * limitations under the License.
  */
 
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+
+#ifdef HAVE_WINSOCK
+#include <winsock2.h>
+typedef int  socklen_t;
+#elif HAVE_SYS_SOCKET_H
+#include <sys/socket.h>
+#endif
+
+#include <bionic/bionic.h> /* for strlcpy */
 #include <cutils/sockets.h>
 #include <log/log.h>
 
@@ -44,4 +56,27 @@ bool socket_peer_is_trusted(int fd __android_unused)
 #endif
 
     return true;
+}
+
+int android_get_control_socket(const char *name)
+{
+	char key[64] = ANDROID_SOCKET_ENV_PREFIX;
+	const char *val;
+	int fd;
+
+	/* build our environment variable, counting cycles like a wolf ... */
+	strlcpy(key + sizeof(ANDROID_SOCKET_ENV_PREFIX) - 1,
+		name,
+		sizeof(key) - sizeof(ANDROID_SOCKET_ENV_PREFIX));
+
+	val = getenv(key);
+	if (!val)
+		return -1;
+
+	errno = 0;
+	fd = strtol(val, NULL, 10);
+	if (errno)
+		return -1;
+
+	return fd;
 }
