@@ -16,6 +16,7 @@
 
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <errno.h>
 #include <fcntl.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -64,7 +65,7 @@ void klog_vwrite(int level, const char *fmt, va_list ap)
     vsnprintf(buf, LOG_BUF_MAX, fmt, ap);
     buf[LOG_BUF_MAX - 1] = 0;
 
-    write(klog_fd, buf, strlen(buf));
+    TEMP_FAILURE_RETRY(write(klog_fd, buf, strlen(buf)));
 }
 
 void klog_write(int level, const char *fmt, ...)

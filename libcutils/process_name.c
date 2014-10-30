@@ -22,6 +22,7 @@
 #endif
 #include <sys/stat.h>
 #include <sys/types.h>
+#include <errno.h>
 #include <unistd.h>
 
 #include <cutils/process_name.h>
@@ -87,7 +88,7 @@ void set_process_name(const char* new_name) {
     int fd = open(PROCESS_NAME_DEVICE, O_RDWR);
     if (fd < 0)
         return;
-    write(fd, process_name, strlen(process_name) + 1);
+    TEMP_FAILURE_RETRY(write(fd, process_name, strlen(process_name) + 1));
     close(fd);
 #endif
 }

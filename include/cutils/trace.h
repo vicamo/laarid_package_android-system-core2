@@ -17,6 +17,7 @@
 #ifndef _LIBS_CUTILS_TRACE_H
 #define _LIBS_CUTILS_TRACE_H
 
+#include <errno.h>
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -184,7 +185,7 @@ static inline void atrace_begin(uint64_t tag, const char* name)
         size_t len;
 
         len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "B|%d|%s", getpid(), name);
-        write(atrace_marker_fd, buf, len);
+        TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
     }
 }
 
@@ -197,7 +198,7 @@ static inline void atrace_end(uint64_t tag)
 {
     if (CC_UNLIKELY(atrace_is_tag_enabled(tag))) {
         char c = 'E';
-        write(atrace_marker_fd, &c, 1);
+        TEMP_FAILURE_RETRY(write(atrace_marker_fd, &c, 1));
     }
 }
 
@@ -219,7 +220,7 @@ static inline void atrace_async_begin(uint64_t tag, const char* name,
 
         len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "S|%d|%s|%" PRId32,
                 getpid(), name, cookie);
-        write(atrace_marker_fd, buf, len);
+        TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
     }
 }
 
@@ -237,7 +238,7 @@ static inline void atrace_async_end(uint64_t tag, const char* name,
 
         len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "F|%d|%s|%" PRId32,
                 getpid(), name, cookie);
-        write(atrace_marker_fd, buf, len);
+        TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
     }
 }
 
@@ -255,7 +256,7 @@ static inline void atrace_int(uint64_t tag, const char* name, int32_t value)
 
         len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "C|%d|%s|%" PRId32,
                 getpid(), name, value);
-        write(atrace_marker_fd, buf, len);
+        TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
     }
 }
 
@@ -272,7 +273,7 @@ static inline void atrace_int64(uint64_t tag, const char* name, int64_t value)
 
         len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "C|%d|%s|%" PRId64,
                 getpid(), name, value);
-        write(atrace_marker_fd, buf, len);
+        TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
     }
 }
 
