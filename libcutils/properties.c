@@ -310,7 +310,6 @@ int property_set(const char *key, const char *value)
 {
     char sendBuf[1+PROPERTY_KEY_MAX+PROPERTY_VALUE_MAX];
     char recvBuf[1];
-    int result = -1;
 
     //ALOGV("PROPERTY SET [%s]: [%s]\n", key, value);
 
@@ -399,7 +398,6 @@ int property_get(const char *key, char *value, const char *default_value)
 int property_set(const char *key, const char *value)
 {
     char ename[PROPERTY_KEY_MAX + 6];
-    char *p;
     int len;
     int r;
 
