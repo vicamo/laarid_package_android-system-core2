@@ -17,6 +17,8 @@
 #ifndef ANDROID_CUTILS_ATOMIC_INLINE_H
 #define ANDROID_CUTILS_ATOMIC_INLINE_H
 
+#include <bionic/bionic.h>
+
 #ifdef __cplusplus
 extern "C" {
 #endif
