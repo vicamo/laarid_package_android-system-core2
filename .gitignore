@@ -18,6 +18,7 @@
 /config.lt
 /config.status
 /configure
+/libcutils/tst_str_parms
 /libtool
 /m4
 /stamp-h1

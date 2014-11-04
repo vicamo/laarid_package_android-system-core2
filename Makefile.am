@@ -49,6 +49,7 @@ lib_LTLIBRARIES = \
 	libandroid-log-0.la \
 	libandroid-cutils-0.la \
 	libandroid-backtrace-0.la \
+	libandroid-utils-0.la \
 	libandroid-sysutils-0.la
 
 noinst_PROGRAMS = \
@@ -316,6 +317,102 @@ libandroid_backtrace_inc_HEADERS = \
 	include/backtrace/BacktraceMap.h \
 	include/backtrace/backtrace_constants.h
 
+# libandroid-utils.la
+# -------------------
+libandroid_utils_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+libandroid_utils_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_utils_0_la_LIBADD = \
+	libandroid-backtrace-0.la \
+	libandroid-cutils-0.la \
+	libandroid-log-0.la
+libandroid_utils_0_la_DEPENDENCIES = \
+	libandroid-cutils-0.la \
+	libandroid-log-0.la
+libandroid_utils_0_la_SOURCES = \
+	libutils/BasicHashtable.cpp \
+	libutils/BlobCache.cpp \
+	libutils/CallStack.cpp \
+	libutils/FileMap.cpp \
+	libutils/JenkinsHash.cpp \
+	libutils/LinearAllocator.cpp \
+	libutils/LinearTransform.cpp \
+	libutils/Log.cpp \
+	libutils/Looper.cpp \
+	libutils/Printer.cpp \
+	libutils/ProcessCallStack.cpp \
+	libutils/PropertyMap.cpp \
+	libutils/RefBase.cpp \
+	libutils/SharedBuffer.cpp \
+	libutils/Static.cpp \
+	libutils/StopWatch.cpp \
+	libutils/String8.cpp \
+	libutils/String16.cpp \
+	libutils/SystemClock.cpp \
+	libutils/Threads.cpp \
+	libutils/Timers.cpp \
+	libutils/Tokenizer.cpp \
+	libutils/Trace.cpp \
+	libutils/Unicode.cpp \
+	libutils/VectorImpl.cpp \
+	libutils/misc.cpp
+
+# HEADERS: android/utils
+# -----------------------
+libandroid_utils_incdir = $(androidincdir)/utils
+libandroid_utils_inc_HEADERS = \
+	include/utils/AndroidThreads.h \
+	include/utils/Atomic.h \
+	include/utils/BasicHashtable.h \
+	include/utils/BitSet.h \
+	include/utils/BlobCache.h \
+	include/utils/ByteOrder.h \
+	include/utils/CallStack.h \
+	include/utils/Compat.h \
+	include/utils/Condition.h \
+	include/utils/Debug.h \
+	include/utils/Errors.h \
+	include/utils/FileMap.h \
+	include/utils/Flattenable.h \
+	include/utils/Functor.h \
+	include/utils/JenkinsHash.h \
+	include/utils/KeyedVector.h \
+	include/utils/LinearAllocator.h \
+	include/utils/LinearTransform.h \
+	include/utils/List.h \
+	include/utils/Log.h \
+	include/utils/Looper.h \
+	include/utils/LruCache.h \
+	include/utils/Mutex.h \
+	include/utils/Printer.h \
+	include/utils/ProcessCallStack.h \
+	include/utils/PropertyMap.h \
+	include/utils/RWLock.h \
+	include/utils/RefBase.h \
+	include/utils/SharedBuffer.h \
+	include/utils/Singleton.h \
+	include/utils/SortedVector.h \
+	include/utils/StopWatch.h \
+	include/utils/String16.h \
+	include/utils/String8.h \
+	include/utils/StrongPointer.h \
+	include/utils/SystemClock.h \
+	include/utils/Thread.h \
+	include/utils/ThreadDefs.h \
+	include/utils/Timers.h \
+	include/utils/Tokenizer.h \
+	include/utils/Trace.h \
+	include/utils/TypeHelpers.h \
+	include/utils/Unicode.h \
+	include/utils/UniquePtr.h \
+	include/utils/Vector.h \
+	include/utils/VectorImpl.h \
+	include/utils/ashmem.h \
+	include/utils/misc.h \
+	include/utils/threads.h
+
 # PKG-CONFIG data files
 # ---------------------
 pkgconfigdir = $(libdir)/pkgconfig
@@ -323,7 +420,8 @@ pkgconfig_DATA = \
 	android-backtrace-$(SYSTEMCORE_API_VERSION).pc \
 	android-cutils-$(SYSTEMCORE_API_VERSION).pc \
 	android-log-$(SYSTEMCORE_API_VERSION).pc \
-	android-sysutils-$(SYSTEMCORE_API_VERSION).pc
+	android-sysutils-$(SYSTEMCORE_API_VERSION).pc \
+	android-utils-$(SYSTEMCORE_API_VERSION).pc
 
 $(pkgconfig_DATA): config.status
 

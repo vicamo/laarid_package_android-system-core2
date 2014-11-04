@@ -20,8 +20,6 @@
 #ifndef _LIBS_UTILS_MISC_H
 #define _LIBS_UTILS_MISC_H
 
-#include <utils/Endian.h>
-
 /* get #of elements in a static array */
 #ifndef NELEM
 # define NELEM(x) ((int) (sizeof(x) / sizeof((x)[0])))

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+#include <cutils/trace.h>
 #include <utils/misc.h>
 #include <utils/Trace.h>
 

@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Android System Core Libraries - utils
+Version: @VERSION@
+Requires: android-log-0.0, android-cutils-0.0
+Libs: -L${libdir} -landroid-utils-@SYSTEMCORE_RELEASE_NUMBER@
+Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@

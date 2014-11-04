@@ -61,6 +61,10 @@ AC_SUBST([SYSTEMCORE_RELEASE_NUMBER])
 # Define _GNU_SOURCE etc. where appropriate, e.g. for strptime() on glibc
 AC_USE_SYSTEM_EXTENSIONS
 
+# Large file support
+# ------------------
+AC_SYS_LARGEFILE
+
 # Host environment
 # ----------------
 AC_CANONICAL_HOST
@@ -143,11 +147,12 @@ AC_CHECK_HEADERS([linux/ioprio.h sched.h sys/socket.h])
 
 # Required functions
 # ------------------
-AC_CHECK_FUNCS([localtime_r prctl strndup])
+AC_CHECK_FUNCS([localtime_r madvise mmap prctl strndup])
 
 # Required types
 # --------------
 AC_CHECK_TYPES([struct nd_opt_rdnss], [], [], [#include <netinet/icmp6.h>])
+AC_CHECK_TYPES([off64_t])
 
 # Thread implementation
 # ---------------------
@@ -209,11 +214,24 @@ else
   fi
 fi
 
+AC_DEFINE([OS_PATH_SEPARATOR], ['/'],
+  [The default path separator for the platform.])
+
+if test x$ac_cv_func_mmap = xyes; then
+  AC_DEFINE([HAVE_POSIX_FILEMAP], [1],
+    [Define to 1 if we have POSIX mmap.])
+fi
+if test x$os_windows = xyes; then
+  AC_DEFINE([HAVE_WIN32_FILEMAP], [1],
+    [Define to 1 if we have Windows {Map,Unmap}ViewOfFile.])
+fi
+
 AC_CONFIG_FILES([
   Makefile
   android-backtrace-$SYSTEMCORE_API_VERSION.pc
   android-cutils-$SYSTEMCORE_API_VERSION.pc
   android-log-$SYSTEMCORE_API_VERSION.pc
   android-sysutils-$SYSTEMCORE_API_VERSION.pc
+  android-utils-$SYSTEMCORE_API_VERSION.pc
 ])
 AC_OUTPUT
