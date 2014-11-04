@@ -26,7 +26,6 @@
 #include <netinet/in.h>
 #include <netinet/icmp6.h>
 #include <arpa/inet.h>
-#include <net/if.h>
 
 #include <linux/if.h>
 #include <linux/if_addr.h>
@@ -38,6 +37,9 @@ const int QLOG_NL_EVENT  = 112;
 
 #include <linux/netlink.h>
 #include <linux/rtnetlink.h>
+
+/* <linux/if.h> conflicts with <net/if.h>, but we need if_indextoname here. */
+extern "C" char *if_indextoname (unsigned int __ifindex, char *__ifname) __THROW;
 
 const int NetlinkEvent::NlActionUnknown = 0;
 const int NetlinkEvent::NlActionAdd = 1;
@@ -59,15 +61,23 @@ NetlinkEvent::NetlinkEvent() {
 }
 
 NetlinkEvent::~NetlinkEvent() {
-    int i;
     if (mPath)
         free(mPath);
-    if (mSubsystem)
+    freeSubsystemParams();
+}
+
+void NetlinkEvent::freeSubsystemParams() {
+    if (mSubsystem) {
         free(mSubsystem);
+        mSubsystem = NULL;
+    }
+
+    int i;
     for (i = 0; i < NL_PARAMS_MAX; i++) {
         if (!mParams[i])
             break;
         free(mParams[i]);
+        mParams[i] = NULL;
     }
 }
 
@@ -144,7 +154,11 @@ bool NetlinkEvent::parseIfInfoMessage(const struct nlmsghdr *nh) {
     for (rta = IFLA_RTA(ifi); RTA_OK(rta, len); rta = RTA_NEXT(rta, len)) {
         switch(rta->rta_type) {
             case IFLA_IFNAME:
-                asprintf(&mParams[0], "INTERFACE=%s", (char *) RTA_DATA(rta));
+                if (asprintf(&mParams[0], "INTERFACE=%s", (char *) RTA_DATA(rta)) < 0) {
+                    SLOGE("parseIfInfoMessage: out of memory\n");
+                    break;
+                }
+
                 mAction = (ifi->ifi_flags & IFF_LOWER_UP) ?  NlActionLinkUp :
                                                              NlActionLinkDown;
                 mSubsystem = strdup("net");
@@ -235,22 +249,26 @@ bool NetlinkEvent::parseIfAddrMessage(const struct nlmsghdr *nh) {
     }
 
     // Fill in netlink event information.
-    mAction = (type == RTM_NEWADDR) ? NlActionAddressUpdated :
-                                      NlActionAddressRemoved;
     mSubsystem = strdup("net");
-    asprintf(&mParams[0], "ADDRESS=%s/%d", addrstr,
-             ifaddr->ifa_prefixlen);
-    asprintf(&mParams[1], "INTERFACE=%s", ifname);
-    asprintf(&mParams[2], "FLAGS=%u", ifaddr->ifa_flags);
-    asprintf(&mParams[3], "SCOPE=%u", ifaddr->ifa_scope);
+    if (!mSubsystem
+        || (asprintf(&mParams[0], "ADDRESS=%s/%d", addrstr, ifaddr->ifa_prefixlen) < 0)
+        || (asprintf(&mParams[1], "INTERFACE=%s", ifname) < 0)
+        || (asprintf(&mParams[2], "FLAGS=%u", ifaddr->ifa_flags) < 0)
+        || (asprintf(&mParams[3], "SCOPE=%u", ifaddr->ifa_scope) < 0)
+        || (cacheinfo
+            && ((asprintf(&mParams[4], "PREFERRED=%u", cacheinfo->ifa_prefered) < 0)
+                || (asprintf(&mParams[5], "VALID=%u", cacheinfo->ifa_valid) < 0)
+                || (asprintf(&mParams[6], "CSTAMP=%u", cacheinfo->cstamp) < 0)
+                || (asprintf(&mParams[7], "TSTAMP=%u", cacheinfo->tstamp) < 0)))) {
 
-    if (cacheinfo) {
-        asprintf(&mParams[4], "PREFERRED=%u", cacheinfo->ifa_prefered);
-        asprintf(&mParams[5], "VALID=%u", cacheinfo->ifa_valid);
-        asprintf(&mParams[6], "CSTAMP=%u", cacheinfo->cstamp);
-        asprintf(&mParams[7], "TSTAMP=%u", cacheinfo->tstamp);
+        freeSubsystemParams();
+
+        SLOGE("parseIfAddrMessage: out of memory\n");
+        return false;
     }
 
+    mAction = (type == RTM_NEWADDR) ? NlActionAddressUpdated :
+                                      NlActionAddressRemoved;
     return true;
 }
 
@@ -264,9 +282,18 @@ bool NetlinkEvent::parseUlogPacketMessage(const struct nlmsghdr *nh) {
         return false;
 
     devname = pm->indev_name[0] ? pm->indev_name : pm->outdev_name;
-    asprintf(&mParams[0], "ALERT_NAME=%s", pm->prefix);
-    asprintf(&mParams[1], "INTERFACE=%s", devname);
+
     mSubsystem = strdup("qlog");
+    if (!mSubsystem
+        || (asprintf(&mParams[0], "ALERT_NAME=%s", pm->prefix) < 0)
+        || (asprintf(&mParams[1], "INTERFACE=%s", devname) < 0)) {
+
+        freeSubsystemParams();
+
+        SLOGE("parseUlogPacketMessage: out of memory\n");
+        return false;
+    }
+
     mAction = NlActionChange;
     return true;
 }
@@ -353,12 +380,20 @@ bool NetlinkEvent::parseRtMessage(const struct nlmsghdr *nh) {
         return false;
 
     // Fill in netlink event information.
+    mSubsystem = strdup("net");
+    if (!mSubsystem
+        || (asprintf(&mParams[0], "ROUTE=%s/%d", dst, prefixLength) < 0)
+        || (asprintf(&mParams[1], "GATEWAY=%s", (*gw) ? gw : "") < 0)
+        || (asprintf(&mParams[2], "INTERFACE=%s", (*dev) ? dev : "") < 0)) {
+
+        freeSubsystemParams();
+
+        SLOGE("parseRtMessage: out of memory\n");
+        return false;
+    }
+
     mAction = (type == RTM_NEWROUTE) ? NlActionRouteUpdated :
                                        NlActionRouteRemoved;
-    mSubsystem = strdup("net");
-    asprintf(&mParams[0], "ROUTE=%s/%d", dst, prefixLength);
-    asprintf(&mParams[1], "GATEWAY=%s", (*gw) ? gw : "");
-    asprintf(&mParams[2], "INTERFACE=%s", (*dev) ? dev : "");
 
     return true;
 }
@@ -414,6 +449,7 @@ bool NetlinkEvent::parseNdUserOptMessage(const struct nlmsghdr *nh) {
         return false;
     }
 
+#if defined(HAVE_STRUCT_ND_OPT_RDNSS)
     if (opthdr->nd_opt_type == ND_OPT_RDNSS) {
         // DNS Servers (RFC 6106).
         // Each address takes up 2*8 octets, and the header takes up 8 octets.
@@ -453,17 +489,27 @@ bool NetlinkEvent::parseNdUserOptMessage(const struct nlmsghdr *nh) {
         }
         buf[pos] = '\0';
 
-        mAction = NlActionRdnss;
         mSubsystem = strdup("net");
-        asprintf(&mParams[0], "INTERFACE=%s", ifname);
-        asprintf(&mParams[1], "LIFETIME=%u", lifetime);
-        mParams[2] = buf;
-    } else {
-        SLOGD("Unknown ND option type %d\n", opthdr->nd_opt_type);
-        return false;
-    }
+        if (!mSubsystem
+            || (asprintf(&mParams[0], "INTERFACE=%s", ifname) < 0)
+            || (asprintf(&mParams[1], "LIFETIME=%u", lifetime) < 0)) {
 
-    return true;
+            free(buf);
+            freeSubsystemParams();
+
+            SLOGE("parseNdUserOptMessage: out of memory\n");
+            return false;
+        }
+
+        mAction = NlActionRdnss;
+        mParams[2] = buf;
+
+        return true;
+    }
+#endif /* !HAVE_STRUCT_ND_OPT_RDNSS */
+
+    SLOGD("Unknown ND option type %d\n", opthdr->nd_opt_type);
+    return false;
 }
 
 /*

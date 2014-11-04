@@ -19,7 +19,7 @@
 #include <pthread.h>
 
 #include <sysutils/SocketClient.h>
-#include "SocketClientCommand.h"
+#include <sysutils/SocketClientCommand.h>
 
 class SocketListener {
     bool                    mListen;

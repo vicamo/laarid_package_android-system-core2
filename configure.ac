@@ -141,6 +141,10 @@ AC_CHECK_HEADERS([linux/ioprio.h sched.h sys/socket.h])
 # ------------------
 AC_CHECK_FUNCS([localtime_r prctl strndup])
 
+# Required types
+# --------------
+AC_CHECK_TYPES([struct nd_opt_rdnss], [], [], [#include <netinet/icmp6.h>])
+
 # Thread implementation
 # ---------------------
 AX_PTHREAD(
@@ -205,5 +209,6 @@ AC_CONFIG_FILES([
   Makefile
   android-log-$SYSTEMCORE_API_VERSION.pc
   android-cutils-$SYSTEMCORE_API_VERSION.pc
+  android-sysutils-$SYSTEMCORE_API_VERSION.pc
 ])
 AC_OUTPUT

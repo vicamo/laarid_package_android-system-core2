@@ -1,12 +1,12 @@
 #ifndef _SOCKET_CLIENT_H
 #define _SOCKET_CLIENT_H
 
-#include "List.h"
-
 #include <pthread.h>
 #include <cutils/atomic.h>
 #include <sys/types.h>
 #include <sys/uio.h>
+
+#include <sysutils/List.h>
 
 class SocketClient {
     int             mSocket;

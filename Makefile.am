@@ -17,6 +17,11 @@ AM_CFLAGS = \
 	$(PTHREAD_CFLAGS) \
 	$(BIONIC_CFLAGS)
 
+AM_CXXFLAGS = \
+	-Wall -Werror \
+	$(PTHREAD_CFLAGS) \
+	$(BIONIC_CFLAGS)
+
 AM_LDFLAGS = \
 	-Wl,--as-needed
 
@@ -42,7 +47,8 @@ libtool_opts = \
 #  libtool: install: error: relink `libandroid-cutils-0.la' with the above command before installing it
 lib_LTLIBRARIES = \
 	libandroid-log-0.la \
-	libandroid-cutils-0.la
+	libandroid-cutils-0.la \
+	libandroid-sysutils-0.la
 
 noinst_PROGRAMS = \
 	libcutils/tst_str_parms
@@ -226,12 +232,53 @@ libcutils_tst_str_parms_SOURCES = \
 	libcutils/memory.c \
 	libcutils/str_parms.c
 
+# libandroid-sysutils.la
+# --------------------
+libandroid_sysutils_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_sysutils_0_la_LIBADD = \
+	libandroid-log-0.la \
+	libandroid-cutils-0.la
+libandroid_sysutils_0_la_DEPENDENCIES = \
+	libandroid-log-0.la \
+	libandroid-cutils-0.la
+libandroid_sysutils_0_la_SOURCES = \
+	libsysutils/src/FrameworkCommand.cpp \
+	libsysutils/src/FrameworkListener.cpp \
+	libsysutils/src/NetlinkEvent.cpp \
+	libsysutils/src/NetlinkListener.cpp \
+	libsysutils/src/ServiceManager.cpp \
+	libsysutils/src/SocketClient.cpp \
+	libsysutils/src/SocketListener.cpp
+
+# Never used:
+# libsysutils/src/FrameworkClient.cpp
+
+# HEADERS: android/sysutils
+# -----------------------
+libandroid_sysutils_incdir = $(androidincdir)/sysutils
+libandroid_sysutils_inc_HEADERS = \
+	include/sysutils/FrameworkCommand.h \
+	include/sysutils/FrameworkListener.h \
+	include/sysutils/List.h \
+	include/sysutils/NetlinkEvent.h \
+	include/sysutils/NetlinkListener.h \
+	include/sysutils/ServiceManager.h \
+	include/sysutils/SocketClient.h \
+	include/sysutils/SocketClientCommand.h \
+	include/sysutils/SocketListener.h
+
+# Never used:
+# include/sysutils/FrameworkClient.h
+
 # PKG-CONFIG data files
 # ---------------------
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = \
 	android-cutils-$(SYSTEMCORE_API_VERSION).pc \
-	android-log-$(SYSTEMCORE_API_VERSION).pc
+	android-log-$(SYSTEMCORE_API_VERSION).pc \
+	android-sysutils-$(SYSTEMCORE_API_VERSION).pc
 
 $(pkgconfig_DATA): config.status
 

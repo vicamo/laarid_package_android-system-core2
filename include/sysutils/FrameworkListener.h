@@ -16,8 +16,8 @@
 #ifndef _FRAMEWORKSOCKETLISTENER_H
 #define _FRAMEWORKSOCKETLISTENER_H
 
-#include "SocketListener.h"
-#include "FrameworkCommand.h"
+#include <sysutils/SocketListener.h>
+#include <sysutils/FrameworkCommand.h>
 
 class SocketClient;
 

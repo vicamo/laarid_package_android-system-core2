@@ -16,7 +16,7 @@
 #ifndef _NETLINKLISTENER_H
 #define _NETLINKLISTENER_H
 
-#include "SocketListener.h"
+#include <sysutils/SocketListener.h>
 
 class NetlinkEvent;
 

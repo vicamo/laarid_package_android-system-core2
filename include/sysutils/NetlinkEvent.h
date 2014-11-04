@@ -59,6 +59,9 @@ public:
     bool parseUlogPacketMessage(const struct nlmsghdr *nh);
     bool parseRtMessage(const struct nlmsghdr *nh);
     bool parseNdUserOptMessage(const struct nlmsghdr *nh);
+
+private:
+    void freeSubsystemParams();
 };
 
 #endif

@@ -16,7 +16,7 @@
 #ifndef __FRAMEWORK_CMD_HANDLER_H
 #define __FRAMEWORK_CMD_HANDLER_H
 
-#include "List.h"
+#include <sysutils/List.h>
 
 class SocketClient;
 
