@@ -25,7 +25,6 @@
 #include <libunwind-ptrace.h>
 
 #include "BacktraceLog.h"
-#include "UnwindMap.h"
 #include "UnwindPtrace.h"
 
 UnwindPtrace::UnwindPtrace() : addr_space_(NULL), upt_info_(NULL) {
@@ -37,10 +36,6 @@ UnwindPtrace::~UnwindPtrace() {
     upt_info_ = NULL;
   }
   if (addr_space_) {
-    // Remove the map from the address space before destroying it.
-    // It will be freed in the UnwindMap destructor.
-    unw_map_set(addr_space_, NULL);
-
     unw_destroy_addr_space(addr_space_);
     addr_space_ = NULL;
   }
@@ -57,9 +52,6 @@ bool UnwindPtrace::Unwind(size_t num_ignore_frames, ucontext_t* ucontext) {
     BACK_LOGW("unw_create_addr_space failed.");
     return false;
   }
-
-  UnwindMap* map = static_cast<UnwindMap*>(GetMap());
-  unw_map_set(addr_space_, map->GetMapCursor());
 
   upt_info_ = reinterpret_cast<struct UPT_info*>(_UPT_create(Tid()));
   if (!upt_info_) {
@@ -120,6 +112,7 @@ bool UnwindPtrace::Unwind(size_t num_ignore_frames, ucontext_t* ucontext) {
 
 std::string UnwindPtrace::GetFunctionNameRaw(uintptr_t pc, uintptr_t* offset) {
   *offset = 0;
+#if 0 /* FIXME: don't know how to reimplement unw_get_proc_name_by_ip */
   char buf[512];
   unw_word_t value;
   if (unw_get_proc_name_by_ip(addr_space_, pc, buf, sizeof(buf), &value,
@@ -127,6 +120,7 @@ std::string UnwindPtrace::GetFunctionNameRaw(uintptr_t pc, uintptr_t* offset) {
     *offset = static_cast<uintptr_t>(value);
     return buf;
   }
+#endif
   return "";
 }
 

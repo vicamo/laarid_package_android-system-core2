@@ -133,6 +133,10 @@ LIBS="$LIBS $BIONIC_LIBS"
 AC_SUBST([BIONIC_CFLAGS])
 AC_SUBST([BIONIC_LIBS])
 
+PKG_CHECK_MODULES([UNWIND], [libunwind libunwind-ptrace])
+AC_SUBST([UNWIND_CFLAGS])
+AC_SUBST([UNWIND_LIBS])
+
 # Required headers
 # ----------------
 AC_CHECK_HEADERS([linux/ioprio.h sched.h sys/socket.h])
@@ -207,8 +211,9 @@ fi
 
 AC_CONFIG_FILES([
   Makefile
-  android-log-$SYSTEMCORE_API_VERSION.pc
+  android-backtrace-$SYSTEMCORE_API_VERSION.pc
   android-cutils-$SYSTEMCORE_API_VERSION.pc
+  android-log-$SYSTEMCORE_API_VERSION.pc
   android-sysutils-$SYSTEMCORE_API_VERSION.pc
 ])
 AC_OUTPUT

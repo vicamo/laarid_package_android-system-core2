@@ -48,6 +48,7 @@ libtool_opts = \
 lib_LTLIBRARIES = \
 	libandroid-log-0.la \
 	libandroid-cutils-0.la \
+	libandroid-backtrace-0.la \
 	libandroid-sysutils-0.la
 
 noinst_PROGRAMS = \
@@ -272,10 +273,55 @@ libandroid_sysutils_inc_HEADERS = \
 # Never used:
 # include/sysutils/FrameworkClient.h
 
+# libandroid-backtrace.la
+# --------------------
+libandroid_backtrace_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(UNWIND_CFLAGS)
+libandroid_backtrace_0_la_CFLAGS = \
+	$(AM_CFLAGS) \
+	$(UNWIND_CFLAGS) \
+	-std=gnu99
+libandroid_backtrace_0_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	$(UNWIND_CFLAGS) \
+	-std=gnu++11
+libandroid_backtrace_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_backtrace_0_la_LIBADD = \
+	libandroid-log-0.la \
+	libandroid-cutils-0.la \
+	$(UNWIND_LIBS)
+libandroid_backtrace_0_la_DEPENDENCIES = \
+	libandroid-log-0.la \
+	libandroid-cutils-0.la
+libandroid_backtrace_0_la_SOURCES = \
+	libbacktrace/BacktraceImpl.cpp \
+	libbacktrace/BacktraceMap.cpp \
+	libbacktrace/BacktraceThread.cpp \
+	libbacktrace/UnwindCurrent.cpp \
+	libbacktrace/UnwindPtrace.cpp \
+	libbacktrace/thread_utils.c
+
+# UnwindMap depneds on Android specific speedups for libunwind which
+# are just not available in generic, packaged libunwind.
+#
+# libbacktrace/UnwindMap.cpp
+
+# HEADERS: android/backtrace
+# --------------------------
+libandroid_backtrace_incdir = $(androidincdir)/backtrace
+libandroid_backtrace_inc_HEADERS = \
+	include/backtrace/Backtrace.h \
+	include/backtrace/BacktraceMap.h \
+	include/backtrace/backtrace_constants.h
+
 # PKG-CONFIG data files
 # ---------------------
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = \
+	android-backtrace-$(SYSTEMCORE_API_VERSION).pc \
 	android-cutils-$(SYSTEMCORE_API_VERSION).pc \
 	android-log-$(SYSTEMCORE_API_VERSION).pc \
 	android-sysutils-$(SYSTEMCORE_API_VERSION).pc
