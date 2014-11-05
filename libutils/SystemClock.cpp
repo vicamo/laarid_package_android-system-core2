@@ -19,7 +19,7 @@
  * System clock functions.
  */
 
-#ifdef HAVE_ANDROID_OS
+#ifdef HAVE_LINUX_ANDROID_ALARM_H
 #include <linux/ioctl.h>
 #include <linux/rtc.h>
 #include <utils/Atomic.h>
@@ -68,7 +68,7 @@ int64_t elapsedRealtime()
  */
 #define DEBUG_TIMESTAMP         0
 
-#if DEBUG_TIMESTAMP && defined(ARCH_ARM)
+#if DEBUG_TIMESTAMP && defined(__arm__)
 static inline void checkTimeStamps(int64_t timestamp,
                                    int64_t volatile *prevTimestampPtr,
                                    int volatile *prevMethodPtr,
@@ -108,15 +108,17 @@ static inline void checkTimeStamps(int64_t timestamp,
  */
 int64_t elapsedRealtimeNano()
 {
-#ifdef HAVE_ANDROID_OS
+#if defined(HAVE_LINUX_ANDROID_ALARM_H) || defined(HAVE_POSIX_CLOCKS)
     struct timespec ts;
     int result;
+#endif
     int64_t timestamp;
 #if DEBUG_TIMESTAMP
     static volatile int64_t prevTimestamp;
     static volatile int prevMethod;
 #endif
 
+#ifdef HAVE_LINUX_ANDROID_ALARM_H
     static int s_fd = -1;
 
     if (s_fd == -1) {
@@ -134,7 +136,9 @@ int64_t elapsedRealtimeNano()
         checkTimeStamps(timestamp, &prevTimestamp, &prevMethod, METHOD_IOCTL);
         return timestamp;
     }
+#endif
 
+#ifdef HAVE_POSIX_CLOCKS
     // /dev/alarm doesn't exist, fallback to CLOCK_BOOTTIME
     result = clock_gettime(CLOCK_BOOTTIME, &ts);
     if (result == 0) {
@@ -143,6 +147,7 @@ int64_t elapsedRealtimeNano()
                         METHOD_CLOCK_GETTIME);
         return timestamp;
     }
+#endif
 
     // XXX: there was an error, probably because the driver didn't
     // exist ... this should return
@@ -151,9 +156,6 @@ int64_t elapsedRealtimeNano()
     checkTimeStamps(timestamp, &prevTimestamp, &prevMethod,
                     METHOD_SYSTEMTIME);
     return timestamp;
-#else
-    return systemTime(SYSTEM_TIME_MONOTONIC);
-#endif
 }
 
 }; // namespace android

@@ -32,7 +32,7 @@
 #include <windows.h>
 #endif
 
-#if defined(HAVE_ANDROID_OS)
+#if defined(HAVE_POSIX_CLOCKS)
 nsecs_t systemTime(int clock)
 {
     static const clockid_t clocks[] = {

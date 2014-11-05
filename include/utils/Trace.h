@@ -17,18 +17,8 @@
 #ifndef ANDROID_TRACE_H
 #define ANDROID_TRACE_H
 
-#ifdef HAVE_ANDROID_OS
-
-#include <fcntl.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <string.h>
-#include <sys/stat.h>
 #include <sys/types.h>
-#include <unistd.h>
 
-#include <cutils/compiler.h>
-#include <utils/threads.h>
 #include <cutils/trace.h>
 
 // See <cutils/trace.h> for more ATRACE_* macros.
@@ -46,11 +36,15 @@ class ScopedTrace {
 public:
 inline ScopedTrace(uint64_t tag, const char* name)
     : mTag(tag) {
+#if defined(__linux__)
     atrace_begin(mTag,name);
+#endif
 }
 
 inline ~ScopedTrace() {
+#if defined(__linux__)
     atrace_end(mTag);
+#endif
 }
 
 private:
@@ -58,12 +52,5 @@ private:
 };
 
 }; // namespace android
-
-#else // HAVE_ANDROID_OS
-
-#define ATRACE_NAME(...)
-#define ATRACE_CALL()
-
-#endif // HAVE_ANDROID_OS
 
 #endif // ANDROID_TRACE_H

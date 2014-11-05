@@ -143,11 +143,14 @@ AC_SUBST([UNWIND_LIBS])
 
 # Required headers
 # ----------------
-AC_CHECK_HEADERS([linux/ioprio.h sched.h sys/socket.h])
+AC_CHECK_HEADERS([linux/android_alarm.h linux/ioprio.h sched.h sys/socket.h])
 
 # Required functions
 # ------------------
 AC_CHECK_FUNCS([localtime_r madvise mmap prctl strndup])
+AC_CHECK_FUNC([clock_gettime],
+  [AC_DEFINE([HAVE_POSIX_CLOCKS], [1],
+    [Define to 1 if you have the clock_gettime function.])])
 
 # Required types
 # --------------
@@ -158,7 +161,17 @@ AC_CHECK_TYPES([off64_t])
 # ---------------------
 AX_PTHREAD(
 [AC_DEFINE([HAVE_PTHREAD],[1],[Define if you have POSIX threads libraries and header files.])
-AC_DEFINE([HAVE_PTHREADS],[1],[Define if you have POSIX threads libraries and header files.])],
+AC_DEFINE([HAVE_PTHREADS],[1],[Define if you have POSIX threads libraries and header files.])
+AC_MSG_CHECKING([for pthread_cond_timedwait_relative])
+AC_LINK_IFELSE(
+  [AC_LANG_PROGRAM(
+    [#include <pthread.h>],
+    [pthread_cond_timedwait_relative(NULL, NULL, NULL);])],
+  [AC_MSG_RESULT([yes])
+  AC_DEFINE([HAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE], [1],
+    [Have function pthread_cond_timedwait_relative])],
+  [AC_MSG_RESULT([no])]
+)],
 [AC_MSG_FAILURE([pthread not available.])])
 
 # Local socket name space
@@ -213,6 +226,10 @@ else
       [Define to 1 if system provides a system property server.])
   fi
 fi
+
+# Android Alarm driver
+# --------------------
+AC_CHECK_HEADERS([linux/android_alarm.h])
 
 AC_DEFINE([OS_PATH_SEPARATOR], ['/'],
   [The default path separator for the platform.])
