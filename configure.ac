@@ -24,8 +24,8 @@
 #   systemcore_interface_revision = 0
 m4_define([systemcore_major_version], [0])
 m4_define([systemcore_minor_version], [0])
-m4_define([systemcore_micro_version], [3])
-m4_define([systemcore_interface_revision], [2])
+m4_define([systemcore_micro_version], [4])
+m4_define([systemcore_interface_revision], [3])
 m4_define([systemcore_api_version], [systemcore_major_version.0])
 m4_define([systemcore_release_number], [systemcore_major_version])
 m4_define([systemcore_version],
