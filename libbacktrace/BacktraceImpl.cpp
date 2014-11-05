@@ -24,12 +24,13 @@
 
 #include <string>
 
+#include <bionic/bionic.h>
+
 #include <backtrace/Backtrace.h>
 #include <backtrace/BacktraceMap.h>
 
 #include "BacktraceImpl.h"
 #include "BacktraceLog.h"
-#include "thread_utils.h"
 
 //-------------------------------------------------------------------------
 // Backtrace functions.

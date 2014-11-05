@@ -21,11 +21,11 @@
 #include <string>
 #include <vector>
 
+#include <bionic/bionic.h>
 #include <backtrace/backtrace_constants.h>
 #include <backtrace/BacktraceMap.h>
 #include <log/log.h>
 
-#include "thread_utils.h"
 #include "BacktraceImpl.h"
 
 BacktraceMap::BacktraceMap(pid_t pid) : pid_(pid) {

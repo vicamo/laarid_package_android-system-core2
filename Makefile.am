@@ -301,8 +301,7 @@ libandroid_backtrace_0_la_SOURCES = \
 	libbacktrace/BacktraceMap.cpp \
 	libbacktrace/BacktraceThread.cpp \
 	libbacktrace/UnwindCurrent.cpp \
-	libbacktrace/UnwindPtrace.cpp \
-	libbacktrace/thread_utils.c
+	libbacktrace/UnwindPtrace.cpp
 
 # UnwindMap depneds on Android specific speedups for libunwind which
 # are just not available in generic, packaged libunwind.

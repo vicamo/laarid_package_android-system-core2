@@ -26,11 +26,11 @@
 #include <sys/types.h>
 #include <ucontext.h>
 
+#include <bionic/bionic.h>
 #include <cutils/atomic.h>
 
 #include "BacktraceLog.h"
 #include "BacktraceThread.h"
-#include "thread_utils.h"
 
 static inline int futex(volatile int* uaddr, int op, int val, const struct timespec* ts, volatile int* uaddr2, int val3) {
   return syscall(__NR_futex, uaddr, op, val, ts, uaddr2, val3);

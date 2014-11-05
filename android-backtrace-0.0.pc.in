@@ -5,6 +5,6 @@ includedir=@includedir@
 
 Name: Android System Core Libraries - backtrace
 Version: @VERSION@
-Requires: android-log-0.0, android-cutils-0.0, libunwind, libunwind-ptrace
+Requires: android-bionic-0.0 >= 0.0.3, android-log-0.0, android-cutils-0.0, libunwind, libunwind-ptrace
 Libs: -L${libdir} -landroid-backtrace-@SYSTEMCORE_RELEASE_NUMBER@
 Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@
