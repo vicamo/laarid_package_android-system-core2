@@ -657,10 +657,19 @@ Thread::Thread(bool canCallJava)
         mExitPending(false), mRunning(false)
         , mTid(-1)
 {
+#if !defined(HAVE_PTHREAD_GETTID_NP)
+    mTidLock.lock();
+#endif
 }
 
 Thread::~Thread()
 {
+#if !defined(HAVE_PTHREAD_GETTID_NP)
+    if (mTid < 0) {
+        // mTid is never assigned, so mTidLock is not unlocked.
+        mTidLock.unlock();
+    }
+#endif
 }
 
 status_t Thread::readyToRun()
@@ -725,6 +734,9 @@ int Thread::_threadLoop(void* user)
 
     // this is very useful for debugging with gdb
     self->mTid = gettid();
+#if !defined(HAVE_PTHREAD_GETTID_NP)
+    self->mTidLock.unlock();
+#endif
 
     bool first = true;
 
@@ -832,22 +844,25 @@ bool Thread::isRunning() const {
     return mRunning;
 }
 
-#ifdef HAVE_ANDROID_OS
 pid_t Thread::getTid() const
 {
     // mTid is not defined until the child initializes it, and the caller may need it earlier
     Mutex::Autolock _l(mLock);
     pid_t tid;
     if (mRunning) {
+#if defined(HAVE_PTHREAD_GETTID_NP)
         pthread_t pthread = (pthread_t) mThread;
         tid = __pthread_gettid(pthread);
+#else
+        Mutex::Autolock _tl(mTidLock);
+        tid = mTid;
+#endif
     } else {
         ALOGW("Thread (this=%p): getTid() is undefined before run()", this);
         tid = -1;
     }
     return tid;
 }
-#endif
 
 bool Thread::exitPending() const
 {

@@ -170,6 +170,15 @@ AC_LINK_IFELSE(
   [AC_MSG_RESULT([yes])
   AC_DEFINE([HAVE_PTHREAD_COND_TIMEDWAIT_RELATIVE], [1],
     [Have function pthread_cond_timedwait_relative])],
+  [AC_MSG_RESULT([no])])
+AC_MSG_CHECKING([for pthread_gettid_np])
+AC_LINK_IFELSE(
+  [AC_LANG_PROGRAM(
+    [#include <pthread.h>],
+    [pthread_gettid_np(0);])],
+  [AC_MSG_RESULT([yes])
+  AC_DEFINE([HAVE_PTHREAD_GETTID_NP], [1],
+    [Have function pthread_gettid_np])],
   [AC_MSG_RESULT([no])]
 )],
 [AC_MSG_FAILURE([pthread not available.])])
