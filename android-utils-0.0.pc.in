@@ -4,6 +4,7 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: Android System Core Libraries - utils
+Description: libandroid-utils-@SYSTEMCORE_RELEASE_NUMBER@
 Version: @VERSION@
 Requires: android-log-0.0, android-cutils-0.0
 Libs: -L${libdir} -landroid-utils-@SYSTEMCORE_RELEASE_NUMBER@

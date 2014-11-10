@@ -4,6 +4,7 @@ libdir=@libdir@
 includedir=@includedir@
 
 Name: Android System Core Libraries - log
+Description: libandroid-log-@SYSTEMCORE_RELEASE_NUMBER@
 Version: @VERSION@
 Requires: android-bionic-0.0 >= 0.0.1
 Libs: -L${libdir} -landroid-log-@SYSTEMCORE_RELEASE_NUMBER@
