@@ -88,6 +88,10 @@ libandroid_log_inc_HEADERS = \
 	include/log/logger.h \
 	include/log/logprint.h
 
+libandroid_android_incdir = $(androidincdir)/android
+libandroid_android_inc_HEADERS = \
+	include/android/log.h
+
 # libandroid-cutils.la
 # --------------------
 libandroid_cutils_0_la_CPPFLAGS = \

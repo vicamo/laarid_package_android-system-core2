@@ -1,2 +1,7 @@
 usr/lib
+usr/include/android/system-core-0.0/android
+usr/include/android/system-core-0.0/backtrace
+usr/include/android/system-core-0.0/cutils
 usr/include/android/system-core-0.0/log
+usr/include/android/system-core-0.0/sysutils
+usr/include/android/system-core-0.0/utils
