@@ -34,6 +34,9 @@ libtool_opts = \
 	-export-dynamic \
 	-rpath $(libdir)
 
+noinst_PROGRAMS =
+lib_LTLIBRARIES =
+
 # Installable libraries
 # ---------------------
 # Note: the order how the participatiing libraries are listed here is
@@ -45,14 +48,16 @@ libtool_opts = \
 #  /usr/bin/ld: cannot find -landroid-log-0
 #  collect2: error: ld returned 1 exit status
 #  libtool: install: error: relink `libandroid-cutils-0.la' with the above command before installing it
-lib_LTLIBRARIES = \
+lib_LTLIBRARIES += \
 	libandroid-log-0.la \
 	libandroid-cutils-0.la \
 	libandroid-backtrace-0.la \
 	libandroid-utils-0.la \
 	libandroid-sysutils-0.la
 
-noinst_PROGRAMS = \
+# Test tools from libcutils
+# -------------------------
+noinst_PROGRAMS += \
 	libcutils/tst_str_parms
 
 androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
@@ -238,46 +243,6 @@ libcutils_tst_str_parms_SOURCES = \
 	libcutils/memory.c \
 	libcutils/str_parms.c
 
-# libandroid-sysutils.la
-# --------------------
-libandroid_sysutils_0_la_LDFLAGS = \
-	$(AM_LDFLAGS) \
-	$(libtool_opts)
-libandroid_sysutils_0_la_LIBADD = \
-	libandroid-log-0.la \
-	libandroid-cutils-0.la
-libandroid_sysutils_0_la_DEPENDENCIES = \
-	libandroid-log-0.la \
-	libandroid-cutils-0.la
-libandroid_sysutils_0_la_SOURCES = \
-	libsysutils/src/FrameworkCommand.cpp \
-	libsysutils/src/FrameworkListener.cpp \
-	libsysutils/src/NetlinkEvent.cpp \
-	libsysutils/src/NetlinkListener.cpp \
-	libsysutils/src/ServiceManager.cpp \
-	libsysutils/src/SocketClient.cpp \
-	libsysutils/src/SocketListener.cpp
-
-# Never used:
-# libsysutils/src/FrameworkClient.cpp
-
-# HEADERS: android/sysutils
-# -----------------------
-libandroid_sysutils_incdir = $(androidincdir)/sysutils
-libandroid_sysutils_inc_HEADERS = \
-	include/sysutils/FrameworkCommand.h \
-	include/sysutils/FrameworkListener.h \
-	include/sysutils/List.h \
-	include/sysutils/NetlinkEvent.h \
-	include/sysutils/NetlinkListener.h \
-	include/sysutils/ServiceManager.h \
-	include/sysutils/SocketClient.h \
-	include/sysutils/SocketClientCommand.h \
-	include/sysutils/SocketListener.h
-
-# Never used:
-# include/sysutils/FrameworkClient.h
-
 # libandroid-backtrace.la
 # --------------------
 libandroid_backtrace_0_la_CPPFLAGS = \
@@ -320,6 +285,46 @@ libandroid_backtrace_inc_HEADERS = \
 	include/backtrace/Backtrace.h \
 	include/backtrace/BacktraceMap.h \
 	include/backtrace/backtrace_constants.h
+
+# libandroid-sysutils.la
+# --------------------
+libandroid_sysutils_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_sysutils_0_la_LIBADD = \
+	libandroid-log-0.la \
+	libandroid-cutils-0.la
+libandroid_sysutils_0_la_DEPENDENCIES = \
+	libandroid-log-0.la \
+	libandroid-cutils-0.la
+libandroid_sysutils_0_la_SOURCES = \
+	libsysutils/src/FrameworkCommand.cpp \
+	libsysutils/src/FrameworkListener.cpp \
+	libsysutils/src/NetlinkEvent.cpp \
+	libsysutils/src/NetlinkListener.cpp \
+	libsysutils/src/ServiceManager.cpp \
+	libsysutils/src/SocketClient.cpp \
+	libsysutils/src/SocketListener.cpp
+
+# Never used:
+# libsysutils/src/FrameworkClient.cpp
+
+# HEADERS: android/sysutils
+# -----------------------
+libandroid_sysutils_incdir = $(androidincdir)/sysutils
+libandroid_sysutils_inc_HEADERS = \
+	include/sysutils/FrameworkCommand.h \
+	include/sysutils/FrameworkListener.h \
+	include/sysutils/List.h \
+	include/sysutils/NetlinkEvent.h \
+	include/sysutils/NetlinkListener.h \
+	include/sysutils/ServiceManager.h \
+	include/sysutils/SocketClient.h \
+	include/sysutils/SocketClientCommand.h \
+	include/sysutils/SocketListener.h
+
+# Never used:
+# include/sysutils/FrameworkClient.h
 
 # libandroid-utils.la
 # -------------------
