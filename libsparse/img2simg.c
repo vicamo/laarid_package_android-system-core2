@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-#define _FILE_OFFSET_BITS 64
-#define _LARGEFILE64_SOURCE 1
-
 #include <fcntl.h>
 #include <stdbool.h>
 #include <stdio.h>

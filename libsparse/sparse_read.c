@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-#define _GNU_SOURCE
-#define _FILE_OFFSET_BITS 64
-#define _LARGEFILE64_SOURCE 1
-
 #include <fcntl.h>
 #include <stdarg.h>
 #include <stdbool.h>
