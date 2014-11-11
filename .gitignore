@@ -7,6 +7,7 @@
 .deps
 .dirstamp
 .libs
+/append2simg
 /config.h
 /config.h.in
 /Makefile
@@ -18,7 +19,10 @@
 /config.lt
 /config.status
 /configure
+/img2simg
 /libcutils/tst_str_parms
+/libzipfile/test_zipfile
 /libtool
 /m4
+/simg2img
 /stamp-h1

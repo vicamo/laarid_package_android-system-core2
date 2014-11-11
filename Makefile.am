@@ -34,6 +34,8 @@ libtool_opts = \
 	-export-dynamic \
 	-rpath $(libdir)
 
+bin_SCRIPTS =
+bin_PROGRAMS =
 noinst_PROGRAMS =
 lib_LTLIBRARIES =
 
@@ -50,10 +52,34 @@ lib_LTLIBRARIES =
 #  libtool: install: error: relink `libandroid-cutils-0.la' with the above command before installing it
 lib_LTLIBRARIES += \
 	libandroid-log-0.la \
-	libandroid-cutils-0.la \
+	libandroid-mincrypt-0.la \
+	libandroid-sparse-0.la \
+	libandroid-zipfile-0.la
+
+lib_LTLIBRARIES += \
+	libandroid-cutils-0.la
+
+lib_LTLIBRARIES += \
 	libandroid-backtrace-0.la \
-	libandroid-utils-0.la \
 	libandroid-sysutils-0.la
+
+lib_LTLIBRARIES += \
+	libandroid-utils-0.la
+
+# Tools from libsparse
+# --------------------
+bin_PROGRAMS += \
+	append2simg \
+	img2simg \
+	simg2img
+
+bin_SCRIPTS += \
+	libsparse/simg_dump.py
+
+# Test tools from libzipfile
+# --------------------------
+noinst_PROGRAMS += \
+	libzipfile/test_zipfile
 
 # Test tools from libcutils
 # -------------------------
@@ -96,6 +122,102 @@ libandroid_log_inc_HEADERS = \
 libandroid_android_incdir = $(androidincdir)/android
 libandroid_android_inc_HEADERS = \
 	include/android/log.h
+
+# libandroid-mincrypt.la
+# ----------------------
+libandroid_mincrypt_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_mincrypt_0_la_SOURCES = \
+	libmincrypt/dsa_sig.c \
+	libmincrypt/p256.c \
+	libmincrypt/p256_ec.c \
+	libmincrypt/p256_ecdsa.c \
+	libmincrypt/rsa.c \
+	libmincrypt/sha.c \
+	libmincrypt/sha256.c
+
+# HEADERS: android/mincrypt
+# -------------------------
+libandroid_mincrypt_incdir = $(androidincdir)/mincrypt
+libandroid_mincrypt_inc_HEADERS = \
+	include/mincrypt/dsa_sig.h \
+	include/mincrypt/hash-internal.h \
+	include/mincrypt/p256.h \
+	include/mincrypt/p256_ecdsa.h \
+	include/mincrypt/rsa.h \
+	include/mincrypt/sha.h \
+	include/mincrypt/sha256.h
+
+# libandroid-sparse.la
+# --------------------
+libandroid_sparse_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(ZLIB_CFLAGS) \
+	-I$(top_srcdir)/libsparse/include
+libandroid_sparse_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_sparse_0_la_LIBADD = \
+	$(ZLIB_LIBS)
+libandroid_sparse_0_la_SOURCES = \
+	libsparse/backed_block.c \
+	libsparse/output_file.c \
+	libsparse/sparse.c \
+	libsparse/sparse_crc32.c \
+	libsparse/sparse_err.c \
+	libsparse/sparse_read.c
+
+# append2simg
+# -----------
+append2simg_CPPFLAGS = \
+	$(libandroid_sparse_0_la_CPPFLAGS)
+append2simg_LDADD = \
+	libandroid-sparse-0.la
+append2simg_SOURCES = \
+	libsparse/append2simg.c
+
+# img2simg
+# --------
+img2simg_CPPFLAGS = \
+	$(libandroid_sparse_0_la_CPPFLAGS)
+img2simg_LDADD = \
+	libandroid-sparse-0.la
+img2simg_SOURCES = \
+	libsparse/img2simg.c
+
+# simg2img
+# --------
+simg2img_CPPFLAGS = \
+	$(libandroid_sparse_0_la_CPPFLAGS)
+simg2img_LDADD = \
+	libandroid-sparse-0.la
+simg2img_SOURCES = \
+	libsparse/simg2img.c
+
+# libandroid-zipfile.la
+# ---------------------
+libandroid_zipfile_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_zipfile_0_la_LIBADD = \
+	$(ZLIB_LIBS)
+libandroid_zipfile_0_la_SOURCES = \
+	libzipfile/centraldir.c \
+	libzipfile/zipfile.c
+
+# HEADERS: android/zipfile
+# ------------------------
+libandroid_zipfile_incdir = $(androidincdir)/zipfile
+libandroid_zipfile_inc_HEADERS = \
+	include/zipfile/zipfile.h
+
+# libzipfile/test_zipfile
+# -----------------------
+libzipfile_test_zipfile_LDADD = \
+	libandroid-zipfile-0.la
+libzipfile_test_zipfile_SOURCES = \
+	libzipfile/test_zipfile.c
 
 # libandroid-cutils.la
 # --------------------
@@ -429,8 +551,11 @@ pkgconfig_DATA = \
 	android-backtrace-$(SYSTEMCORE_API_VERSION).pc \
 	android-cutils-$(SYSTEMCORE_API_VERSION).pc \
 	android-log-$(SYSTEMCORE_API_VERSION).pc \
+	android-mincrypt-$(SYSTEMCORE_API_VERSION).pc \
+	android-sparse-$(SYSTEMCORE_API_VERSION).pc \
 	android-sysutils-$(SYSTEMCORE_API_VERSION).pc \
-	android-utils-$(SYSTEMCORE_API_VERSION).pc
+	android-utils-$(SYSTEMCORE_API_VERSION).pc \
+	android-zipfile-$(SYSTEMCORE_API_VERSION).pc
 
 $(pkgconfig_DATA): config.status
 

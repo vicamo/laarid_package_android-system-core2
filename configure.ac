@@ -141,6 +141,10 @@ PKG_CHECK_MODULES([UNWIND], [libunwind libunwind-ptrace])
 AC_SUBST([UNWIND_CFLAGS])
 AC_SUBST([UNWIND_LIBS])
 
+PKG_CHECK_MODULES([ZLIB], [zlib])
+AC_SUBST([ZLIB_CFLAGS])
+AC_SUBST([ZLIB_LIBS])
+
 # Required headers
 # ----------------
 AC_CHECK_HEADERS([linux/android_alarm.h linux/ioprio.h sched.h sys/socket.h])
@@ -257,7 +261,10 @@ AC_CONFIG_FILES([
   android-backtrace-$SYSTEMCORE_API_VERSION.pc
   android-cutils-$SYSTEMCORE_API_VERSION.pc
   android-log-$SYSTEMCORE_API_VERSION.pc
+  android-mincrypt-$SYSTEMCORE_API_VERSION.pc
+  android-sparse-$SYSTEMCORE_API_VERSION.pc
   android-sysutils-$SYSTEMCORE_API_VERSION.pc
   android-utils-$SYSTEMCORE_API_VERSION.pc
+  android-zipfile-$SYSTEMCORE_API_VERSION.pc
 ])
 AC_OUTPUT
