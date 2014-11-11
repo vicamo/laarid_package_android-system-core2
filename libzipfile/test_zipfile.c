@@ -42,7 +42,11 @@ main(int argc, char** argv)
     rewind(f);
     
     buf = malloc(size);
-    fread(buf, 1, size, f);
+    if (fread(buf, 1, size, f) != size) {
+        /* Either EOF or file error found. */
+        fprintf(stderr, "couldn't read %s\n", argv[1]);
+        return 1;
+    }
 
     zip = init_zipfile(buf, size);
     if (zip == NULL) {
