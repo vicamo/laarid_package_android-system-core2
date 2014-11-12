@@ -62,6 +62,7 @@ lib_LTLIBRARIES += \
 lib_LTLIBRARIES += \
 	libandroid-backtrace-0.la \
 	libandroid-diskconfig-0.la \
+	libandroid-netutils-0.la \
 	libandroid-sysutils-0.la
 
 lib_LTLIBRARIES += \
@@ -429,6 +430,28 @@ libandroid_diskconfig_incdir = $(androidincdir)/diskconfig
 libandroid_diskconfig_inc_HEADERS = \
 	include/diskconfig/diskconfig.h
 
+# libandroid-netutils.la
+# ----------------------
+libandroid_netutils_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_netutils_0_la_LIBADD = \
+	libandroid-log-0.la \
+	libandroid-cutils-0.la
+libandroid_netutils_0_la_SOURCES = \
+	libnetutils/dhcpclient.c \
+	libnetutils/dhcpmsg.c \
+	libnetutils/dhcp_utils.c \
+	libnetutils/ifc_utils.c \
+	libnetutils/packet.c
+
+# HEADERS: android/netutils
+# -------------------------
+libandroid_netutils_incdir = $(androidincdir)/netutils
+libandroid_netutils_inc_HEADERS = \
+	include/netutils/dhcp.h \
+	include/netutils/ifc.h
+
 # libandroid-sysutils.la
 # --------------------
 libandroid_sysutils_0_la_LDFLAGS = \
@@ -574,6 +597,7 @@ pkgconfig_DATA = \
 	android-diskconfig-$(SYSTEMCORE_API_VERSION).pc \
 	android-log-$(SYSTEMCORE_API_VERSION).pc \
 	android-mincrypt-$(SYSTEMCORE_API_VERSION).pc \
+	android-netutils-$(SYSTEMCORE_API_VERSION).pc \
 	android-sparse-$(SYSTEMCORE_API_VERSION).pc \
 	android-sysutils-$(SYSTEMCORE_API_VERSION).pc \
 	android-utils-$(SYSTEMCORE_API_VERSION).pc \

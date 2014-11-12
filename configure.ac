@@ -263,6 +263,7 @@ AC_CONFIG_FILES([
   android-diskconfig-$SYSTEMCORE_API_VERSION.pc
   android-log-$SYSTEMCORE_API_VERSION.pc
   android-mincrypt-$SYSTEMCORE_API_VERSION.pc
+  android-netutils-$SYSTEMCORE_API_VERSION.pc
   android-sparse-$SYSTEMCORE_API_VERSION.pc
   android-sysutils-$SYSTEMCORE_API_VERSION.pc
   android-utils-$SYSTEMCORE_API_VERSION.pc

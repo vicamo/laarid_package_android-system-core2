@@ -23,9 +23,9 @@
 #include <sys/socket.h>
 #include <sys/select.h>
 #include <sys/types.h>
+#include <sys/ioctl.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-#include <net/if.h>
 #include <netdb.h>
 
 #include <linux/if.h>
@@ -39,16 +39,12 @@
 
 #include "netutils/ifc.h"
 
-#ifdef ANDROID
 #define LOG_TAG "NetUtils"
 #include <cutils/log.h>
 #include <cutils/properties.h>
-#else
-#include <stdio.h>
-#include <string.h>
-#define ALOGD printf
-#define ALOGW printf
-#endif
+
+/* <linux/if.h> conflicts with <net/if.h>, but we need if_nametoindex here. */
+extern unsigned int if_nametoindex (const char *__ifname) __THROW;
 
 #ifdef HAVE_ANDROID_OS
 /* SIOCKILLADDR is an Android extension. */
@@ -421,7 +417,6 @@ int ifc_clear_addresses(const char *name) {
 
 int ifc_set_hwaddr(const char *name, const void *ptr)
 {
-    int r;
     struct ifreq ifr;
     ifc_init_ifr(name, &ifr);
 
