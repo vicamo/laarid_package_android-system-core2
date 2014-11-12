@@ -42,8 +42,8 @@ static int autosuspend_autosleep_enable(void)
 
     ret = write(autosleep_fd, sleep_state, strlen(sleep_state));
     if (ret < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGE("Error writing to %s: %s\n", SYS_POWER_AUTOSLEEP, buf);
+        char* p = strerror_r_wrapper(errno, buf, sizeof(buf));
+        ALOGE("Error writing to %s: %s\n", SYS_POWER_AUTOSLEEP, p);
         goto err;
     }
 
@@ -64,8 +64,8 @@ static int autosuspend_autosleep_disable(void)
 
     ret = write(autosleep_fd, on_state, strlen(on_state));
     if (ret < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGE("Error writing to %s: %s\n", SYS_POWER_AUTOSLEEP, buf);
+        char* p = strerror_r_wrapper(errno, buf, sizeof(buf));
+        ALOGE("Error writing to %s: %s\n", SYS_POWER_AUTOSLEEP, p);
         goto err;
     }
 
@@ -84,13 +84,12 @@ struct autosuspend_ops autosuspend_autosleep_ops = {
 
 struct autosuspend_ops *autosuspend_autosleep_init(void)
 {
-    int ret;
     char buf[80];
 
     autosleep_fd = open(SYS_POWER_AUTOSLEEP, O_WRONLY);
     if (autosleep_fd < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGE("Error opening %s: %s\n", SYS_POWER_AUTOSLEEP, buf);
+        char* p = strerror_r_wrapper(errno, buf, sizeof(buf));
+        ALOGE("Error opening %s: %s\n", SYS_POWER_AUTOSLEEP, p);
         return NULL;
     }
 

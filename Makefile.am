@@ -63,6 +63,7 @@ lib_LTLIBRARIES += \
 	libandroid-backtrace-0.la \
 	libandroid-diskconfig-0.la \
 	libandroid-netutils-0.la \
+	libandroid-suspend-0.la \
 	libandroid-sysutils-0.la
 
 lib_LTLIBRARIES += \
@@ -452,6 +453,24 @@ libandroid_netutils_inc_HEADERS = \
 	include/netutils/dhcp.h \
 	include/netutils/ifc.h
 
+# libandroid-suspend.la
+# ---------------------
+libandroid_suspend_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	-I$(top_srcdir)/libsuspend/include
+libandroid_suspend_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_suspend_0_la_LIBADD = \
+	libandroid-log-0.la \
+	libandroid-cutils-0.la
+libandroid_suspend_0_la_SOURCES = \
+	libsuspend/autosuspend.c \
+	libsuspend/autosuspend_autosleep.c \
+	libsuspend/autosuspend_earlysuspend.c \
+	libsuspend/autosuspend_wakeup_count.c \
+	libsuspend/strerror_r.c
+
 # libandroid-sysutils.la
 # --------------------
 libandroid_sysutils_0_la_LDFLAGS = \
@@ -599,6 +618,7 @@ pkgconfig_DATA = \
 	android-mincrypt-$(SYSTEMCORE_API_VERSION).pc \
 	android-netutils-$(SYSTEMCORE_API_VERSION).pc \
 	android-sparse-$(SYSTEMCORE_API_VERSION).pc \
+	android-suspend-$(SYSTEMCORE_API_VERSION).pc \
 	android-sysutils-$(SYSTEMCORE_API_VERSION).pc \
 	android-utils-$(SYSTEMCORE_API_VERSION).pc \
 	android-zipfile-$(SYSTEMCORE_API_VERSION).pc

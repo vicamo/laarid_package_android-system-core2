@@ -75,7 +75,7 @@ static int wait_for_fb_sleep(void)
     return err < 0 ? err : 0;
 }
 
-static void *earlysuspend_thread_func(void __unused *arg)
+static void *earlysuspend_thread_func(void *arg __attribute__ ((__unused__)))
 {
     while (1) {
         if (wait_for_fb_sleep()) {
@@ -106,8 +106,8 @@ static int autosuspend_earlysuspend_enable(void)
 
     ret = write(sPowerStatefd, pwr_state_mem, strlen(pwr_state_mem));
     if (ret < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGE("Error writing to %s: %s\n", EARLYSUSPEND_SYS_POWER_STATE, buf);
+        char* p = strerror_r_wrapper(errno, buf, sizeof(buf));
+        ALOGE("Error writing to %s: %s\n", EARLYSUSPEND_SYS_POWER_STATE, p);
         goto err;
     }
 
@@ -136,8 +136,8 @@ static int autosuspend_earlysuspend_disable(void)
 
     ret = write(sPowerStatefd, pwr_state_on, strlen(pwr_state_on));
     if (ret < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGE("Error writing to %s: %s\n", EARLYSUSPEND_SYS_POWER_STATE, buf);
+        char* p = strerror_r_wrapper(errno, buf, sizeof(buf));
+        ALOGE("Error writing to %s: %s\n", EARLYSUSPEND_SYS_POWER_STATE, p);
         goto err;
     }
 
@@ -182,8 +182,8 @@ void start_earlysuspend_thread(void)
     ALOGI("Starting early suspend unblocker thread\n");
     ret = pthread_create(&earlysuspend_thread, NULL, earlysuspend_thread_func, NULL);
     if (ret) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGE("Error creating thread: %s\n", buf);
+        char* p = strerror_r_wrapper(errno, buf, sizeof(buf));
+        ALOGE("Error creating thread: %s\n", p);
         return;
     }
 
@@ -198,15 +198,15 @@ struct autosuspend_ops *autosuspend_earlysuspend_init(void)
     sPowerStatefd = open(EARLYSUSPEND_SYS_POWER_STATE, O_RDWR);
 
     if (sPowerStatefd < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGW("Error opening %s: %s\n", EARLYSUSPEND_SYS_POWER_STATE, buf);
+        char* p = strerror_r_wrapper(errno, buf, sizeof(buf));
+        ALOGW("Error opening %s: %s\n", EARLYSUSPEND_SYS_POWER_STATE, p);
         return NULL;
     }
 
     ret = write(sPowerStatefd, "on", 2);
     if (ret < 0) {
-        strerror_r(errno, buf, sizeof(buf));
-        ALOGW("Error writing 'on' to %s: %s\n", EARLYSUSPEND_SYS_POWER_STATE, buf);
+        char* p = strerror_r_wrapper(errno, buf, sizeof(buf));
+        ALOGW("Error writing 'on' to %s: %s\n", EARLYSUSPEND_SYS_POWER_STATE, p);
         goto err_write;
     }
 
