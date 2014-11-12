@@ -268,6 +268,7 @@ AC_CONFIG_FILES([
   android-sparse-$SYSTEMCORE_API_VERSION.pc
   android-suspend-$SYSTEMCORE_API_VERSION.pc
   android-sysutils-$SYSTEMCORE_API_VERSION.pc
+  android-usbhost-$SYSTEMCORE_API_VERSION.pc
   android-utils-$SYSTEMCORE_API_VERSION.pc
   android-zipfile-$SYSTEMCORE_API_VERSION.pc
 ])

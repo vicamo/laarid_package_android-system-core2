@@ -64,7 +64,8 @@ lib_LTLIBRARIES += \
 	libandroid-diskconfig-0.la \
 	libandroid-netutils-0.la \
 	libandroid-suspend-0.la \
-	libandroid-sysutils-0.la
+	libandroid-sysutils-0.la \
+	libandroid-usbhost-0.la
 
 lib_LTLIBRARIES += \
 	libandroid-utils-0.la
@@ -511,6 +512,23 @@ libandroid_sysutils_inc_HEADERS = \
 # Never used:
 # include/sysutils/FrameworkClient.h
 
+# libandroid-usbhost.la
+# ---------------------
+libandroid_usbhost_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_usbhost_0_la_LIBADD = \
+	libandroid-log-0.la \
+	libandroid-cutils-0.la
+libandroid_usbhost_0_la_SOURCES = \
+	libusbhost/usbhost.c
+
+# HEADERS: android/usbhost
+# ------------------------
+libandroid_usbhost_incdir = $(androidincdir)/usbhost
+libandroid_usbhost_inc_HEADERS = \
+	include/usbhost/usbhost.h
+
 # libandroid-utils.la
 # -------------------
 libandroid_utils_0_la_CPPFLAGS = \
@@ -620,6 +638,7 @@ pkgconfig_DATA = \
 	android-sparse-$(SYSTEMCORE_API_VERSION).pc \
 	android-suspend-$(SYSTEMCORE_API_VERSION).pc \
 	android-sysutils-$(SYSTEMCORE_API_VERSION).pc \
+	android-usbhost-$(SYSTEMCORE_API_VERSION).pc \
 	android-utils-$(SYSTEMCORE_API_VERSION).pc \
 	android-zipfile-$(SYSTEMCORE_API_VERSION).pc
 
