@@ -260,6 +260,7 @@ AC_CONFIG_FILES([
   Makefile
   android-backtrace-$SYSTEMCORE_API_VERSION.pc
   android-cutils-$SYSTEMCORE_API_VERSION.pc
+  android-diskconfig-$SYSTEMCORE_API_VERSION.pc
   android-log-$SYSTEMCORE_API_VERSION.pc
   android-mincrypt-$SYSTEMCORE_API_VERSION.pc
   android-sparse-$SYSTEMCORE_API_VERSION.pc

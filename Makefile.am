@@ -61,6 +61,7 @@ lib_LTLIBRARIES += \
 
 lib_LTLIBRARIES += \
 	libandroid-backtrace-0.la \
+	libandroid-diskconfig-0.la \
 	libandroid-sysutils-0.la
 
 lib_LTLIBRARIES += \
@@ -408,6 +409,26 @@ libandroid_backtrace_inc_HEADERS = \
 	include/backtrace/BacktraceMap.h \
 	include/backtrace/backtrace_constants.h
 
+# libandroid-disconfig.la
+# -----------------------
+libandroid_diskconfig_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_diskconfig_0_la_LIBADD = \
+	libandroid-log-0.la \
+	libandroid-cutils-0.la
+libandroid_diskconfig_0_la_SOURCES = \
+	libdiskconfig/config_mbr.c \
+	libdiskconfig/diskconfig.c \
+	libdiskconfig/diskutils.c \
+	libdiskconfig/write_lst.c
+
+# HEADERS: android/diskconfig
+# ---------------------------
+libandroid_diskconfig_incdir = $(androidincdir)/diskconfig
+libandroid_diskconfig_inc_HEADERS = \
+	include/diskconfig/diskconfig.h
+
 # libandroid-sysutils.la
 # --------------------
 libandroid_sysutils_0_la_LDFLAGS = \
@@ -550,6 +571,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = \
 	android-backtrace-$(SYSTEMCORE_API_VERSION).pc \
 	android-cutils-$(SYSTEMCORE_API_VERSION).pc \
+	android-diskconfig-$(SYSTEMCORE_API_VERSION).pc \
 	android-log-$(SYSTEMCORE_API_VERSION).pc \
 	android-mincrypt-$(SYSTEMCORE_API_VERSION).pc \
 	android-sparse-$(SYSTEMCORE_API_VERSION).pc \

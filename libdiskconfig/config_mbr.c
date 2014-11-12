@@ -224,7 +224,8 @@ mk_mbr_sig()
         item->offset = (loff_t)((uintptr_t)((uint8_t *)(&mbr->mbr_sig)));
     }
 
-    *((uint16_t*)item->data) = PC_BIOS_BOOT_SIG;
+    item->data[0] = PC_BIOS_BOOT_SIG & 0xFF;
+    item->data[1] = (PC_BIOS_BOOT_SIG >> 8) & 0xFF;
     return item;
 }
 
