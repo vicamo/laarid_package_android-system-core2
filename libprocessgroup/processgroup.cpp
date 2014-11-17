@@ -19,7 +19,9 @@
 
 #include <assert.h>
 #include <dirent.h>
+#include <errno.h>
 #include <fcntl.h>
+#include <signal.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,9 +29,12 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 
+#include <bionic/bionic.h> /* for strlcat */
+
 #include <log/log.h>
 #include <private/android_filesystem_config.h>
 
+#include <utils/Compat.h>
 #include <utils/SystemClock.h>
 
 #include <processgroup/processgroup.h>
@@ -100,7 +105,7 @@ static int refillBuffer(struct ctx *ctx)
 
     ctx->buf_len += ret;
     ctx->buf[ctx->buf_len] = 0;
-    SLOGV("Read %d to buffer: %s", ret, ctx->buf);
+    SLOGV("Read " ZD " to buffer: %s", ret, ctx->buf);
 
     assert(ctx->buf_len <= sizeof(ctx->buf));
 

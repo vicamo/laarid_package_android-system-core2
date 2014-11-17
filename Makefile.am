@@ -70,6 +70,15 @@ lib_LTLIBRARIES += \
 lib_LTLIBRARIES += \
 	libandroid-utils-0.la
 
+lib_LTLIBRARIES += \
+	libandroid-processgroup-0.la \
+	libandroid-ziparchive-0.la
+
+# Tools from libprocessgroup
+# --------------------------
+bin_PROGRAMS += \
+	processgroup_cleanup
+
 # Tools from libsparse
 # --------------------
 bin_PROGRAMS += \
@@ -625,6 +634,50 @@ libandroid_utils_inc_HEADERS = \
 	include/utils/misc.h \
 	include/utils/threads.h
 
+# libandroid-processgroup.la
+# --------------------------
+libandroid_processgroup_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	-I$(top_srcdir)/libprocessgroup/include
+libandroid_processgroup_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_processgroup_0_la_LIBADD = \
+	libandroid-log-0.la \
+	libandroid-utils-0.la
+libandroid_processgroup_0_la_SOURCES = \
+	libprocessgroup/processgroup.cpp
+
+# processgroup_cleanup
+# --------------------
+processgroup_cleanup_CPPFLAGS = \
+	$(libandroid_sparse_0_la_CPPFLAGS)
+processgroup_cleanup_LDADD = \
+	libandroid-processgroup-0.la
+processgroup_cleanup_SOURCES = \
+	libprocessgroup/cleanup.cpp
+
+# libandroid-ziparchive-0.la
+# --------------------------
+libandroid_ziparchive_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(ZLIB_CFLAGS)
+libandroid_ziparchive_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_ziparchive_0_la_LIBADD = \
+	libandroid-log-0.la \
+	libandroid-utils-0.la \
+	$(ZLIB_LIBS)
+libandroid_ziparchive_0_la_SOURCES = \
+	libziparchive/zip_archive.cc
+
+# HEADERS: android/ziparchive
+# ---------------------------
+libandroid_ziparchive_incdir = $(androidincdir)/ziparchive
+libandroid_ziparchive_inc_HEADERS = \
+	include/ziparchive/zip_archive.h
+
 # PKG-CONFIG data files
 # ---------------------
 pkgconfigdir = $(libdir)/pkgconfig
@@ -635,11 +688,13 @@ pkgconfig_DATA = \
 	android-log-$(SYSTEMCORE_API_VERSION).pc \
 	android-mincrypt-$(SYSTEMCORE_API_VERSION).pc \
 	android-netutils-$(SYSTEMCORE_API_VERSION).pc \
+	android-processgroup-$(SYSTEMCORE_API_VERSION).pc \
 	android-sparse-$(SYSTEMCORE_API_VERSION).pc \
 	android-suspend-$(SYSTEMCORE_API_VERSION).pc \
 	android-sysutils-$(SYSTEMCORE_API_VERSION).pc \
 	android-usbhost-$(SYSTEMCORE_API_VERSION).pc \
 	android-utils-$(SYSTEMCORE_API_VERSION).pc \
+	android-ziparchive-$(SYSTEMCORE_API_VERSION).pc \
 	android-zipfile-$(SYSTEMCORE_API_VERSION).pc
 
 $(pkgconfig_DATA): config.status

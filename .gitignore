@@ -24,5 +24,6 @@
 /libzipfile/test_zipfile
 /libtool
 /m4
+/processgroup_cleanup
 /simg2img
 /stamp-h1

@@ -720,9 +720,12 @@ static int32_t UpdateEntryFromDataDescriptor(int fd,
     return kIoError;
   }
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
   const uint32_t ddSignature = *(reinterpret_cast<const uint32_t*>(ddBuf));
   const uint16_t offset = (ddSignature == DataDescriptor::kOptSignature) ? 4 : 0;
   const DataDescriptor* descriptor = reinterpret_cast<const DataDescriptor*>(ddBuf + offset);
+#pragma GCC diagnostic pop
 
   entry->crc32 = descriptor->crc32;
   entry->compressed_length = descriptor->compressed_size;

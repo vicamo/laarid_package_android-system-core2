@@ -15,7 +15,9 @@
  */
 #include <string.h>
 #include <unistd.h>
-#include <sys/syslimits.h>
+#include <linux/limits.h> /* for PATH_MAX */
+
+#include <bionic/bionic.h> /* for strlcat */
 
 #include "processgroup_priv.h"
 

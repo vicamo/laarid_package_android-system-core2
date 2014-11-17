@@ -151,7 +151,7 @@ AC_CHECK_HEADERS([linux/android_alarm.h linux/ioprio.h sched.h sys/socket.h])
 
 # Required functions
 # ------------------
-AC_CHECK_FUNCS([localtime_r madvise mmap prctl strndup])
+AC_CHECK_FUNCS([localtime_r madvise mmap prctl pread strndup])
 AC_CHECK_FUNC([clock_gettime],
   [AC_DEFINE([HAVE_POSIX_CLOCKS], [1],
     [Define to 1 if you have the clock_gettime function.])])
@@ -265,11 +265,13 @@ AC_CONFIG_FILES([
   android-log-$SYSTEMCORE_API_VERSION.pc
   android-mincrypt-$SYSTEMCORE_API_VERSION.pc
   android-netutils-$SYSTEMCORE_API_VERSION.pc
+  android-processgroup-$SYSTEMCORE_API_VERSION.pc
   android-sparse-$SYSTEMCORE_API_VERSION.pc
   android-suspend-$SYSTEMCORE_API_VERSION.pc
   android-sysutils-$SYSTEMCORE_API_VERSION.pc
   android-usbhost-$SYSTEMCORE_API_VERSION.pc
   android-utils-$SYSTEMCORE_API_VERSION.pc
+  android-ziparchive-$SYSTEMCORE_API_VERSION.pc
   android-zipfile-$SYSTEMCORE_API_VERSION.pc
 ])
 AC_OUTPUT

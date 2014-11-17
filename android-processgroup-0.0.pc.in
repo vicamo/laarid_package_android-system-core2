@@ -1,0 +1,10 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: Android System Core Libraries - processgroup
+Description: libandroid-processgroup-@SYSTEMCORE_RELEASE_NUMBER@
+Version: @VERSION@
+Requires: android-log-0.0, android-utils-0.0
+Libs: -L${libdir} -landroid-processgroup-@SYSTEMCORE_RELEASE_NUMBER@
