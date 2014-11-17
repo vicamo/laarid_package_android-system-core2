@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#include <errno.h>
 #include <stdbool.h>
 #include <fcntl.h>
 #include <stdio.h>
@@ -22,6 +21,8 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
+
+#include <bionic/bionic.h>
 
 #include <cutils/debugger.h>
 #include <cutils/sockets.h>

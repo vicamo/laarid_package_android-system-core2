@@ -17,7 +17,6 @@
 #ifndef _LIBS_CUTILS_TRACE_H
 #define _LIBS_CUTILS_TRACE_H
 
-#include <errno.h>
 #include <inttypes.h>
 #include <stdbool.h>
 #include <stdint.h>
@@ -25,6 +24,8 @@
 #include <sys/cdefs.h>
 #include <sys/types.h>
 #include <unistd.h>
+
+#include <bionic/bionic.h>
 
 #include <cutils/compiler.h>
 #include <cutils/atomic-inline.h>

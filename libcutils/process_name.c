@@ -22,8 +22,9 @@
 #endif
 #include <sys/stat.h>
 #include <sys/types.h>
-#include <errno.h>
 #include <unistd.h>
+
+#include <bionic/bionic.h>
 
 #include <cutils/process_name.h>
 #include <cutils/properties.h>
