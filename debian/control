@@ -40,3 +40,24 @@ Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: Android system core libraries
  This package contains libraries built from Android platform/system/core.
+
+Package: libandroid-nativebridge0-dev
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends: libandroid-nativebridge0 (= ${binary:Version}), libandroid-system-core0-dev, libandroid-nativehelper0-dev, ${misc:Depends}
+Description: Android nativebridge library - development
+ This package contains libandroid-nativebridge built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-nativebridge0
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: Android nativebridge library
+ This package contains libandroid-nativebridge built from Android platform/system/core.

@@ -1,1 +1,14 @@
-usr/lib/*/lib*.so.*
+usr/lib/*/libandroid-backtrace-*.so.*
+usr/lib/*/libandroid-cutils-*.so.*
+usr/lib/*/libandroid-diskconfig-*.so.*
+usr/lib/*/libandroid-log-*.so.*
+usr/lib/*/libandroid-mincrypt-*.so.*
+usr/lib/*/libandroid-netutils-*.so.*
+usr/lib/*/libandroid-processgroup-*.so.*
+usr/lib/*/libandroid-sparse-*.so.*
+usr/lib/*/libandroid-suspend-*.so.*
+usr/lib/*/libandroid-sysutils-*.so.*
+usr/lib/*/libandroid-usbhost-*.so.*
+usr/lib/*/libandroid-utils-*.so.*
+usr/lib/*/libandroid-ziparchive-*.so.*
+usr/lib/*/libandroid-zipfile-*.so.*
