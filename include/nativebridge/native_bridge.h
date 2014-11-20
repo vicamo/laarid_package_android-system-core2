@@ -17,9 +17,10 @@
 #ifndef NATIVE_BRIDGE_H_
 #define NATIVE_BRIDGE_H_
 
-#include "jni.h"
 #include <stdint.h>
 #include <sys/types.h>
+
+#include <nativehelper/jni.h>
 
 namespace android {
 

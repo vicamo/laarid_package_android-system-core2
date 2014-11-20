@@ -124,6 +124,10 @@ m4_define([lt_age], [lt_current])
 LT_VERSION_INFO="lt_current:lt_revision:lt_age"
 AC_SUBST(LT_VERSION_INFO)
 
+# System dlloader
+# ---------------
+LT_LIB_DLLOAD
+
 LT_OUTPUT
 
 # Required libraries
@@ -144,6 +148,10 @@ AC_SUBST([UNWIND_LIBS])
 PKG_CHECK_MODULES([ZLIB], [zlib])
 AC_SUBST([ZLIB_CFLAGS])
 AC_SUBST([ZLIB_LIBS])
+
+PKG_CHECK_MODULES([NATIVEHELPER], [android-nativehelper-0.0])
+AC_SUBST([NATIVEHELPER_CFLAGS])
+AC_SUBST([NATIVEHELPER_LIBS])
 
 # Required headers
 # ----------------
@@ -264,6 +272,7 @@ AC_CONFIG_FILES([
   android-diskconfig-$SYSTEMCORE_API_VERSION.pc
   android-log-$SYSTEMCORE_API_VERSION.pc
   android-mincrypt-$SYSTEMCORE_API_VERSION.pc
+  android-nativebridge-$SYSTEMCORE_API_VERSION.pc
   android-netutils-$SYSTEMCORE_API_VERSION.pc
   android-processgroup-$SYSTEMCORE_API_VERSION.pc
   android-sparse-$SYSTEMCORE_API_VERSION.pc

@@ -57,7 +57,8 @@ lib_LTLIBRARIES += \
 	libandroid-zipfile-0.la
 
 lib_LTLIBRARIES += \
-	libandroid-cutils-0.la
+	libandroid-cutils-0.la \
+	libandroid-nativebridge-0.la
 
 lib_LTLIBRARIES += \
 	libandroid-backtrace-0.la \
@@ -378,6 +379,31 @@ libcutils_tst_str_parms_SOURCES = \
 	libcutils/memory.c \
 	libcutils/str_parms.c
 
+# libandroid-nativebridge.la
+# --------------------------
+libandroid_nativebridge_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(NATIVEHELPER_CFLAGS)
+libandroid_nativebridge_0_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	$(NATIVEHELPER_CFLAGS) \
+	-std=gnu++11 \
+	-fvisibility=protected
+libandroid_nativebridge_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+libandroid_nativebridge_0_la_LIBADD = \
+	$(LIBADD_DLOPEN) \
+	$(top_builddir)/libandroid-log-0.la
+libandroid_nativebridge_0_la_SOURCES = \
+	libnativebridge/native_bridge.cc
+
+# HEADERS: android/nativebridge
+# -----------------------------
+libandroid_nativebridge_incdir = $(androidincdir)/nativebridge
+libandroid_nativebridge_inc_HEADERS = \
+	include/nativebridge/native_bridge.h
+
 # libandroid-backtrace.la
 # --------------------
 libandroid_backtrace_0_la_CPPFLAGS = \
@@ -687,6 +713,7 @@ pkgconfig_DATA = \
 	android-diskconfig-$(SYSTEMCORE_API_VERSION).pc \
 	android-log-$(SYSTEMCORE_API_VERSION).pc \
 	android-mincrypt-$(SYSTEMCORE_API_VERSION).pc \
+	android-nativebridge-$(SYSTEMCORE_API_VERSION).pc \
 	android-netutils-$(SYSTEMCORE_API_VERSION).pc \
 	android-processgroup-$(SYSTEMCORE_API_VERSION).pc \
 	android-sparse-$(SYSTEMCORE_API_VERSION).pc \

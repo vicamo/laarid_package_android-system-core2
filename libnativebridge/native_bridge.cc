@@ -54,9 +54,6 @@ static const char* kClosedString = "kClosed";
 
 static const char* GetNativeBridgeStateString(NativeBridgeState state) {
   switch (state) {
-    case NativeBridgeState::kNotSetup:
-      return kNotSetupString;
-
     case NativeBridgeState::kOpened:
       return kOpenedString;
 
@@ -65,6 +62,9 @@ static const char* GetNativeBridgeStateString(NativeBridgeState state) {
 
     case NativeBridgeState::kClosed:
       return kClosedString;
+
+    default: // NativeBridgeState::kNotSetup
+      return kNotSetupString;
   }
 }
 
