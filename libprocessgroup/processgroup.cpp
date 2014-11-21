@@ -22,6 +22,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <signal.h>
+#include <inttypes.h>
 #include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -105,7 +106,7 @@ static int refillBuffer(struct ctx *ctx)
 
     ctx->buf_len += ret;
     ctx->buf[ctx->buf_len] = 0;
-    SLOGV("Read " ZD " to buffer: %s", ret, ctx->buf);
+    SLOGV("Read %zd to buffer: %s", ret, ctx->buf);
 
     assert(ctx->buf_len <= sizeof(ctx->buf));
 
@@ -254,7 +255,7 @@ int killProcessGroup(uid_t uid, int initialPid, int signal)
 {
     int processes;
     int sleep_us = 100;
-    long startTime = android::uptimeMillis();
+    int64_t startTime = android::uptimeMillis();
 
     while ((processes = killProcessGroupOnce(uid, initialPid, signal)) > 0) {
         SLOGV("killed %d processes for processgroup %d\n", processes, initialPid);
@@ -268,7 +269,7 @@ int killProcessGroup(uid_t uid, int initialPid, int signal)
         }
     }
 
-    SLOGV("Killed process group uid %d pid %d in %ldms, %d procs remain", uid, initialPid,
+    SLOGV("Killed process group uid %d pid %d in %" PRId64 "ms, %d procs remain", uid, initialPid,
             android::uptimeMillis()-startTime, processes);
 
     if (processes == 0) {
