@@ -704,6 +704,18 @@ libandroid_ziparchive_incdir = $(androidincdir)/ziparchive
 libandroid_ziparchive_inc_HEADERS = \
 	include/ziparchive/zip_archive.h
 
+# HEADERS: android/system
+# -----------------------
+libandroid_system_incdir = $(androidincdir)/system
+libandroid_system_inc_HEADERS = \
+	include/system/audio.h \
+	include/system/audio_policy.h \
+	include/system/camera.h \
+	include/system/graphics.h \
+	include/system/sound_trigger.h \
+	include/system/thread_defs.h \
+	include/system/window.h
+
 # PKG-CONFIG data files
 # ---------------------
 pkgconfigdir = $(libdir)/pkgconfig

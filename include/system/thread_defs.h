@@ -17,7 +17,7 @@
 #ifndef ANDROID_THREAD_DEFS_H
 #define ANDROID_THREAD_DEFS_H
 
-#include "graphics.h"
+#include "system/graphics.h"
 
 #if defined(__cplusplus)
 extern "C" {

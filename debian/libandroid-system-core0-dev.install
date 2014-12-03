@@ -5,6 +5,7 @@ usr/include/android/system-core-*/diskconfig
 usr/include/android/system-core-*/log
 usr/include/android/system-core-*/mincrypt
 usr/include/android/system-core-*/netutils
+usr/include/android/system-core-*/system
 usr/include/android/system-core-*/sysutils
 usr/include/android/system-core-*/usbhost
 usr/include/android/system-core-*/utils
