@@ -47,7 +47,7 @@ extern "C" {
 
 #if defined(__aarch64__)
 #include <cutils/atomic-arm64.h>
-#elif defined(__arm__)
+#elif defined(__arm__) && defined(__ARM_ARCH_7__)
 #include <cutils/atomic-arm.h>
 #elif defined(__i386__)
 #include <cutils/atomic-x86.h>
@@ -58,7 +58,7 @@ extern "C" {
 #elif defined(__mips__)
 #include <cutils/atomic-mips.h>
 #else
-#error atomic operations are unsupported
+#include <cutils/atomic-gcc-builtin.h>
 #endif
 
 #if ANDROID_SMP == 0
