@@ -1,0 +1,90 @@
+dist: trusty
+sudo: required
+services:
+- docker
+language: cpp
+
+env:
+  matrix:
+  - IMAGE_ARCH=amd64
+  - IMAGE_ARCH=arm64
+  - IMAGE_ARCH=armel
+  - IMAGE_ARCH=armhf
+  - IMAGE_ARCH=i386
+  - IMAGE_ARCH=mips
+  - IMAGE_ARCH=mips64el
+  - IMAGE_ARCH=mipsel
+  - IMAGE_ARCH=ppc64el
+  - IMAGE_ARCH=s390x
+  global:
+  - DOCKER_EXEC_ROOT="sudo docker exec --interactive --tty --user root test_container"
+  - DOCKER_EXEC="sudo docker exec --interactive --tty test_container"
+  - DOCKER_EXEC_NOTTY="sudo docker exec test_container"
+  - BINTRAY_USER=laarid
+  - BINTRAY_REPO=main
+  - BINTRAY_COMPONENT=main
+  - BINTRAY_DESC="Android system core libraries"
+
+branches:
+  only:
+  - master
+  - /^v\d+\.\d+\.\d+/
+
+addons:
+  apt:
+    sources:
+    - sourceline: 'deb http://archive.ubuntu.com/ubuntu/ devel universe'
+    packages:
+    - binfmt-support
+    - qemu-user-static
+
+cache:
+- apt
+
+before_install:
+- sudo docker pull laarid/devel:${IMAGE_ARCH}
+- sudo docker images
+- |
+  sudo docker run --detach --interactive --tty \
+    --name test_container \
+    -v ${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}}:${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}} \
+    laarid/devel:${IMAGE_ARCH} \
+    /bin/bash
+
+install:
+- ${DOCKER_EXEC_ROOT} apt-get update -qq
+- ${DOCKER_EXEC_ROOT} mk-build-deps -i -s sudo -t 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y --allow-unauthenticated' ${TRAVIS_BUILD_DIR}/debian/control
+
+script:
+- ${DOCKER_EXEC} /bin/sh -c "cd ${TRAVIS_BUILD_DIR}; debuild --preserve-env --preserve-envvar PATH -i -us -uc -b"
+
+before_deploy:
+- |
+  cat debian/bintray.json.in | \
+    sed -e "s#@BINTRAY_PACKAGE@#$(cat debian/control | grep ^Source: | awk '{print $2}')#g" \
+        -e "s#@BINTRAY_USER@#${BINTRAY_USER}#g" \
+        -e "s#@BINTRAY_REPO@#${BINTRAY_REPO}#g" \
+        -e "s#@BINTRAY_DESC@#${BINTRAY_DESC}#g" \
+        -e "s#@GITHUB_REPO@#${TRAVIS_REPO_SLUG}#g" \
+        -e "s,@BINTRAY_VERSION@,${TRAVIS_TAG#v},g" \
+        -e "s#@BINTRAY_RELEASE_DATE@#$(cat debian/changelog | grep -m 1 '^ -- ' | sed 's,^.*  ,,')#g" \
+        -e "s#@BINTRAY_OUTDIR@#$(dirname ${TRAVIS_BUILD_DIR})#g" \
+        -e "s#@BINTRAY_POOLABBR@#$(cat debian/control | grep ^Source: | awk '{print $2}' | cut -c1)#g" \
+        -e "s#@BINTRAY_SUITE@#$(${DOCKER_EXEC_NOTTY} cat /etc/apt/sources.list | grep -m 1 '^deb ' | awk '{print $3}')#g" \
+        -e "s#@BINTRAY_COMPONENT@#${BINTRAY_COMPONENT}#g" \
+        -e "s#@BINTRAY_ARCH@#$(${DOCKER_EXEC_NOTTY} dpkg --print-architecture)#g" | \
+    tee debian/bintray.json
+
+deploy:
+- provider: bintray
+  file: debian/bintray.json
+  user: vicamo
+  key:
+    secure: "qZmynoFS3xYdDANotC/PtUNobxs/vakivZ7YxSZsHjSH2KI/9AaLLHqm57Gjh9DgvNu84PnsBnlb8H2aWkwiZuuJpYyLOFV2hUE384oLuOb/84N2P3R9uf+ru0+AjavzrMH2mNQpG6+XS3KNT08a7nBcWTrNSFsV2QGkhb3+BUQnv/SMAP1b3nh/0AcbRe9yGsE9jeQDG6hmZjDH+DjbApIdZ2WWfd4fAyFgqZHoGsN4yOwr41BwVBbXKTxyC1DQxstGazyq1ezNdNTJixVMuHW7qliHuKcUMYeC0PNNGoKI7pRkfI3q0SarkOiVqaOtwWP8u1Y0GZ+5ZLWcN2xmjHH/v4MgvpoIkVUxAto4cWEN7EfAATzV1IvpVxq2EPOgjCxOfqdLI9Qv/paJ7a7AOb/g+dV8brTRP1RJ2OPMrVdt6MKINRLjs0GCXtjkszEwdjv57L/9BgHg0WCQRGMrPMAFKxSlG9H5jfj0hlhMAOgQBsoUmacpdboPiF8fXOMrE9T3CiWmO3KZERbfahUzGj55DTxNt9XaFy7cYPZFEAw6c6t1mtAUyirPaMEZ/UjZHC1tqChJB4+qT+uLAVICq4ihUy7ZA0PUfT/WfyIjxQpXG+yet1tdlXbIOmvgShpPyo1Sc0VUawqFUJlFcLNeYfx2OtDUvggAt5dQLQd2G+8="
+  on:
+    tags: true
+
+notifications:
+  slack:
+    rooms:
+    - secure: "YYXvJkDyQNiQot32TJBlw7wMmAR7X+JC2BZ5/wbJm5o1cWJl8xfB5J9v2Kup30EyU/tAaRO6PP6PleSLvkLhDh95P3pdduniamAnlUtzmb7UNgOs5wgxU1uCtcWMP/RqbJapsZdY6Jox5WgNrwIP9m+Rj7a79H87V/nl24UdXLsq7z0VGoxfp1/g8l9TFrfItigcLvCrMTS+3GZ3aI60KaFzO9nyFhcmhLy1W9VEokaAkZlgI36r/STf0jhOGpPWSzHTvLby97sadjDpeThsD2GfAPxTDLPeKwgdih0OauubxFsKFNmYODgQp2qpuaKRnbAAlELElPYuOG+sAXTMaboi5NwQQWCoQUBmwMNhy9mU2VXaMNWdzCjw5a4wkxhmUy9NdJOZN+Wz/1UXviJyccaXOZ5BpppA1jNkeLT8um1/8gcnE6+/yLhXBBUbphKrmFwhh5oXdab4tM0HbnPSO0fUuowxVAnwreXhljMk5UIf+8jvByf/m6+vOt6hEYSC/uMiLR2TCMwB2Mwv9Tqa/tNiEZd2kk1pnEMh7Da51O4pJ5MEe2gB0u+JT1gO92YP24Xhn5X217BK+POaea5H9bVp8wqGoDHFecbQ6pWUG32Gr/JxZtT/N8Aj28kpGDeUkskahQqVaS2h6awlW0RU6QcRncfB8i0uzk80Tvjgsc4="
