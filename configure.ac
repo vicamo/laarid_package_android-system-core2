@@ -35,8 +35,8 @@ m4_define([systemcore_version],
 AC_PREREQ(2.69)
 
 AC_INIT([android-system-core], [systemcore_version],
-  [https://github.com/laarid/platform_system_core/issues], [],
-  [https://github.com/laarid/platform_system_core])
+  [https://github.com/laarid/package_android-system-core/issues], [],
+  [https://github.com/laarid/package_android-system-core])
 
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_SRCDIR([include/log/log.h])
