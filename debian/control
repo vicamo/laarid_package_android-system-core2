@@ -1,7 +1,7 @@
 Source: android-system-core
 Priority: extra
 Maintainer: You-Sheng Yang <vicamo@gmail.com>
-Build-Depends: debhelper (>= 9), dh-autoreconf, autoconf-archive, libandroid-bionic0-dev
+Build-Depends: debhelper (>= 9), dh-autoreconf, autoconf-archive, libbionic0-dev
 Standards-Version: 3.9.5
 Section: libs
 Homepage: https://github.com/laarid/package_android-system-core
@@ -25,7 +25,7 @@ Priority: extra
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: libandroid-system-core0 (= ${binary:Version}), libandroid-bionic0-dev, ${misc:Depends}
+Depends: libandroid-system-core0 (= ${binary:Version}), libbionic0-dev, ${misc:Depends}
 Description: Android system core libraries - development
  This package contains libraries built from Android platform/system/core.
  .
