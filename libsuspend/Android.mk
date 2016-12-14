@@ -1,33 +1,23 @@
 # Copyright 2012 The Android Open Source Project
 
-LOCAL_PATH:= $(call my-dir)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-suspend-0.la
 
-libsuspend_src_files := \
-	autosuspend.c \
-	autosuspend_autosleep.c \
-	autosuspend_earlysuspend.c \
-	autosuspend_wakeup_count.c \
+%canon_reldir%_libandroid_suspend_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	-I$(top_srcdir)/%reldir%/include
+%canon_reldir%_libandroid_suspend_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_suspend_0_la_LIBADD = \
+	liblog/libandroid-log-0.la \
+	libcutils/libandroid-cutils-0.la
+%canon_reldir%_libandroid_suspend_0_la_SOURCES = \
+	%reldir%/autosuspend.c \
+	%reldir%/autosuspend_autosleep.c \
+	%reldir%/autosuspend_earlysuspend.c \
+	%reldir%/autosuspend_wakeup_count.c \
+	%reldir%/strerror_r.c
 
-libsuspend_libraries := \
-	liblog libcutils
-
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := $(libsuspend_src_files)
-LOCAL_MODULE := libsuspend
-LOCAL_MODULE_TAGS := optional
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
-LOCAL_SHARED_LIBRARIES := $(libsuspend_libraries)
-LOCAL_CFLAGS := -Werror
-#LOCAL_CFLAGS += -DLOG_NDEBUG=0
-include $(BUILD_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := $(libsuspend_src_files)
-LOCAL_MODULE := libsuspend
-LOCAL_MODULE_TAGS := optional
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/include
-LOCAL_CFLAGS := -Werror
-#LOCAL_CFLAGS += -DLOG_NDEBUG=0
-include $(BUILD_STATIC_LIBRARY)
+pkgconfig_DATA += \
+	%reldir%/android-suspend-$(SYSTEMCORE_API_VERSION).pc

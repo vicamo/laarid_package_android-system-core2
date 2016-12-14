@@ -13,76 +13,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-LOCAL_PATH := $(my-dir)
-include $(CLEAR_VARS)
 
-ifneq ($(TARGET_USES_LOGD),false)
-liblog_sources := logd_write.c
-else
-liblog_sources := logd_write_kern.c
-endif
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-log-0.la
 
-# some files must not be compiled when building against Mingw
-# they correspond to features not used by our host development tools
-# which are also hard or even impossible to port to native Win32
-WITH_MINGW :=
-ifeq ($(HOST_OS),windows)
-    ifeq ($(strip $(USE_CYGWIN)),)
-        WITH_MINGW := true
-    endif
-endif
-# USE_MINGW is defined when we build against Mingw on Linux
-ifneq ($(strip $(USE_MINGW)),)
-    WITH_MINGW := true
-endif
+%canon_reldir%_libandroid_log_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_log_0_la_SOURCES = \
+	%reldir%/event_tag_map.c \
+	%reldir%/logprint.c \
+	%reldir%/log_time.cpp \
+	%reldir%/log_read.c \
+	%reldir%/logd_write.c
 
-ifndef WITH_MINGW
-    liblog_sources += \
-        logprint.c \
-        event_tag_map.c
-else
-    liblog_sources += \
-        uio.c
-endif
-
-liblog_host_sources := $(liblog_sources) fake_log_device.c
-liblog_target_sources := $(liblog_sources) log_time.cpp
-ifneq ($(TARGET_USES_LOGD),false)
-liblog_target_sources += log_read.c
-else
-liblog_target_sources += log_read_kern.c
-endif
-
-# Shared and static library for host
-# ========================================================
-LOCAL_MODULE := liblog
-LOCAL_SRC_FILES := $(liblog_host_sources)
-LOCAL_CFLAGS := -DFAKE_LOG_DEVICE=1 -Werror
-LOCAL_MULTILIB := both
-include $(BUILD_HOST_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := liblog
-LOCAL_WHOLE_STATIC_LIBRARIES := liblog
-ifeq ($(strip $(HOST_OS)),linux)
-LOCAL_LDLIBS := -lrt
-endif
-LOCAL_MULTILIB := both
-include $(BUILD_HOST_SHARED_LIBRARY)
-
-
-# Shared and static library for target
-# ========================================================
-include $(CLEAR_VARS)
-LOCAL_MODULE := liblog
-LOCAL_SRC_FILES := $(liblog_target_sources)
-LOCAL_CFLAGS := -Werror
-include $(BUILD_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := liblog
-LOCAL_WHOLE_STATIC_LIBRARIES := liblog
-LOCAL_CFLAGS := -Werror
-include $(BUILD_SHARED_LIBRARY)
-
-include $(call first-makefiles-under,$(LOCAL_PATH))
+pkgconfig_DATA += \
+	%reldir%/android-log-$(SYSTEMCORE_API_VERSION).pc

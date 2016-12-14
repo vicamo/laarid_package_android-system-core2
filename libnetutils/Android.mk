@@ -1,19 +1,18 @@
-LOCAL_PATH := $(call my-dir)
-include $(CLEAR_VARS)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-netutils-0.la
 
-LOCAL_SRC_FILES := \
-        dhcpclient.c \
-        dhcpmsg.c \
-        dhcp_utils.c \
-        ifc_utils.c \
-        packet.c
+%canon_reldir%_libandroid_netutils_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_netutils_0_la_LIBADD = \
+	liblog/libandroid-log-0.la \
+	libcutils/libandroid-cutils-0.la
+%canon_reldir%_libandroid_netutils_0_la_SOURCES = \
+	%reldir%/dhcpclient.c \
+	%reldir%/dhcpmsg.c \
+	%reldir%/dhcp_utils.c \
+	%reldir%/ifc_utils.c \
+	%reldir%/packet.c
 
-LOCAL_SHARED_LIBRARIES := \
-        libcutils \
-        liblog
-
-LOCAL_MODULE := libnetutils
-
-LOCAL_CFLAGS := -Werror
-
-include $(BUILD_SHARED_LIBRARY)
+pkgconfig_DATA += \
+	%reldir%/android-netutils-$(SYSTEMCORE_API_VERSION).pc

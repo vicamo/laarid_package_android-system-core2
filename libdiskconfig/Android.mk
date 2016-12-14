@@ -1,25 +1,17 @@
-LOCAL_PATH := $(call my-dir)
-include $(CLEAR_VARS)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-diskconfig-0.la
 
-commonSources := \
-	diskconfig.c \
-	diskutils.c \
-	write_lst.c \
-	config_mbr.c
+%canon_reldir%_libandroid_diskconfig_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_diskconfig_0_la_LIBADD = \
+	liblog/libandroid-log-0.la \
+	libcutils/libandroid-cutils-0.la
+%canon_reldir%_libandroid_diskconfig_0_la_SOURCES = \
+	%reldir%/config_mbr.c \
+	%reldir%/diskconfig.c \
+	%reldir%/diskutils.c \
+	%reldir%/write_lst.c
 
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := $(commonSources)
-LOCAL_MODULE := libdiskconfig
-LOCAL_MODULE_TAGS := optional
-LOCAL_SYSTEM_SHARED_LIBRARIES := libcutils liblog libc
-LOCAL_CFLAGS := -Werror
-include $(BUILD_SHARED_LIBRARY)
-
-ifeq ($(HOST_OS),linux)
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := $(commonSources)
-LOCAL_MODULE := libdiskconfig_host
-LOCAL_MODULE_TAGS := optional
-LOCAL_CFLAGS := -O2 -g -W -Wall -Werror -D_LARGEFILE64_SOURCE
-include $(BUILD_HOST_STATIC_LIBRARY)
-endif # HOST_OS == linux
+pkgconfig_DATA += \
+	%reldir%/android-diskconfig-$(SYSTEMCORE_API_VERSION).pc

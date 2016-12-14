@@ -1,56 +1,22 @@
-LOCAL_PATH:= $(call my-dir)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-zipfile-0.la
 
-# build host static library
-include $(CLEAR_VARS)
+%canon_reldir%_libandroid_zipfile_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_zipfile_0_la_LIBADD = \
+	$(ZLIB_LIBS)
+%canon_reldir%_libandroid_zipfile_0_la_SOURCES = \
+	%reldir%/centraldir.c \
+	%reldir%/zipfile.c
 
-LOCAL_SRC_FILES:= \
-	centraldir.c \
-	zipfile.c
+noinst_PROGRAMS += \
+	%reldir%/test_zipfile
 
-LOCAL_STATIC_LIBRARIES := \
-	libunz
+%canon_reldir%_test_zipfile_LDADD = \
+	%reldir%/libandroid-zipfile-0.la
+%canon_reldir%_test_zipfile_SOURCES = \
+	%reldir%/test_zipfile.c
 
-LOCAL_MODULE:= libzipfile
-
-LOCAL_C_INCLUDES += external/zlib
-
-LOCAL_CFLAGS := -Werror
-
-LOCAL_MULTILIB := both
-
-include $(BUILD_HOST_STATIC_LIBRARY)
-
-# build device static library
-include $(CLEAR_VARS)
-
-LOCAL_SRC_FILES:= \
-	centraldir.c \
-	zipfile.c
-
-LOCAL_STATIC_LIBRARIES := \
-	libunz
-
-LOCAL_MODULE:= libzipfile
-
-LOCAL_C_INCLUDES += external/zlib
-
-LOCAL_CFLAGS := -Werror
-
-include $(BUILD_STATIC_LIBRARY)
-
-
-# build test_zipfile
-include $(CLEAR_VARS)
-
-LOCAL_SRC_FILES:= \
-	test_zipfile.c
-
-LOCAL_STATIC_LIBRARIES := libzipfile libunz
-
-LOCAL_MODULE := test_zipfile
-
-LOCAL_C_INCLUDES += external/zlib
-
-LOCAL_CFLAGS := -Werror
-
-include $(BUILD_HOST_EXECUTABLE)
+pkgconfig_DATA += \
+	%reldir%/android-zipfile-$(SYSTEMCORE_API_VERSION).pc

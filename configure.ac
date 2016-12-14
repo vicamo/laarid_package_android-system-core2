@@ -267,20 +267,20 @@ fi
 
 AC_CONFIG_FILES([
   Makefile
-  android-backtrace-$SYSTEMCORE_API_VERSION.pc
-  android-cutils-$SYSTEMCORE_API_VERSION.pc
-  android-diskconfig-$SYSTEMCORE_API_VERSION.pc
-  android-log-$SYSTEMCORE_API_VERSION.pc
-  android-mincrypt-$SYSTEMCORE_API_VERSION.pc
-  android-nativebridge-$SYSTEMCORE_API_VERSION.pc
-  android-netutils-$SYSTEMCORE_API_VERSION.pc
-  android-processgroup-$SYSTEMCORE_API_VERSION.pc
-  android-sparse-$SYSTEMCORE_API_VERSION.pc
-  android-suspend-$SYSTEMCORE_API_VERSION.pc
-  android-sysutils-$SYSTEMCORE_API_VERSION.pc
-  android-usbhost-$SYSTEMCORE_API_VERSION.pc
-  android-utils-$SYSTEMCORE_API_VERSION.pc
-  android-ziparchive-$SYSTEMCORE_API_VERSION.pc
-  android-zipfile-$SYSTEMCORE_API_VERSION.pc
+  libbacktrace/android-backtrace-$SYSTEMCORE_API_VERSION.pc
+  libcutils/android-cutils-$SYSTEMCORE_API_VERSION.pc
+  libdiskconfig/android-diskconfig-$SYSTEMCORE_API_VERSION.pc
+  liblog/android-log-$SYSTEMCORE_API_VERSION.pc
+  libmincrypt/android-mincrypt-$SYSTEMCORE_API_VERSION.pc
+  libnativebridge/android-nativebridge-$SYSTEMCORE_API_VERSION.pc
+  libnetutils/android-netutils-$SYSTEMCORE_API_VERSION.pc
+  libprocessgroup/android-processgroup-$SYSTEMCORE_API_VERSION.pc
+  libsparse/android-sparse-$SYSTEMCORE_API_VERSION.pc
+  libsuspend/android-suspend-$SYSTEMCORE_API_VERSION.pc
+  libsysutils/android-sysutils-$SYSTEMCORE_API_VERSION.pc
+  libusbhost/android-usbhost-$SYSTEMCORE_API_VERSION.pc
+  libutils/android-utils-$SYSTEMCORE_API_VERSION.pc
+  libziparchive/android-ziparchive-$SYSTEMCORE_API_VERSION.pc
+  libzipfile/android-zipfile-$SYSTEMCORE_API_VERSION.pc
 ])
 AC_OUTPUT

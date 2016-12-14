@@ -14,45 +14,17 @@
 # limitations under the License.
 #
 
-LOCAL_PATH := $(call my-dir)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-usbhost-0.la
 
-# Static library for Linux host
-# ========================================================
+%canon_reldir%_libandroid_usbhost_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_usbhost_0_la_LIBADD = \
+	liblog/libandroid-log-0.la \
+	libcutils/libandroid-cutils-0.la
+%canon_reldir%_libandroid_usbhost_0_la_SOURCES = \
+	%reldir%/usbhost.c
 
-ifeq ($(HOST_OS),linux)
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := libusbhost
-LOCAL_SRC_FILES := usbhost.c
-LOCAL_CFLAGS := -Werror
-
-include $(BUILD_HOST_STATIC_LIBRARY)
-
-endif
-
-# Shared library for target
-# ========================================================
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := libusbhost
-LOCAL_SRC_FILES := usbhost.c
-
-LOCAL_CFLAGS := -g -DUSE_LIBLOG -Werror
-
-# needed for logcat
-LOCAL_SHARED_LIBRARIES := libcutils
-
-include $(BUILD_SHARED_LIBRARY)
-
-# Static library for target
-# ========================================================
-
-include $(CLEAR_VARS)
-
-LOCAL_MODULE := libusbhost
-LOCAL_SRC_FILES := usbhost.c
-LOCAL_CFLAGS := -Werror
-
-include $(BUILD_STATIC_LIBRARY)
+pkgconfig_DATA += \
+	%reldir%/android-usbhost-$(SYSTEMCORE_API_VERSION).pc

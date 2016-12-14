@@ -1,18 +1,19 @@
 # Copyright 2008 The Android Open Source Project
 #
-LOCAL_PATH := $(call my-dir)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-mincrypt-0.la
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libmincrypt
-LOCAL_SRC_FILES := dsa_sig.c p256.c p256_ec.c p256_ecdsa.c rsa.c sha.c sha256.c
-LOCAL_CFLAGS := -Wall -Werror
-include $(BUILD_STATIC_LIBRARY)
+%canon_reldir%_libandroid_mincrypt_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_mincrypt_0_la_SOURCES = \
+	%reldir%/dsa_sig.c \
+	%reldir%/p256.c \
+	%reldir%/p256_ec.c \
+	%reldir%/p256_ecdsa.c \
+	%reldir%/rsa.c \
+	%reldir%/sha.c \
+	%reldir%/sha256.c
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libmincrypt
-LOCAL_SRC_FILES := dsa_sig.c p256.c p256_ec.c p256_ecdsa.c rsa.c sha.c sha256.c
-LOCAL_CFLAGS := -Wall -Werror
-include $(BUILD_HOST_STATIC_LIBRARY)
-
-include $(LOCAL_PATH)/tools/Android.mk \
-        $(LOCAL_PATH)/test/Android.mk
+pkgconfig_DATA += \
+	%reldir%/android-mincrypt-$(SYSTEMCORE_API_VERSION).pc

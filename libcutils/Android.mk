@@ -13,158 +13,110 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-LOCAL_PATH := $(my-dir)
-include $(CLEAR_VARS)
 
-ifeq ($(TARGET_CPU_SMP),true)
-    targetSmpFlag := -DANDROID_SMP=1
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-cutils-0.la
+
+%canon_reldir%_libandroid_cutils_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS)
+%canon_reldir%_libandroid_cutils_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_cutils_0_la_LIBADD = \
+	liblog/libandroid-log-0.la
+%canon_reldir%_libandroid_cutils_0_la_DEPENDENCIES = \
+	liblog/libandroid-log-0.la
+%canon_reldir%_libandroid_cutils_0_la_SOURCES = \
+	%reldir%/atomic.c \
+	%reldir%/config_utils.c \
+	%reldir%/cpu_info.c \
+	%reldir%/debugger.c \
+	%reldir%/fs.c \
+	%reldir%/hashmap.c \
+	%reldir%/iosched_policy.c \
+	%reldir%/klog.c \
+	%reldir%/load_file.c \
+	%reldir%/memory.c \
+	%reldir%/multiuser.c \
+	%reldir%/native_handle.c \
+	%reldir%/partition_utils.c \
+	%reldir%/process_name.c \
+	%reldir%/properties.c \
+	%reldir%/qtaguid.c \
+	%reldir%/record_stream.c \
+	%reldir%/sched_policy.c \
+	%reldir%/socket_inaddr_any_server.c \
+	%reldir%/socket_local_client.c \
+	%reldir%/socket_local_server.c \
+	%reldir%/socket_loopback_client.c \
+	%reldir%/socket_loopback_server.c \
+	%reldir%/socket_network_client.c \
+	%reldir%/sockets.c \
+	%reldir%/str_parms.c \
+	%reldir%/strdup16to8.c \
+	%reldir%/strdup8to16.c \
+	%reldir%/threads.c \
+	%reldir%/uevent.c
+
+# Need kernel uapi/linux/reboot.h
+#	%reldir%/android_reboot.c
+
+if HAVE_ASHMEM
+%canon_reldir%_libandroid_cutils_0_la_SOURCES += \
+       %reldir%/ashmem-dev.c
 else
-    targetSmpFlag := -DANDROID_SMP=0
-endif
-hostSmpFlag := -DANDROID_SMP=0
-
-commonSources := \
-	hashmap.c \
-	atomic.c.arm \
-	native_handle.c \
-	config_utils.c \
-	cpu_info.c \
-	load_file.c \
-	open_memstream.c \
-	strdup16to8.c \
-	strdup8to16.c \
-	record_stream.c \
-	process_name.c \
-	threads.c \
-	sched_policy.c \
-	iosched_policy.c \
-	str_parms.c \
-
-# some files must not be compiled when building against Mingw
-# they correspond to features not used by our host development tools
-# which are also hard or even impossible to port to native Win32
-WINDOWS_HOST_ONLY :=
-ifeq ($(HOST_OS),windows)
-    ifeq ($(strip $(USE_CYGWIN)),)
-        WINDOWS_HOST_ONLY := 1
-    endif
-endif
-# USE_MINGW is defined when we build against Mingw on Linux
-ifneq ($(strip $(USE_MINGW)),)
-    WINDOWS_HOST_ONLY := 1
+%canon_reldir%_libandroid_cutils_0_la_SOURCES += \
+       %reldir%/ashmem-host.c
 endif
 
-ifneq ($(WINDOWS_HOST_ONLY),1)
-    commonSources += \
-        fs.c \
-        multiuser.c \
-        socket_inaddr_any_server.c \
-        socket_local_client.c \
-        socket_local_server.c \
-        socket_loopback_client.c \
-        socket_loopback_server.c \
-        socket_network_client.c \
-        sockets.c \
-
-    commonHostSources += \
-        ashmem-host.c
-
+if OS_LINUX
+%canon_reldir%_libandroid_cutils_0_la_SOURCES += \
+	%reldir%/trace.c
 endif
 
-
-# Static library for host
-# ========================================================
-LOCAL_MODULE := libcutils
-LOCAL_SRC_FILES := $(commonSources) $(commonHostSources) dlmalloc_stubs.c
-LOCAL_STATIC_LIBRARIES := liblog
-LOCAL_CFLAGS += $(hostSmpFlag)
-ifneq ($(HOST_OS),windows)
-LOCAL_CFLAGS += -Werror
+if CPU_ARM
+%canon_reldir%_libandroid_cutils_0_la_SOURCES += \
+	%reldir%/arch-arm/memset32.S
+%canon_reldir%_libandroid_cutils_0_la_CPPFLAGS += \
+	-DHAVE_MEMSET16 \
+	-DHAVE_MEMSET32
 endif
-LOCAL_MULTILIB := both
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-include $(BUILD_HOST_STATIC_LIBRARY)
-
-
-# Tests for host
-# ========================================================
-include $(CLEAR_VARS)
-LOCAL_MODULE := tst_str_parms
-LOCAL_CFLAGS += -DTEST_STR_PARMS
-ifneq ($(HOST_OS),windows)
-LOCAL_CFLAGS += -Werror
+if CPU_AARCH64
+%canon_reldir%_libandroid_cutils_0_la_SOURCES += \
+	%reldir%/arch-arm64/android_memset.S
+%canon_reldir%_libandroid_cutils_0_la_CPPFLAGS += \
+	-DHAVE_MEMSET16 \
+	-DHAVE_MEMSET32
 endif
-LOCAL_SRC_FILES := str_parms.c hashmap.c memory.c
-LOCAL_STATIC_LIBRARIES := liblog
-LOCAL_MODULE_TAGS := optional
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-include $(BUILD_HOST_EXECUTABLE)
+if CPU_X86
+%canon_reldir%_libandroid_cutils_0_la_SOURCES += \
+	%reldir%/arch-x86/android_memset16.S \
+	%reldir%/arch-x86/android_memset32.S
+%canon_reldir%_libandroid_cutils_0_la_CPPFLAGS += \
+	-DHAVE_MEMSET16 \
+	-DHAVE_MEMSET32
+endif
+if CPU_X86_64
+%canon_reldir%_libandroid_cutils_0_la_SOURCES += \
+	%reldir%/arch-x86_64/android_memset16_SSE2-atom.S \
+	%reldir%/arch-x86_64/android_memset32_SSE2-atom.S
+%canon_reldir%_libandroid_cutils_0_la_CPPFLAGS += \
+	-DHAVE_MEMSET16 \
+	-DHAVE_MEMSET32
+endif
 
+noinst_PROGRAMS += \
+	%reldir%/tst_str_parms
 
-# Shared and static library for target
-# ========================================================
+%canon_reldir%_tst_str_parms_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	-DTEST_STR_PARMS
+%canon_reldir%_tst_str_parms_LDADD = \
+	liblog/libandroid-log-0.la
+%canon_reldir%_tst_str_parms_SOURCES = \
+	%reldir%/hashmap.c \
+	%reldir%/memory.c \
+	%reldir%/str_parms.c
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libcutils
-LOCAL_SRC_FILES := $(commonSources) \
-        android_reboot.c \
-        ashmem-dev.c \
-        debugger.c \
-        klog.c \
-        memory.c \
-        partition_utils.c \
-        properties.c \
-        qtaguid.c \
-        trace.c \
-        uevent.c \
-
-LOCAL_SRC_FILES_arm += \
-        arch-arm/memset32.S \
-
-LOCAL_SRC_FILES_arm64 += \
-        arch-arm64/android_memset.S \
-
-LOCAL_SRC_FILES_mips += \
-        arch-mips/android_memset.c \
-
-LOCAL_SRC_FILES_x86 += \
-        arch-x86/android_memset16.S \
-        arch-x86/android_memset32.S \
-
-LOCAL_SRC_FILES_x86_64 += \
-        arch-x86_64/android_memset16_SSE2-atom.S \
-        arch-x86_64/android_memset32_SSE2-atom.S \
-
-LOCAL_CFLAGS_arm += -DHAVE_MEMSET16 -DHAVE_MEMSET32
-LOCAL_CFLAGS_arm64 += -DHAVE_MEMSET16 -DHAVE_MEMSET32
-LOCAL_CFLAGS_mips += -DHAVE_MEMSET16 -DHAVE_MEMSET32
-LOCAL_CFLAGS_x86 += -DHAVE_MEMSET16 -DHAVE_MEMSET32
-LOCAL_CFLAGS_x86_64 += -DHAVE_MEMSET16 -DHAVE_MEMSET32
-
-LOCAL_C_INCLUDES := $(libcutils_c_includes)
-LOCAL_STATIC_LIBRARIES := liblog
-LOCAL_CFLAGS += $(targetSmpFlag) -Werror
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-include $(BUILD_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := libcutils
-# TODO: remove liblog as whole static library, once we don't have prebuilt that requires
-# liblog symbols present in libcutils.
-LOCAL_WHOLE_STATIC_LIBRARIES := libcutils liblog
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_CFLAGS += $(targetSmpFlag) -Werror
-LOCAL_C_INCLUDES := $(libcutils_c_includes)
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-include $(BUILD_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := tst_str_parms
-LOCAL_CFLAGS += -DTEST_STR_PARMS -Werror
-LOCAL_SRC_FILES := str_parms.c hashmap.c memory.c
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_MODULE_TAGS := optional
-LOCAL_ADDITIONAL_DEPENDENCIES := $(LOCAL_PATH)/Android.mk
-include $(BUILD_EXECUTABLE)
-
-include $(call all-makefiles-under,$(LOCAL_PATH))
+pkgconfig_DATA += \
+	%reldir%/android-cutils-$(SYSTEMCORE_API_VERSION).pc

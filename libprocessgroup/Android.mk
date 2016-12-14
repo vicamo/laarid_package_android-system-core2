@@ -1,21 +1,27 @@
-LOCAL_PATH := $(call my-dir)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-processgroup-0.la
 
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := processgroup.cpp
-LOCAL_MODULE := libprocessgroup
-LOCAL_SHARED_LIBRARIES := liblog libutils
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_CFLAGS := -Wall -Werror
-LOCAL_REQUIRED_MODULE := processgroup_cleanup
-include external/libcxx/libcxx.mk
-include $(BUILD_SHARED_LIBRARY)
+%canon_reldir%_libandroid_processgroup_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	-I$(top_srcdir)/%reldir%/include
+%canon_reldir%_libandroid_processgroup_0_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_processgroup_0_la_LIBADD = \
+	liblog/libandroid-log-0.la \
+	libutils/libandroid-utils-0.la
+%canon_reldir%_libandroid_processgroup_0_la_SOURCES = \
+	%reldir%/processgroup.cpp
 
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := cleanup.cpp
-LOCAL_MODULE := processgroup_cleanup
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_CFLAGS := -Wall -Werror
-LOCAL_FORCE_STATIC_EXECUTABLE := true
-LOCAL_STATIC_LIBRARIES := libc libcutils
-include $(BUILD_EXECUTABLE)
+bin_PROGRAMS += \
+	%reldir%/processgroup_cleanup
+
+%canon_reldir%_processgroup_cleanup_CPPFLAGS = \
+	$(libsparse_libandroid_sparse_0_la_CPPFLAGS)
+%canon_reldir%_processgroup_cleanup_LDADD = \
+	%reldir%/libandroid-processgroup-0.la
+%canon_reldir%_processgroup_cleanup_SOURCES = \
+	%reldir%/cleanup.cpp
+
+pkgconfig_DATA += \
+	%reldir%/android-processgroup-$(SYSTEMCORE_API_VERSION).pc
