@@ -14,11 +14,13 @@ AM_CPPFLAGS = \
 
 AM_CFLAGS = \
 	-Wall -Werror \
+	-std=gnu89 \
 	$(PTHREAD_CFLAGS) \
 	$(BIONIC_CFLAGS)
 
 AM_CXXFLAGS = \
 	-Wall -Werror \
+	-std=gnu++98 \
 	$(PTHREAD_CFLAGS) \
 	$(BIONIC_CFLAGS)
 
