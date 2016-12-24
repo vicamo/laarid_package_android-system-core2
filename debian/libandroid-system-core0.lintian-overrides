@@ -1,0 +1,11 @@
+# Only mips variants have this error. See https://github.com/laarid/package_android-system-core/issues/3
+libandroid-system-core0 [mips mipsel mips64el] binary: shlib-without-PT_GNU_STACK-section usr/lib*/libandroid-cutils-0.so.*
+libandroid-system-core0 [mips mipsel mips64el] binary: shlib-without-PT_GNU_STACK-section usr/lib*/libandroid-diskconfig-0.so.*
+libandroid-system-core0 [mips mipsel mips64el] binary: shlib-without-PT_GNU_STACK-section usr/lib*/libandroid-log-0.so.*
+libandroid-system-core0 [mips mipsel mips64el] binary: shlib-without-PT_GNU_STACK-section usr/lib*/libandroid-mincrypt-0.so.*
+libandroid-system-core0 [mips mipsel mips64el] binary: shlib-without-PT_GNU_STACK-section usr/lib*/libandroid-netutils-0.so.*
+libandroid-system-core0 [mips mipsel mips64el] binary: shlib-without-PT_GNU_STACK-section usr/lib*/libandroid-sparse-0.so.*
+libandroid-system-core0 [mips mipsel mips64el] binary: shlib-without-PT_GNU_STACK-section usr/lib*/libandroid-suspend-0.so.*
+libandroid-system-core0 [mips mipsel mips64el] binary: shlib-without-PT_GNU_STACK-section usr/lib*/libandroid-sysutils-0.so.*
+libandroid-system-core0 [mips mipsel mips64el] binary: shlib-without-PT_GNU_STACK-section usr/lib*/libandroid-usbhost-0.so.*
+libandroid-system-core0 [mips mipsel mips64el] binary: shlib-without-PT_GNU_STACK-section usr/lib*/libandroid-zipfile-0.so.*
