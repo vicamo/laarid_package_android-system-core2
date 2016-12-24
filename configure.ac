@@ -141,17 +141,9 @@ LIBS="$LIBS $BIONIC_LIBS"
 AC_SUBST([BIONIC_CFLAGS])
 AC_SUBST([BIONIC_LIBS])
 
-PKG_CHECK_MODULES([UNWIND], [libunwind libunwind-ptrace])
-AC_SUBST([UNWIND_CFLAGS])
-AC_SUBST([UNWIND_LIBS])
-
 PKG_CHECK_MODULES([ZLIB], [zlib])
 AC_SUBST([ZLIB_CFLAGS])
 AC_SUBST([ZLIB_LIBS])
-
-PKG_CHECK_MODULES([NATIVEHELPER], [android-nativehelper-0.0])
-AC_SUBST([NATIVEHELPER_CFLAGS])
-AC_SUBST([NATIVEHELPER_LIBS])
 
 # Required headers
 # ----------------
@@ -267,20 +259,15 @@ fi
 
 AC_CONFIG_FILES([
   Makefile
-  libbacktrace/android-backtrace-$SYSTEMCORE_API_VERSION.pc
   libcutils/android-cutils-$SYSTEMCORE_API_VERSION.pc
   libdiskconfig/android-diskconfig-$SYSTEMCORE_API_VERSION.pc
   liblog/android-log-$SYSTEMCORE_API_VERSION.pc
   libmincrypt/android-mincrypt-$SYSTEMCORE_API_VERSION.pc
-  libnativebridge/android-nativebridge-$SYSTEMCORE_API_VERSION.pc
   libnetutils/android-netutils-$SYSTEMCORE_API_VERSION.pc
-  libprocessgroup/android-processgroup-$SYSTEMCORE_API_VERSION.pc
   libsparse/android-sparse-$SYSTEMCORE_API_VERSION.pc
   libsuspend/android-suspend-$SYSTEMCORE_API_VERSION.pc
   libsysutils/android-sysutils-$SYSTEMCORE_API_VERSION.pc
   libusbhost/android-usbhost-$SYSTEMCORE_API_VERSION.pc
-  libutils/android-utils-$SYSTEMCORE_API_VERSION.pc
-  libziparchive/android-ziparchive-$SYSTEMCORE_API_VERSION.pc
   libzipfile/android-zipfile-$SYSTEMCORE_API_VERSION.pc
 ])
 AC_OUTPUT

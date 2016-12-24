@@ -1,4 +1,0 @@
-usr/include/android/system-core-*/nativebridge/*
-usr/lib/*/libandroid-nativebridge-*.a
-usr/lib/*/libandroid-nativebridge-*.so
-usr/lib/*/pkgconfig/android-nativebridge-*.pc

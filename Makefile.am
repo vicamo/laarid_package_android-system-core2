@@ -72,18 +72,6 @@ include $(srcdir)/libsuspend/Android.mk
 include $(srcdir)/libsysutils/Android.mk
 include $(srcdir)/libusbhost/Android.mk
 
-# Stage 1: depends on external packages that depend on stage 0 packages
-include $(srcdir)/libbacktrace/Android.mk
-include $(srcdir)/libnativebridge/Android.mk
-
-# Stage 1-1: depends on any of above packages
-include $(srcdir)/libutils/Android.mk
-
-# Stage 1-2: depends on any of above packages
-include $(srcdir)/libprocessgroup/Android.mk
-include $(srcdir)/libziparchive/Android.mk
-
-
 # PKG-CONFIG data files
 # ---------------------
 pkgconfigdir = $(libdir)/pkgconfig
