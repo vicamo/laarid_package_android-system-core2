@@ -167,9 +167,8 @@ static void removeUidProcessGroups(const char *uid_path)
 {
     DIR *uid = opendir(uid_path);
     if (uid != NULL) {
-        struct dirent cur;
         struct dirent *dir;
-        while ((readdir_r(uid, &cur, &dir) == 0) && dir) {
+        while ((dir = readdir(uid)) != NULL) {
             char path[PROCESSGROUP_MAX_PATH_LEN];
 
             if (dir->d_type != DT_DIR) {
@@ -195,9 +194,8 @@ void removeAllProcessGroups()
     if (root == NULL) {
         SLOGE("failed to open %s: %s", PROCESSGROUP_CGROUP_PATH, strerror(errno));
     } else {
-        struct dirent cur;
         struct dirent *dir;
-        while ((readdir_r(root, &cur, &dir) == 0) && dir) {
+        while ((dir = readdir(root)) != NULL) {
             char path[PROCESSGROUP_MAX_PATH_LEN];
 
             if (dir->d_type != DT_DIR) {
