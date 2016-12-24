@@ -155,7 +155,7 @@ AC_SUBST([NATIVEHELPER_LIBS])
 
 # Required headers
 # ----------------
-AC_CHECK_HEADERS([linux/android_alarm.h linux/ioprio.h sched.h sys/socket.h])
+AC_CHECK_HEADERS([linux/android_alarm.h linux/ioprio.h sched.h sys/socket.h linux/netfilter_ipv4/ipt_ULOG.h])
 
 # Required functions
 # ------------------

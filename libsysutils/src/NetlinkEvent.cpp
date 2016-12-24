@@ -31,7 +31,9 @@
 #include <linux/if_addr.h>
 #include <linux/if_link.h>
 #include <linux/netfilter/nfnetlink.h>
+#if defined(HAVE_LINUX_NETFILETER_IPV4_IPT_ULOG_H)
 #include <linux/netfilter_ipv4/ipt_ULOG.h>
+#endif
 /* From kernel's net/netfilter/xt_quota2.c */
 const int QLOG_NL_EVENT  = 112;
 
@@ -276,6 +278,7 @@ bool NetlinkEvent::parseIfAddrMessage(const struct nlmsghdr *nh) {
  * Parse a QLOG_NL_EVENT message.
  */
 bool NetlinkEvent::parseUlogPacketMessage(const struct nlmsghdr *nh) {
+#if defined(HAVE_LINUX_NETFILETER_IPV4_IPT_ULOG_H)
     const char *devname;
     ulog_packet_msg_t *pm = (ulog_packet_msg_t *) NLMSG_DATA(nh);
     if (!checkRtNetlinkLength(nh, sizeof(*pm)))
@@ -295,6 +298,7 @@ bool NetlinkEvent::parseUlogPacketMessage(const struct nlmsghdr *nh) {
     }
 
     mAction = NlActionChange;
+#endif
     return true;
 }
 
