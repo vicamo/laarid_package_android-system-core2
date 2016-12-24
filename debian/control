@@ -13,7 +13,10 @@ Priority: extra
 Section: misc
 Architecture: any
 Multi-Arch: no
-Depends: libandroid-system-core0 (= ${binary:Version}), ${misc:Depends}, ${shlibs:Depends}
+Depends: libandroid-system-core0 (= ${binary:Version}),
+         python,
+         ${misc:Depends},
+         ${shlibs:Depends}
 Description: Android system core libraries - utilities
  This package contains libraries built from Android platform/system/core.
  .
