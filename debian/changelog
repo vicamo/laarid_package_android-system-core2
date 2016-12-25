@@ -1,3 +1,24 @@
+android-system-core (0.0.8) unstable; urgency=medium
+
+  * split package by soname
+  * ci: list known failed architectures
+  * ci: add travis-ci
+  * debian: suppress shlib-without-PT_GNU_STACK-section lintian error
+  * debian: fix lintan error python-script-but-no-python-dep
+  * debian: fix lintan error
+    arch-dependent-file-not-in-arch-specific-directory
+  * include pkg-config vars when necessary
+  * remove targets for second stages
+  * accommodate to bionic package name change
+  * automake: change to subdir-object layout
+  * always specify language standard used
+  * debian: enable parallel build
+  * debian: update project url
+  * libsysutils: fix build without linux/netfilter_ipv4/ipt_ULOG.h
+  * replace deprecated readdir_r with readdir
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Sun, 25 Dec 2016 18:54:00 +0800
+
 android-system-core (0.0.7) unstable; urgency=medium
 
   * move TEMP_FAILURE_RETRY to bionic
