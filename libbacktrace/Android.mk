@@ -15,30 +15,30 @@
 #
 
 lib_LTLIBRARIES += \
-	%reldir%/libandroid-backtrace-0.la
+	%reldir%/libandroid-backtrace.la
 
-%canon_reldir%_libandroid_backtrace_0_la_CPPFLAGS = \
+%canon_reldir%_libandroid_backtrace_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(UNWIND_CFLAGS)
-%canon_reldir%_libandroid_backtrace_0_la_CFLAGS = \
+%canon_reldir%_libandroid_backtrace_la_CFLAGS = \
 	$(AM_CFLAGS) \
 	$(UNWIND_CFLAGS) \
 	-std=gnu99
-%canon_reldir%_libandroid_backtrace_0_la_CXXFLAGS = \
+%canon_reldir%_libandroid_backtrace_la_CXXFLAGS = \
 	$(AM_CXXFLAGS) \
 	$(UNWIND_CFLAGS) \
 	-std=gnu++11
-%canon_reldir%_libandroid_backtrace_0_la_LDFLAGS = \
+%canon_reldir%_libandroid_backtrace_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
-%canon_reldir%_libandroid_backtrace_0_la_LIBADD = \
-	liblog/libandroid-log-0.la \
-	libcutils/libandroid-cutils-0.la \
+%canon_reldir%_libandroid_backtrace_la_LIBADD = \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la \
 	$(UNWIND_LIBS)
-%canon_reldir%_libandroid_backtrace_0_la_DEPENDENCIES = \
-	liblog/libandroid-log-0.la \
-	libcutils/libandroid-cutils-0.la
-%canon_reldir%_libandroid_backtrace_0_la_SOURCES = \
+%canon_reldir%_libandroid_backtrace_la_DEPENDENCIES = \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la
+%canon_reldir%_libandroid_backtrace_la_SOURCES = \
 	%reldir%/BacktraceImpl.cpp \
 	%reldir%/BacktraceMap.cpp \
 	%reldir%/BacktraceThread.cpp \

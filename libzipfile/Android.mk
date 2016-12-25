@@ -1,12 +1,12 @@
 lib_LTLIBRARIES += \
-	%reldir%/libandroid-zipfile-0.la
+	%reldir%/libandroid-zipfile.la
 
-%canon_reldir%_libandroid_zipfile_0_la_LDFLAGS = \
+%canon_reldir%_libandroid_zipfile_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
-%canon_reldir%_libandroid_zipfile_0_la_LIBADD = \
+%canon_reldir%_libandroid_zipfile_la_LIBADD = \
 	$(ZLIB_LIBS)
-%canon_reldir%_libandroid_zipfile_0_la_SOURCES = \
+%canon_reldir%_libandroid_zipfile_la_SOURCES = \
 	%reldir%/centraldir.c \
 	%reldir%/zipfile.c
 
@@ -14,7 +14,7 @@ noinst_PROGRAMS += \
 	%reldir%/test_zipfile
 
 %canon_reldir%_test_zipfile_LDADD = \
-	%reldir%/libandroid-zipfile-0.la
+	%reldir%/libandroid-zipfile.la
 %canon_reldir%_test_zipfile_SOURCES = \
 	%reldir%/test_zipfile.c
 

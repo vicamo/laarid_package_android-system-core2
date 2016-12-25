@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: Android System Core Libraries - ziparchive
-Description: libandroid-ziparchive-@SYSTEMCORE_RELEASE_NUMBER@
+Name: android-ziparchive-@SYSTEMCORE_RELEASE_NUMBER@
+Description: Android System Core Libraries - ziparchive
 Version: @VERSION@
-Requires: android-utils-0.0, zlib
-Libs: -L${libdir} -landroid-ziparchive-@SYSTEMCORE_RELEASE_NUMBER@
+Requires: android-utils-@SYSTEMCORE_API_VERSION@, zlib
+Libs: -L${libdir} -landroid-ziparchive
 Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@

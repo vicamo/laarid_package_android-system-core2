@@ -1,0 +1,3 @@
+usr/lib/*/libandroid-sparse.a
+usr/lib/*/libandroid-sparse.so
+usr/lib/*/pkgconfig/android-sparse-*.pc

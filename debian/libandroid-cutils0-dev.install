@@ -1,0 +1,5 @@
+usr/include/android/system-core-*/cutils
+usr/include/android/system-core-*/system
+usr/lib/*/libandroid-cutils.a
+usr/lib/*/libandroid-cutils.so
+usr/lib/*/pkgconfig/android-cutils-*.pc

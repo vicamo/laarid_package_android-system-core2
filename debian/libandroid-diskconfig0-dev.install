@@ -1,0 +1,4 @@
+usr/include/android/system-core-*/diskconfig
+usr/lib/*/libandroid-diskconfig.a
+usr/lib/*/libandroid-diskconfig.so
+usr/lib/*/pkgconfig/android-diskconfig-*.pc

@@ -1,13 +1,13 @@
 lib_LTLIBRARIES += \
-	%reldir%/libandroid-netutils-0.la
+	%reldir%/libandroid-netutils.la
 
-%canon_reldir%_libandroid_netutils_0_la_LDFLAGS = \
+%canon_reldir%_libandroid_netutils_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
-%canon_reldir%_libandroid_netutils_0_la_LIBADD = \
-	liblog/libandroid-log-0.la \
-	libcutils/libandroid-cutils-0.la
-%canon_reldir%_libandroid_netutils_0_la_SOURCES = \
+%canon_reldir%_libandroid_netutils_la_LIBADD = \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la
+%canon_reldir%_libandroid_netutils_la_SOURCES = \
 	%reldir%/dhcpclient.c \
 	%reldir%/dhcpmsg.c \
 	%reldir%/dhcp_utils.c \

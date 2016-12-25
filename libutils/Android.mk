@@ -13,21 +13,21 @@
 # limitations under the License.
 
 lib_LTLIBRARIES += \
-	%reldir%/libandroid-utils-0.la
+	%reldir%/libandroid-utils.la
 
-%canon_reldir%_libandroid_utils_0_la_CPPFLAGS = \
+%canon_reldir%_libandroid_utils_la_CPPFLAGS = \
 	$(AM_CPPFLAGS)
-%canon_reldir%_libandroid_utils_0_la_LDFLAGS = \
+%canon_reldir%_libandroid_utils_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
-%canon_reldir%_libandroid_utils_0_la_LIBADD = \
-	libbacktrace/libandroid-backtrace-0.la \
-	libcutils/libandroid-cutils-0.la \
-	liblog/libandroid-log-0.la
-%canon_reldir%_libandroid_utils_0_la_DEPENDENCIES = \
-	libcutils/libandroid-cutils-0.la \
-	liblog/libandroid-log-0.la
-%canon_reldir%_libandroid_utils_0_la_SOURCES = \
+%canon_reldir%_libandroid_utils_la_LIBADD = \
+	libbacktrace/libandroid-backtrace.la \
+	libcutils/libandroid-cutils.la \
+	liblog/libandroid-log.la
+%canon_reldir%_libandroid_utils_la_DEPENDENCIES = \
+	libcutils/libandroid-cutils.la \
+	liblog/libandroid-log.la
+%canon_reldir%_libandroid_utils_la_SOURCES = \
 	%reldir%/BasicHashtable.cpp \
 	%reldir%/BlobCache.cpp \
 	%reldir%/CallStack.cpp \

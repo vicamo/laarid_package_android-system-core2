@@ -15,15 +15,14 @@
 #
 
 lib_LTLIBRARIES += \
-	%reldir%/libandroid-usbhost-0.la
+	%reldir%/libandroid-usbhost.la
 
-%canon_reldir%_libandroid_usbhost_0_la_LDFLAGS = \
+%canon_reldir%_libandroid_usbhost_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
-%canon_reldir%_libandroid_usbhost_0_la_LIBADD = \
-	liblog/libandroid-log-0.la \
-	libcutils/libandroid-cutils-0.la
-%canon_reldir%_libandroid_usbhost_0_la_SOURCES = \
+%canon_reldir%_libandroid_usbhost_la_LIBADD = \
+	liblog/libandroid-log.la
+%canon_reldir%_libandroid_usbhost_la_SOURCES = \
 	%reldir%/usbhost.c
 
 pkgconfig_DATA += \

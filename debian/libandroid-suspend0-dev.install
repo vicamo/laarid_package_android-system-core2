@@ -1,0 +1,3 @@
+usr/lib/*/libandroid-suspend.a
+usr/lib/*/libandroid-suspend.so
+usr/lib/*/pkgconfig/android-suspend-*.pc

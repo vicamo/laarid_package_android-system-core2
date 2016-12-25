@@ -1,13 +1,13 @@
 lib_LTLIBRARIES += \
-	%reldir%/libandroid-diskconfig-0.la
+	%reldir%/libandroid-diskconfig.la
 
-%canon_reldir%_libandroid_diskconfig_0_la_LDFLAGS = \
+%canon_reldir%_libandroid_diskconfig_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
-%canon_reldir%_libandroid_diskconfig_0_la_LIBADD = \
-	liblog/libandroid-log-0.la \
-	libcutils/libandroid-cutils-0.la
-%canon_reldir%_libandroid_diskconfig_0_la_SOURCES = \
+%canon_reldir%_libandroid_diskconfig_la_LIBADD = \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la
+%canon_reldir%_libandroid_diskconfig_la_SOURCES = \
 	%reldir%/config_mbr.c \
 	%reldir%/diskconfig.c \
 	%reldir%/diskutils.c \

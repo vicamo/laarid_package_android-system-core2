@@ -3,8 +3,8 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: Android System Core Libraries - suspend
-Description: libandroid-suspend-@SYSTEMCORE_RELEASE_NUMBER@
+Name: android-suspend-@SYSTEMCORE_API_VERSION@
+Description: Android System Core Libraries - suspend
 Version: @VERSION@
-Requires: android-log-0.0, android-cutils-0.0
-Libs: -L${libdir} -landroid-suspend-@SYSTEMCORE_RELEASE_NUMBER@
+Requires: android-log-@SYSTEMCORE_API_VERSION@
+Libs: -L${libdir} -landroid-suspend

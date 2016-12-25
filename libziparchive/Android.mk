@@ -14,19 +14,19 @@
 # limitations under the License.
 
 lib_LTLIBRARIES += \
-	%reldir%/libandroid-ziparchive-0.la
+	%reldir%/libandroid-ziparchive.la
 
-%canon_reldir%_libandroid_ziparchive_0_la_CPPFLAGS = \
+%canon_reldir%_libandroid_ziparchive_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(ZLIB_CFLAGS)
-%canon_reldir%_libandroid_ziparchive_0_la_LDFLAGS = \
+%canon_reldir%_libandroid_ziparchive_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
-%canon_reldir%_libandroid_ziparchive_0_la_LIBADD = \
-	liblog/libandroid-log-0.la \
-	libutils/libandroid-utils-0.la \
+%canon_reldir%_libandroid_ziparchive_la_LIBADD = \
+	liblog/libandroid-log.la \
+	libutils/libandroid-utils.la \
 	$(ZLIB_LIBS)
-%canon_reldir%_libandroid_ziparchive_0_la_SOURCES = \
+%canon_reldir%_libandroid_ziparchive_la_SOURCES = \
 	%reldir%/zip_archive.cc
 
 pkgconfig_DATA += \

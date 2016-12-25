@@ -1,18 +1,18 @@
 lib_LTLIBRARIES += \
-	%reldir%/libandroid-sysutils-0.la
+	%reldir%/libandroid-sysutils.la
 
-%canon_reldir%_libandroid_sysutils_0_la_CXXFLAGS = \
+%canon_reldir%_libandroid_sysutils_la_CXXFLAGS = \
 	$(AM_CXXFLAGS) \
 	$(PTHREAD_CFLAGS)
-%canon_reldir%_libandroid_sysutils_0_la_LDFLAGS = \
+%canon_reldir%_libandroid_sysutils_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(PTHREAD_CFLAGS) \
 	$(libtool_opts)
-%canon_reldir%_libandroid_sysutils_0_la_LIBADD = \
+%canon_reldir%_libandroid_sysutils_la_LIBADD = \
 	-lpthread \
-	liblog/libandroid-log-0.la \
-	libcutils/libandroid-cutils-0.la
-%canon_reldir%_libandroid_sysutils_0_la_SOURCES = \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la
+%canon_reldir%_libandroid_sysutils_la_SOURCES = \
 	%reldir%/src/FrameworkCommand.cpp \
 	%reldir%/src/FrameworkListener.cpp \
 	%reldir%/src/NetlinkEvent.cpp \

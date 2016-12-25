@@ -3,8 +3,8 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: Android System Core Libraries - mincrypt
-Description: libandroid-mincrypt-@SYSTEMCORE_RELEASE_NUMBER@
+Name: android-mincrypt-@SYSTEMCORE_API_VERSION@
+Description: Android System Core Libraries - mincrypt
 Version: @VERSION@
-Libs: -L${libdir} -landroid-mincrypt-@SYSTEMCORE_RELEASE_NUMBER@
+Libs: -L${libdir} -landroid-mincrypt
 Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@

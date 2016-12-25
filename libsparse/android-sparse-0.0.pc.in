@@ -3,8 +3,8 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: Android System Core Libraries - sparse
-Description: libandroid-sparse-@SYSTEMCORE_RELEASE_NUMBER@
+Name: android-sparse-@SYSTEMCORE_API_VERSION@
+Description: Android System Core Libraries - sparse
 Version: @VERSION@
 Requires: zlib
-Libs: -L${libdir} -landroid-sparse-@SYSTEMCORE_RELEASE_NUMBER@
+Libs: -L${libdir} -landroid-sparse

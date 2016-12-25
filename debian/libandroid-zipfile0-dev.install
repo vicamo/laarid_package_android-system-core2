@@ -1,0 +1,4 @@
+usr/include/android/system-core-*/zipfile
+usr/lib/*/libandroid-zipfile.a
+usr/lib/*/libandroid-zipfile.so
+usr/lib/*/pkgconfig/android-zipfile-*.pc
