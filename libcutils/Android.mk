@@ -18,11 +18,18 @@ lib_LTLIBRARIES += \
 	%reldir%/libandroid-cutils-0.la
 
 %canon_reldir%_libandroid_cutils_0_la_CPPFLAGS = \
-	$(AM_CPPFLAGS)
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS)
+%canon_reldir%_libandroid_cutils_0_la_CFLAGS = \
+	$(AM_CFLAGS) \
+	$(PTHREAD_CFLAGS) \
+	$(BIONIC_CFLAGS)
 %canon_reldir%_libandroid_cutils_0_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_cutils_0_la_LIBADD = \
+	$(PTHREAD_LIBS) \
+	$(BIONIC_LIBS) \
 	liblog/libandroid-log-0.la
 %canon_reldir%_libandroid_cutils_0_la_DEPENDENCIES = \
 	liblog/libandroid-log-0.la
@@ -110,8 +117,10 @@ noinst_PROGRAMS += \
 
 %canon_reldir%_tst_str_parms_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
 	-DTEST_STR_PARMS
 %canon_reldir%_tst_str_parms_LDADD = \
+	$(BIONIC_LIBS) \
 	liblog/libandroid-log-0.la
 %canon_reldir%_tst_str_parms_SOURCES = \
 	%reldir%/hashmap.c \

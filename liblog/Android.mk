@@ -17,6 +17,14 @@
 lib_LTLIBRARIES += \
 	%reldir%/libandroid-log-0.la
 
+%canon_reldir%_libandroid_log_0_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS)
+%canon_reldir%_libandroid_log_0_la_CFLAGS = \
+	$(AM_CFLAGS) \
+	$(BIONIC_CFLAGS)
+%canon_reldir%_libandroid_log_0_la_LIBADD = \
+	$(BIONIC_LIBS)
 %canon_reldir%_libandroid_log_0_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)

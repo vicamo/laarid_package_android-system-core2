@@ -9,27 +9,18 @@ DISTCLEANFILES =
 # -------------------
 AM_CPPFLAGS = \
 	-include config.h \
-	-I$(top_srcdir)/include \
-	$(BIONIC_CFLAGS)
+	-I$(top_srcdir)/include
 
 AM_CFLAGS = \
 	-Wall -Werror \
-	-std=gnu89 \
-	$(PTHREAD_CFLAGS) \
-	$(BIONIC_CFLAGS)
+	-std=gnu89
 
 AM_CXXFLAGS = \
 	-Wall -Werror \
-	-std=gnu++98 \
-	$(PTHREAD_CFLAGS) \
-	$(BIONIC_CFLAGS)
+	-std=gnu++98
 
 AM_LDFLAGS = \
 	-Wl,--as-needed
-
-LIBS = \
-	$(PTHREAD_LIBS) \
-	$(BIONIC_LIBS)
 
 libtool_opts = \
 	-version-info $(LT_VERSION_INFO) \
