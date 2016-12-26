@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: android-zipfile-@SYSTEMCORE_API_VERSION@
 Description: Android System Core Libraries - zipfile
 Version: @VERSION@
-Requires: zlib
+Requires.private: zlib
 Libs: -L${libdir} -landroid-zipfile
 Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@

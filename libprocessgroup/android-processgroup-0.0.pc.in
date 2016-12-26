@@ -6,5 +6,5 @@ includedir=@includedir@
 Name: android-processgroup-@SYSTEMCORE_API_VERSION@
 Description: Android System Core Libraries - processgroup
 Version: @VERSION@
-Requires: android-log-@SYSTEMCORE_API_VERSION@, android-utils-@SYSTEMCORE_API_VERSION@
+Requires.private: android-log-@SYSTEMCORE_API_VERSION@, android-utils-@SYSTEMCORE_API_VERSION@
 Libs: -L${libdir} -landroid-processgroup

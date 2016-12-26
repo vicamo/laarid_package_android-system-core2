@@ -6,5 +6,5 @@ includedir=@includedir@
 Name: android-sparse-@SYSTEMCORE_API_VERSION@
 Description: Android System Core Libraries - sparse
 Version: @VERSION@
-Requires: zlib
+Requires.private: zlib
 Libs: -L${libdir} -landroid-sparse
