@@ -3,7 +3,7 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: android-usbhost-@SYSTEMCORE_RELEASE_NUMBER@
+Name: android-usbhost-@SYSTEMCORE_API_VERSION@
 Description: Android System Core Libraries - usbhost
 Version: @VERSION@
 Requires: android-log-@SYSTEMCORE_API_VERSION@

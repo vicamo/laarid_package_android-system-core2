@@ -3,7 +3,7 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: android-ziparchive-@SYSTEMCORE_RELEASE_NUMBER@
+Name: android-ziparchive-@SYSTEMCORE_API_VERSION@
 Description: Android System Core Libraries - ziparchive
 Version: @VERSION@
 Requires: android-utils-@SYSTEMCORE_API_VERSION@, zlib
