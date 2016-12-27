@@ -32,4 +32,4 @@ lib_LTLIBRARIES += \
 	%reldir%/zip_archive.cc
 
 pkgconfig_DATA += \
-	%reldir%/android-ziparchive-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-ziparchive-$(SYSTEMCORE2_API_VERSION).pc

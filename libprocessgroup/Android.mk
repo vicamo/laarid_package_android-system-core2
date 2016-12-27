@@ -31,4 +31,4 @@ bin_PROGRAMS += \
 	%reldir%/cleanup.cpp
 
 pkgconfig_DATA += \
-	%reldir%/android-processgroup-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-processgroup-$(SYSTEMCORE2_API_VERSION).pc

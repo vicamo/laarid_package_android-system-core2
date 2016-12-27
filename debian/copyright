@@ -1,6 +1,6 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: android-platform-system-core
-Source: https://github.com/laarid/package_android-system-core
+Source: https://github.com/laarid/package_android-system-core2
 
 Files: *
 Copyright: 2014 Android Open Source Project

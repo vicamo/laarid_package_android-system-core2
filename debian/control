@@ -1,4 +1,4 @@
-Source: android-system-core
+Source: android-system-core2
 Priority: extra
 Maintainer: You-Sheng Yang <vicamo@gmail.com>
 Build-Depends: debhelper (>= 9),
@@ -10,9 +10,9 @@ Build-Depends: debhelper (>= 9),
                libunwind8-dev
 Standards-Version: 3.9.5
 Section: libs
-Homepage: https://github.com/laarid/package_android-system-core
-Vcs-Git: https://github.com/laarid/package_android-system-core.git
-Vcs-Browser: https://github.com/laarid/package_android-system-core
+Homepage: https://github.com/laarid/package_android-system-core2
+Vcs-Git: https://github.com/laarid/package_android-system-core2.git
+Vcs-Browser: https://github.com/laarid/package_android-system-core2
 
 Package: libandroid-backtrace0-dev
 Priority: extra

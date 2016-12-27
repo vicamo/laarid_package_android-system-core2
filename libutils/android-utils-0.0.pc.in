@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: android-utils-@SYSTEMCORE_API_VERSION@
+Name: android-utils-@SYSTEMCORE2_API_VERSION@
 Description: Android System Core Libraries - utils
 Version: @VERSION@
 Requires.private: android-log-@LOG_API_VERSION@ >= @LOG_REQUIRED_VERSION@, android-cutils-@CUTILS_API_VERSION@ >= @CUTILS_REQUIRED_VERSION@
 Libs: -L${libdir} -landroid-utils
-Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@
+Cflags: -I${includedir}/android/system-core-@SYSTEMCORE2_API_VERSION@

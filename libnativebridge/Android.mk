@@ -20,4 +20,4 @@ lib_LTLIBRARIES += \
 	%reldir%/native_bridge.cc
 
 pkgconfig_DATA += \
-	%reldir%/android-nativebridge-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-nativebridge-$(SYSTEMCORE2_API_VERSION).pc

@@ -58,4 +58,4 @@ lib_LTLIBRARIES += \
 	%reldir%/misc.cpp
 
 pkgconfig_DATA += \
-	%reldir%/android-utils-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-utils-$(SYSTEMCORE2_API_VERSION).pc

@@ -1,4 +1,4 @@
-android-system-core (0.0.8) unstable; urgency=medium
+android-system-core2 (0.0.8) unstable; urgency=medium
 
   * split package by soname
   * ci: list known failed architectures
