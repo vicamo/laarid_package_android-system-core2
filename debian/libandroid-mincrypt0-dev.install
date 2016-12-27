@@ -1,4 +1,0 @@
-usr/include/android/system-core-*/mincrypt
-usr/lib/*/libandroid-mincrypt.a
-usr/lib/*/libandroid-mincrypt.so
-usr/lib/*/pkgconfig/android-mincrypt-*.pc

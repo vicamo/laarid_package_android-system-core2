@@ -1,0 +1,4 @@
+usr/include/android/system-core-*/utils
+usr/lib/*/libandroid-utils.a
+usr/lib/*/libandroid-utils.so
+usr/lib/*/pkgconfig/android-utils-*.pc

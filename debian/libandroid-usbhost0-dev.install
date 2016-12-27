@@ -1,4 +1,0 @@
-usr/include/android/system-core-*/usbhost
-usr/lib/*/libandroid-usbhost.a
-usr/lib/*/libandroid-usbhost.so
-usr/lib/*/pkgconfig/android-usbhost-*.pc

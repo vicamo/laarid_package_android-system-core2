@@ -1,4 +1,0 @@
-usr/include/android/system-core-*/sysutils
-usr/lib/*/libandroid-sysutils.a
-usr/lib/*/libandroid-sysutils.so
-usr/lib/*/pkgconfig/android-sysutils-*.pc

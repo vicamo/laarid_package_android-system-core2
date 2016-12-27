@@ -1,4 +1,0 @@
-usr/include/android/system-core-*/netutils
-usr/lib/*/libandroid-netutils.a
-usr/lib/*/libandroid-netutils.so
-usr/lib/*/pkgconfig/android-netutils-*.pc

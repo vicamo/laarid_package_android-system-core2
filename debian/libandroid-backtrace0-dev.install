@@ -1,0 +1,4 @@
+usr/include/android/system-core-*/backtrace/*
+usr/lib/*/libandroid-backtrace.a
+usr/lib/*/libandroid-backtrace.so
+usr/lib/*/pkgconfig/android-backtrace-*.pc
