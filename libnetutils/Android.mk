@@ -10,9 +10,11 @@ lib_LTLIBRARIES += \
 %canon_reldir%_libandroid_netutils_la_SOURCES = \
 	%reldir%/dhcpclient.c \
 	%reldir%/dhcpmsg.c \
+	%reldir%/dhcpmsg.h \
 	%reldir%/dhcp_utils.c \
 	%reldir%/ifc_utils.c \
-	%reldir%/packet.c
+	%reldir%/packet.c \
+	%reldir%/packet.h
 
 pkgconfig_DATA += \
 	%reldir%/android-netutils-$(SYSTEMCORE_API_VERSION).pc

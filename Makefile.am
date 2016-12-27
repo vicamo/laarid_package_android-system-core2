@@ -3,7 +3,23 @@ ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 # Distribution
 # ------------
 EXTRA_DIST =
+BUILT_SOURCES =
+CLEANFILES =
 DISTCLEANFILES =
+MAINTAINERCLEANFILES = \
+	$(GITIGNORE_MAINTAINERCLEANFILES_TOPLEVEL) \
+	$(GITIGNORE_MAINTAINERCLEANFILES_M4_LIBTOOL) \
+	$(GITIGNORE_MAINTAINERCLEANFILES_MAKEFILE_IN) \
+	$(srcdir)/ChangeLog \
+	$(srcdir)/INSTALL
+
+DISTCHECK_CONFIGURE_FLAGS = \
+	--disable-maintainer-mode
+
+GITIGNOREFILES = \
+	build \
+	debian \
+	$(DIST_ARCHIVES)
 
 # Common/global flags
 # -------------------
@@ -68,5 +84,12 @@ include $(srcdir)/libusbhost/Android.mk
 pkgconfigdir = $(libdir)/pkgconfig
 $(pkgconfig_DATA): config.status
 
-DISTCLEANFILES += \
-	$(pkgconfig_DATA)
+EXTRA_DIST += $(pkgconfig_DATA:.pc=.pc.in)
+DISTCLEANFILES += $(pkgconfig_DATA)
+
+# Somehow $(bin_SCRIPTS) are not included in DIST_SOURCES by default.
+EXTRA_DIST += $(bin_SCRIPTS)
+CLEANFILES += $(BUILT_SOURCES)
+GITIGNOREFILES += $(BUILT_SOURCES)
+
+-include $(top_srcdir)/git.mk

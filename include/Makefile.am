@@ -132,3 +132,8 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 	%reldir%/system/sound_trigger.h \
 	%reldir%/system/thread_defs.h \
 	%reldir%/system/window.h
+
+EXTRA_DIST += \
+	%reldir%/private/android_filesystem_capability.h \
+	%reldir%/private/android_filesystem_config.h \
+	%reldir%/utils/Compat.h
