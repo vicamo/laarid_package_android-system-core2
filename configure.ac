@@ -267,6 +267,12 @@ if test x$os_windows = xyes; then
     [Define to 1 if we have Windows {Map,Unmap}ViewOfFile.])
 fi
 
+# Optional features
+# -----------------
+AC_ARG_ENABLE([cpusets],
+  [AS_HELP_STRING([--enable-cpusets], [enable use of /dev/cpuset @<:@default=yes@:>@])])
+AM_CONDITIONAL([ENABLE_CPUSETS], [test x$enable_cpusets = xyes])
+
 AC_CONFIG_FILES([
   Makefile
   libcutils/android-cutils-$SYSTEMCORE_API_VERSION.pc
