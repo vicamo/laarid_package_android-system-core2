@@ -80,6 +80,8 @@ AM_CONDITIONAL(OS_LINUX, test "$os_linux" = "yes")
 
 cpu_arm=no
 cpu_aarch64=no
+cpu_mips=no
+cpu_mips64=no
 cpu_x86=no
 cpu_x86_64=no
 case "$host_cpu" in
@@ -88,6 +90,12 @@ case "$host_cpu" in
     ;;
   aarch64*)
     cpu_aarch64=yes
+    ;;
+  mips64*)
+    cpu_mips64=yes
+    ;;
+  mips*)
+    cpu_mips=yes
     ;;
   i?86 | x86)
     cpu_x86=yes
@@ -99,6 +107,8 @@ esac
 
 AM_CONDITIONAL(CPU_ARM, test "$cpu_arm" = "yes")
 AM_CONDITIONAL(CPU_AARCH64, test "$cpu_aarch64" = "yes")
+AM_CONDITIONAL(CPU_MIPS, test "$cpu_mips" = "yes")
+AM_CONDITIONAL(CPU_MIPS64, test "$cpu_mips64" = "yes")
 AM_CONDITIONAL(CPU_X86, test "$cpu_x86" = "yes")
 AM_CONDITIONAL(CPU_X86_64, test "$cpu_x86_64" = "yes")
 
