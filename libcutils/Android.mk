@@ -53,6 +53,7 @@ lib_LTLIBRARIES += \
 	%reldir%/record_stream.c \
 	%reldir%/sched_policy.c \
 	%reldir%/socket_inaddr_any_server.c \
+	%reldir%/socket_local.h \
 	%reldir%/socket_local_client.c \
 	%reldir%/socket_local_server.c \
 	%reldir%/socket_loopback_client.c \
@@ -106,7 +107,8 @@ endif
 if CPU_X86_64
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
 	%reldir%/arch-x86_64/android_memset16_SSE2-atom.S \
-	%reldir%/arch-x86_64/android_memset32_SSE2-atom.S
+	%reldir%/arch-x86_64/android_memset32_SSE2-atom.S \
+	%reldir%/arch-x86_64/cache.h
 %canon_reldir%_libandroid_cutils_la_CPPFLAGS += \
 	-DHAVE_MEMSET16 \
 	-DHAVE_MEMSET32

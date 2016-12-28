@@ -19,7 +19,9 @@ lib_LTLIBRARIES += \
 	%reldir%/autosuspend.c \
 	%reldir%/autosuspend_autosleep.c \
 	%reldir%/autosuspend_earlysuspend.c \
+	%reldir%/autosuspend_ops.h \
 	%reldir%/autosuspend_wakeup_count.c \
+	%reldir%/include/suspend/autosuspend.h \
 	%reldir%/strerror_r.c
 
 pkgconfig_DATA += \

@@ -8,6 +8,7 @@ lib_LTLIBRARIES += \
 	$(ZLIB_LIBS)
 %canon_reldir%_libandroid_zipfile_la_SOURCES = \
 	%reldir%/centraldir.c \
+	%reldir%/private.h \
 	%reldir%/zipfile.c
 
 noinst_PROGRAMS += \

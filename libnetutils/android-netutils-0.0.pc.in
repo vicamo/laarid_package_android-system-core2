@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: android-netutils-@SYSTEMCORE_API_VERSION@
 Description: Android System Core Libraries - netutils
 Version: @VERSION@
-Requires: android-log-@SYSTEMCORE_API_VERSION@, android-cutils-@SYSTEMCORE_API_VERSION@
+Requires.private: android-log-@SYSTEMCORE_API_VERSION@, android-cutils-@SYSTEMCORE_API_VERSION@
 Libs: -L${libdir} -landroid-netutils
 Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@
