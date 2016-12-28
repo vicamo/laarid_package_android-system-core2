@@ -268,6 +268,5 @@ AC_CONFIG_FILES([
   libsuspend/android-suspend-$SYSTEMCORE_API_VERSION.pc
   libsysutils/android-sysutils-$SYSTEMCORE_API_VERSION.pc
   libusbhost/android-usbhost-$SYSTEMCORE_API_VERSION.pc
-  libzipfile/android-zipfile-$SYSTEMCORE_API_VERSION.pc
 ])
 AC_OUTPUT

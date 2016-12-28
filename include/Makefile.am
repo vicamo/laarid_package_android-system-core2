@@ -35,12 +35,6 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 	%reldir%/mincrypt/sha.h \
 	%reldir%/mincrypt/sha256.h
 
-# HEADERS: android/zipfile
-# ------------------------
-%canon_reldir%_libandroid_zipfile_incdir = $(androidincdir)/zipfile
-%canon_reldir%_libandroid_zipfile_inc_HEADERS = \
-	%reldir%/zipfile/zipfile.h
-
 # HEADERS: android/cutils
 # -----------------------
 %canon_reldir%_libandroid_cutils_incdir = $(androidincdir)/cutils
@@ -48,20 +42,11 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 	%reldir%/cutils/android_reboot.h \
 	%reldir%/cutils/aref.h \
 	%reldir%/cutils/ashmem.h \
-	%reldir%/cutils/atomic-arm.h \
-	%reldir%/cutils/atomic-arm64.h \
-	%reldir%/cutils/atomic-inline.h \
-	%reldir%/cutils/atomic-mips.h \
-	%reldir%/cutils/atomic-mips64.h \
-	%reldir%/cutils/atomic-x86.h \
-	%reldir%/cutils/atomic-x86_64.h \
 	%reldir%/cutils/atomic.h \
 	%reldir%/cutils/bitops.h \
 	%reldir%/cutils/compiler.h \
 	%reldir%/cutils/config_utils.h \
-	%reldir%/cutils/cpu_info.h \
 	%reldir%/cutils/debugger.h \
-	%reldir%/cutils/dir_hash.h \
 	%reldir%/cutils/fs.h \
 	%reldir%/cutils/hashmap.h \
 	%reldir%/cutils/iosched_policy.h \
@@ -125,15 +110,14 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 # -----------------------
 %canon_reldir%_libandroid_system_incdir = $(androidincdir)/system
 %canon_reldir%_libandroid_system_inc_HEADERS = \
-	%reldir%/system/audio.h \
-	%reldir%/system/audio_policy.h \
 	%reldir%/system/camera.h \
 	%reldir%/system/graphics.h \
-	%reldir%/system/sound_trigger.h \
+	%reldir%/system/radio.h \
 	%reldir%/system/thread_defs.h \
 	%reldir%/system/window.h
 
 EXTRA_DIST += \
 	%reldir%/private/android_filesystem_capability.h \
 	%reldir%/private/android_filesystem_config.h \
+	%reldir%/private/android_logger.h \
 	%reldir%/utils/Compat.h

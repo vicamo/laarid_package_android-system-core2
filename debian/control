@@ -94,30 +94,6 @@ Depends: ${shlibs:Depends},
 Description: Android libsparse
  This package contains libsparse built from Android platform/system/core.
 
-Package: libandroid-zipfile0-dev
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends: libandroid-zipfile0 (= ${binary:Version}),
-         zlib1g-dev,
-         ${misc:Depends}
-Description: Android libzipfile - development
- This package contains libzipfile built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-zipfile0
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends},
-         ${misc:Depends}
-Description: Android libzipfile
- This package contains libzipfile built from Android platform/system/core.
-
 Package: libandroid-cutils0-dev
 Priority: extra
 Section: libdevel
