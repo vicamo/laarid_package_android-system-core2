@@ -15,7 +15,9 @@ lib_LTLIBRARIES += \
 	$(BIONIC_LIBS) \
 	libutils/libandroid-utils.la
 %canon_reldir%_libandroid_processgroup_la_SOURCES = \
-	%reldir%/processgroup.cpp
+	%reldir%/include/processgroup/processgroup.h \
+	%reldir%/processgroup.cpp \
+	%reldir%/processgroup_priv.h
 
 bin_PROGRAMS += \
 	%reldir%/processgroup_cleanup

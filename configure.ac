@@ -39,7 +39,7 @@ AC_INIT([android-system-core], [systemcore_version],
   [https://github.com/laarid/package_android-system-core])
 
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_SRCDIR([include/log/log.h])
+AC_CONFIG_SRCDIR([include/utils/Mutex.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 
