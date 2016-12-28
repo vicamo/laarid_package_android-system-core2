@@ -67,7 +67,6 @@ include $(srcdir)/include/Makefile.am
 include $(srcdir)/liblog/Android.mk
 include $(srcdir)/libmincrypt/Android.mk
 include $(srcdir)/libsparse/Android.mk
-include $(srcdir)/libzipfile/Android.mk
 
 # Stage 0-1: depends on any of above packages
 include $(srcdir)/libcutils/Android.mk

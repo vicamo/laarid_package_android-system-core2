@@ -23,6 +23,7 @@ lib_LTLIBRARIES += \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_ziparchive_la_LIBADD = \
+	base/libandroid-base.la \
 	liblog/libandroid-log.la \
 	libutils/libandroid-utils.la \
 	$(ZLIB_LIBS)

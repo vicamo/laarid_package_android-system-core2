@@ -16,5 +16,13 @@ lib_LTLIBRARIES += \
 	%reldir%/packet.c \
 	%reldir%/packet.h
 
+bin_PROGRAMS += \
+	%reldir%/dhcptool
+
+%canon_reldir%_dhcptool_LDADD = \
+	%reldir%/libandroid-netutils.la
+%canon_reldir%_dhcptool_SOURCES = \
+	%reldir%/dhcptool.c
+
 pkgconfig_DATA += \
 	%reldir%/android-netutils-$(SYSTEMCORE_API_VERSION).pc

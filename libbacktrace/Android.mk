@@ -39,9 +39,12 @@ lib_LTLIBRARIES += \
 	liblog/libandroid-log.la \
 	libcutils/libandroid-cutils.la
 %canon_reldir%_libandroid_backtrace_la_SOURCES = \
-	%reldir%/BacktraceImpl.cpp \
+	%reldir%/Backtrace.cpp \
+	%reldir%/BacktraceCurrent.cpp \
 	%reldir%/BacktraceMap.cpp \
-	%reldir%/BacktraceThread.cpp \
+	%reldir%/BacktracePtrace.cpp \
+	%reldir%/thread_utils.c \
+	%reldir%/ThreadEntry.cpp \
 	%reldir%/UnwindCurrent.cpp \
 	%reldir%/UnwindPtrace.cpp
 

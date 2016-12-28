@@ -23,12 +23,12 @@
 #include <android/log.h>
 
 /* the rest is only used internally by the system */
-#include <time.h>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdint.h>
-#include <sys/types.h>
 #include <stdarg.h>
+#include <stdint.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <time.h>
+#include <unistd.h>
 
 #ifdef __cplusplus
 extern "C" {

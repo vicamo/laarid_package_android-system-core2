@@ -5,7 +5,6 @@ lib_LTLIBRARIES += \
 
 %canon_reldir%_libandroid_sparse_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
-	$(ZLIB_CFLAGS) \
 	-I$(top_srcdir)/%reldir%/include
 %canon_reldir%_libandroid_sparse_la_LDFLAGS = \
 	$(AM_LDFLAGS) \

@@ -1,5 +1,6 @@
 #include <alloca.h>
 #include <errno.h>
+#include <malloc.h>
 #include <pthread.h>
 #include <signal.h>
 #include <stdlib.h>
@@ -221,7 +222,9 @@ int SocketClient::sendDataLockedv(struct iovec *iov, int iovcnt) {
 
     sigaction(SIGPIPE, &old_action, &new_action);
 
-    errno = e;
+    if (e != 0) {
+        errno = e;
+    }
     return ret;
 }
 
