@@ -18,16 +18,18 @@ lib_LTLIBRARIES += \
 
 %canon_reldir%_libandroid_ziparchive_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
-	$(ZLIB_CFLAGS)
+	$(ZLIB_CFLAGS) \
+	$(LOG_CFLAGS) \
+	$(CUTILS_CFLAGS)
 %canon_reldir%_libandroid_ziparchive_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_ziparchive_la_LIBADD = \
-	liblog/libandroid-log.la \
-	libutils/libandroid-utils.la \
-	$(ZLIB_LIBS)
+	$(ZLIB_LIBS) \
+	$(LOG_LIBS) \
+	libutils/libandroid-utils.la
 %canon_reldir%_libandroid_ziparchive_la_SOURCES = \
 	%reldir%/zip_archive.cc
 
 pkgconfig_DATA += \
-	%reldir%/android-ziparchive-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-ziparchive-$(SYSTEMCORE2_API_VERSION).pc

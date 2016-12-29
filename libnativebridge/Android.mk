@@ -3,6 +3,7 @@ lib_LTLIBRARIES += \
 
 %canon_reldir%_libandroid_nativebridge_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
+	$(LOG_CFLAGS) \
 	$(NATIVEHELPER_CFLAGS)
 %canon_reldir%_libandroid_nativebridge_la_CXXFLAGS = \
 	$(AM_CXXFLAGS) \
@@ -14,9 +15,9 @@ lib_LTLIBRARIES += \
 	$(libtool_opts)
 %canon_reldir%_libandroid_nativebridge_la_LIBADD = \
 	$(LIBADD_DLOPEN) \
-	liblog/libandroid-log.la
+	$(LOG_LIBS)
 %canon_reldir%_libandroid_nativebridge_la_SOURCES = \
 	%reldir%/native_bridge.cc
 
 pkgconfig_DATA += \
-	%reldir%/android-nativebridge-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-nativebridge-$(SYSTEMCORE2_API_VERSION).pc

@@ -1,27 +1,34 @@
-Source: android-system-core
+Source: android-system-core2
 Priority: extra
 Maintainer: You-Sheng Yang <vicamo@gmail.com>
-Build-Depends: debhelper (>= 9), dh-autoreconf, autoconf-archive, libbionic0-dev
+Build-Depends: debhelper (>= 9),
+               dh-autoreconf,
+               autoconf-archive,
+               libandroid-cutils0-dev,
+               libandroid-log0-dev,
+               libandroid-nativehelper0-dev,
+               libunwind8-dev
 Standards-Version: 3.9.5
 Section: libs
-Homepage: https://github.com/laarid/package_android-system-core
-Vcs-Git: https://github.com/laarid/package_android-system-core.git
-Vcs-Browser: https://github.com/laarid/package_android-system-core
+Homepage: https://github.com/laarid/package_android-system-core2
+Vcs-Git: https://github.com/laarid/package_android-system-core2.git
+Vcs-Browser: https://github.com/laarid/package_android-system-core2
 
-Package: libandroid-log0-dev
+Package: libandroid-backtrace0-dev
 Priority: extra
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: libandroid-log0 (= ${binary:Version}),
-         libbionic0-dev,
+Depends: libandroid-backtrace0 (= ${binary:Version}),
+         libandroid-cutils0-dev,
+         libunwind8-dev,
          ${misc:Depends}
-Description: Android liblog - development
- This package contains liblog built from Android platform/system/core.
+Description: Android libbacktrace - development
+ This package contains libbacktrace built from Android platform/system/core.
  .
  This package contains the development files.
 
-Package: libandroid-log0
+Package: libandroid-backtrace0
 Priority: extra
 Section: libs
 Architecture: any
@@ -29,22 +36,23 @@ Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends},
          ${misc:Depends}
-Description: Android liblog
- This package contains liblog built from Android platform/system/core.
+Description: Android libbacktrace
+ This package contains libbacktrace built from Android platform/system/core.
 
-Package: libandroid-mincrypt0-dev
+Package: libandroid-nativebridge0-dev
 Priority: extra
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: libandroid-mincrypt0 (= ${binary:Version}),
+Depends: libandroid-nativebridge0 (= ${binary:Version}),
+         libandroid-nativehelper0-dev,
          ${misc:Depends}
-Description: Android libmincrypt - development
- This package contains libmincrypt built from Android platform/system/core.
+Description: Android libnativebridge - development
+ This package contains libnativebridge built from Android platform/system/core.
  .
  This package contains the development files.
 
-Package: libandroid-mincrypt0
+Package: libandroid-nativebridge0
 Priority: extra
 Section: libs
 Architecture: any
@@ -52,38 +60,86 @@ Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends},
          ${misc:Depends}
-Description: Android libmincrypt
- This package contains libmincrypt built from Android platform/system/core.
+Description: Android libnativebridge
+ This package contains libnativebridge built from Android platform/system/core.
 
-Package: libandroid-sparse0-bin
+Package: libandroid-utils0-dev
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends: libandroid-utils0 (= ${binary:Version}),
+         libandroid-cutils0-dev,
+         ${misc:Depends}
+Description: Android libutils - development
+ This package contains libutils built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-utils0
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Description: Android libutils
+ This package contains libutils built from Android platform/system/core.
+
+Package: libandroid-processgroup0-bin
 Priority: extra
 Section: misc
 Architecture: any
 Multi-Arch: no
-Depends: libandroid-sparse0 (= ${binary:Version}),
-         python,
+Depends: libandroid-processgroup0 (= ${binary:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
-Description: Android libsparse - utilities
- This package contains libsparse built from Android platform/system/core.
+Description: Android libprocessgroup - utilities
+ This package contains libprocessgroup built from Android platform/system/core.
  .
  This package contains the utilities which are used by the libraries
  and other packages.
 
-Package: libandroid-sparse0-dev
+Package: libandroid-processgroup0-dev
 Priority: extra
 Section: libdevel
 Architecture: any
 Multi-Arch: same
-Depends: libandroid-sparse0 (= ${binary:Version}),
+Depends: libandroid-processgroup0 (= ${binary:Version}),
+         libandroid-utils0-dev,
+         ${misc:Depends}
+Description: Android libprocessgroup - development
+ This package contains libprocessgroup built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-processgroup0
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Description: Android libprocessgroup
+ This package contains libprocessgroup built from Android platform/system/core.
+
+Package: libandroid-ziparchive0-dev
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends: libandroid-ziparchive0 (= ${binary:Version}),
+         libandroid-utils0-dev,
          zlib1g-dev,
          ${misc:Depends}
-Description: Android libsparse - development
- This package contains libsparse built from Android platform/system/core.
+Description: Android libziparchive - development
+ This package contains libziparchive built from Android platform/system/core.
  .
  This package contains the development files.
 
-Package: libandroid-sparse0
+Package: libandroid-ziparchive0
 Priority: extra
 Section: libs
 Architecture: any
@@ -91,179 +147,5 @@ Multi-Arch: same
 Pre-Depends: ${misc:Pre-Depends}
 Depends: ${shlibs:Depends},
          ${misc:Depends}
-Description: Android libsparse
- This package contains libsparse built from Android platform/system/core.
-
-Package: libandroid-zipfile0-dev
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends: libandroid-zipfile0 (= ${binary:Version}),
-         zlib1g-dev,
-         ${misc:Depends}
-Description: Android libzipfile - development
- This package contains libzipfile built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-zipfile0
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends},
-         ${misc:Depends}
-Description: Android libzipfile
- This package contains libzipfile built from Android platform/system/core.
-
-Package: libandroid-cutils0-dev
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends: libandroid-cutils0 (= ${binary:Version}),
-         libandroid-log0-dev,
-         libbionic0-dev,
-         ${misc:Depends}
-Description: Android libcutils - development
- This package contains libcutils built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-cutils0
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends},
-         ${misc:Depends}
-Description: Android libcutils
- This package contains libcutils built from Android platform/system/core.
-
-Package: libandroid-diskconfig0-dev
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends: libandroid-diskconfig0 (= ${binary:Version}),
-         libandroid-cutils0-dev,
-         libandroid-log0-dev,
-         ${misc:Depends}
-Description: Android libdiskconfig - development
- This package contains libdiskconfig built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-diskconfig0
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends},
-         ${misc:Depends}
-Description: Android libdiskconfig
- This package contains libdiskconfig built from Android platform/system/core.
-
-Package: libandroid-netutils0-dev
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends: libandroid-netutils0 (= ${binary:Version}),
-         libandroid-cutils0-dev,
-         libandroid-log0-dev,
-         ${misc:Depends}
-Description: Android libnetutils - development
- This package contains libnetutils built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-netutils0
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends},
-         ${misc:Depends}
-Description: Android libnetutils
- This package contains libnetutils built from Android platform/system/core.
-
-Package: libandroid-suspend0-dev
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends: libandroid-suspend0 (= ${binary:Version}),
-         libandroid-cutils0-dev,
-         libandroid-log0-dev,
-         ${misc:Depends}
-Description: Android libsuspend - development
- This package contains libsuspend built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-suspend0
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends},
-         ${misc:Depends}
-Description: Android libsuspend
- This package contains libsuspend built from Android platform/system/core.
-
-Package: libandroid-sysutils0-dev
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends: libandroid-sysutils0 (= ${binary:Version}),
-         libandroid-cutils0-dev,
-         libandroid-log0-dev,
-         ${misc:Depends}
-Description: Android libsysutils - development
- This package contains libsysutils built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-sysutils0
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends},
-         ${misc:Depends}
-Description: Android libsysutils
- This package contains libsysutils built from Android platform/system/core.
-
-Package: libandroid-usbhost0-dev
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends: libandroid-usbhost0 (= ${binary:Version}),
-         libandroid-cutils0-dev,
-         libandroid-log0-dev,
-         ${misc:Depends}
-Description: Android libusbhost - development
- This package contains libusbhost built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-usbhost0
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends: ${misc:Pre-Depends}
-Depends: ${shlibs:Depends},
-         ${misc:Depends}
-Description: Android libusbhost
- This package contains libusbhost built from Android platform/system/core.
+Description: Android libziparchive
+ This package contains libziparchive built from Android platform/system/core.

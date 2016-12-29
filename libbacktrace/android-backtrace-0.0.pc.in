@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: android-backtrace-@SYSTEMCORE_API_VERSION@
+Name: android-backtrace-@SYSTEMCORE2_API_VERSION@
 Description: Android System Core Libraries - backtrace
 Version: @VERSION@
-Requires.private: bionic-@BIONIC_API_VERSION@ >= @BIONIC_REQUIRED_VERSION@, android-log-@SYSTEMCORE_RELEASE_NUMBER@, android-cutils-@SYSTEMCORE_RELEASE_NUMBER@, libunwind, libunwind-ptrace
+Requires.private: bionic-@BIONIC_API_VERSION@ >= @BIONIC_REQUIRED_VERSION@, android-log-@LOG_API_VERSION@ >= @LOG_REQUIRED_VERSION@, android-cutils-@CUTILS_API_VERSION@ >= @CUTILS_REQUIRED_VERSION@, libunwind, libunwind-ptrace
 Libs: -L${libdir} -landroid-backtrace
-Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@
+Cflags: -I${includedir}/android/system-core-@SYSTEMCORE2_API_VERSION@

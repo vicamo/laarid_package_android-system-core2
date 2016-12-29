@@ -1,4 +1,4 @@
 # Compulsory line, this is a version 3 file
 version=3
 
-https://github.com/laarid/package_android-system-core/releases android-system-core-(.*)\.tar\.gz
+https://github.com/laarid/package_android-system-core2/releases android-system-core2-(.*)\.tar\.gz

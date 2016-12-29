@@ -1,3 +1,13 @@
+android-system-core2 (0.0.8) stretch; urgency=medium
+
+  * libziparchive: fix format string
+  * Fix format string
+  * rename package to android-system-core2
+  * fix distcheck
+  * build stage 2 packages
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Wed, 28 Dec 2016 21:47:31 +0800
+
 android-system-core (0.0.8) unstable; urgency=medium
 
   * split package by soname

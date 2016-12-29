@@ -16,17 +16,19 @@ lib_LTLIBRARIES += \
 	%reldir%/libandroid-utils.la
 
 %canon_reldir%_libandroid_utils_la_CPPFLAGS = \
-	$(AM_CPPFLAGS)
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	$(LOG_CFLAGS) \
+	$(CUTILS_CFLAGS)
 %canon_reldir%_libandroid_utils_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_utils_la_LIBADD = \
+	-lpthread \
 	libbacktrace/libandroid-backtrace.la \
-	libcutils/libandroid-cutils.la \
-	liblog/libandroid-log.la
-%canon_reldir%_libandroid_utils_la_DEPENDENCIES = \
-	libcutils/libandroid-cutils.la \
-	liblog/libandroid-log.la
+	$(BIONIC_LIBS) \
+	$(LOG_LIBS) \
+	$(CUTILS_LIBS)
 %canon_reldir%_libandroid_utils_la_SOURCES = \
 	%reldir%/BasicHashtable.cpp \
 	%reldir%/BlobCache.cpp \
@@ -56,4 +58,4 @@ lib_LTLIBRARIES += \
 	%reldir%/misc.cpp
 
 pkgconfig_DATA += \
-	%reldir%/android-utils-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-utils-$(SYSTEMCORE2_API_VERSION).pc

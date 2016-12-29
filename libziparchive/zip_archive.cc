@@ -354,7 +354,7 @@ static int32_t CopyFileToFile(int fd, uint8_t* begin, const uint32_t length, uin
     ssize_t actual = TEMP_FAILURE_RETRY(read(fd, buf, get_size));
 
     if (actual != get_size) {
-      ALOGW("CopyFileToFile: copy read failed (" ZD " vs " ZD ")", actual, get_size);
+      ALOGW("CopyFileToFile: copy read failed (%zd vs %zd)", actual, get_size);
       return kIoError;
     }
 

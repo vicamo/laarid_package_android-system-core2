@@ -1,45 +1,45 @@
-# android-system-core versioning
+# android-system-core2 versioning
 # -------------------------
 # To make new release:
 #
-#   systemcore_micro_version += 1
-#   systemcore_interface_revision += 1
+#   systemcore2_micro_version += 1
+#   systemcore2_interface_revision += 1
 #
 # if any functions have been added:
 #
-#   systemcore_micro_version += 1
-#   systemcore_interface_revision = 0
+#   systemcore2_micro_version += 1
+#   systemcore2_interface_revision = 0
 #
 #   or
 #
-#   systemcore_minor_version += 1
-#   systemcore_micro_version = 0
-#   systemcore_interface_revision = 0
+#   systemcore2_minor_version += 1
+#   systemcore2_micro_version = 0
+#   systemcore2_interface_revision = 0
 #
 # if backwards compatibility has been broken:
 #
-#   systemcore_major_version += 1
-#   systemcore_minor_version = 0
-#   systemcore_micro_version = 0
-#   systemcore_interface_revision = 0
-m4_define([systemcore_major_version], [0])
-m4_define([systemcore_minor_version], [0])
-m4_define([systemcore_micro_version], [8])
-m4_define([systemcore_interface_revision], [7])
-m4_define([systemcore_api_version], [systemcore_major_version.0])
-m4_define([systemcore_release_number], [systemcore_major_version])
-m4_define([systemcore_version],
-  [systemcore_major_version.systemcore_minor_version.systemcore_micro_version])
+#   systemcore2_major_version += 1
+#   systemcore2_minor_version = 0
+#   systemcore2_micro_version = 0
+#   systemcore2_interface_revision = 0
+m4_define([systemcore2_major_version], [0])
+m4_define([systemcore2_minor_version], [0])
+m4_define([systemcore2_micro_version], [8])
+m4_define([systemcore2_interface_revision], [7])
+m4_define([systemcore2_api_version], [systemcore2_major_version.0])
+m4_define([systemcore2_release_number], [systemcore2_major_version])
+m4_define([systemcore2_version],
+  [systemcore2_major_version.systemcore2_minor_version.systemcore2_micro_version])
 
 # Require autoconf 2.69 for aarch64
 AC_PREREQ(2.69)
 
-AC_INIT([android-system-core], [systemcore_version],
-  [https://github.com/laarid/package_android-system-core/issues], [],
-  [https://github.com/laarid/package_android-system-core])
+AC_INIT([android-system-core2], [systemcore2_version],
+  [https://github.com/laarid/package_android-system-core2/issues], [],
+  [https://github.com/laarid/package_android-system-core2])
 
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_SRCDIR([include/log/log.h])
+AC_CONFIG_SRCDIR([include/utils/Mutex.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 
@@ -47,16 +47,16 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects no-define tar-ustar])
 AM_MAINTAINER_MODE([enable])
 AM_SILENT_RULES([yes])
 
-SYSTEMCORE_MAJOR_VERSION=systemcore_major_version
-SYSTEMCORE_MINOR_VERSION=systemcore_minor_version
-SYSTEMCORE_MICRO_VERSION=systemcore_micro_version
-SYSTEMCORE_API_VERSION=systemcore_api_version
-SYSTEMCORE_RELEASE_NUMBER=systemcore_release_number
-AC_SUBST([SYSTEMCORE_MAJOR_VERSION])
-AC_SUBST([SYSTEMCORE_MINOR_VERSION])
-AC_SUBST([SYSTEMCORE_MICRO_VERSION])
-AC_SUBST([SYSTEMCORE_API_VERSION])
-AC_SUBST([SYSTEMCORE_RELEASE_NUMBER])
+SYSTEMCORE2_MAJOR_VERSION=systemcore2_major_version
+SYSTEMCORE2_MINOR_VERSION=systemcore2_minor_version
+SYSTEMCORE2_MICRO_VERSION=systemcore2_micro_version
+SYSTEMCORE2_API_VERSION=systemcore2_api_version
+SYSTEMCORE2_RELEASE_NUMBER=systemcore2_release_number
+AC_SUBST([SYSTEMCORE2_MAJOR_VERSION])
+AC_SUBST([SYSTEMCORE2_MINOR_VERSION])
+AC_SUBST([SYSTEMCORE2_MICRO_VERSION])
+AC_SUBST([SYSTEMCORE2_API_VERSION])
+AC_SUBST([SYSTEMCORE2_RELEASE_NUMBER])
 
 # Define _GNU_SOURCE etc. where appropriate, e.g. for strptime() on glibc
 AC_USE_SYSTEM_EXTENSIONS
@@ -111,12 +111,12 @@ AC_PROG_CXX
 # ------------------
 LT_INIT
 
-LT_RELEASE="systemcore_api_version"
+LT_RELEASE="systemcore2_api_version"
 AC_SUBST(LT_RELEASE)
 
-m4_define([systemcore_binary_age], [m4_eval(100 * systemcore_minor_version + systemcore_micro_version)])
-m4_define([lt_current], [m4_eval(systemcore_binary_age - systemcore_interface_revision)])
-m4_define([lt_revision], [systemcore_interface_revision])
+m4_define([systemcore2_binary_age], [m4_eval(100 * systemcore2_minor_version + systemcore2_micro_version)])
+m4_define([lt_current], [m4_eval(systemcore2_binary_age - systemcore2_interface_revision)])
+m4_define([lt_revision], [systemcore2_interface_revision])
 # Whenever backward compatibility is broken, we generate libraries of different
 # release number. That follows the library files of the same release are always
 # compatible, and they have their lt_age equal to lt_current.
@@ -133,13 +133,40 @@ LT_OUTPUT
 # Required libraries
 # ------------------
 BIONIC_API_VERSION=0.0
-BIONIC_REQUIRED_VERSION=0.0.4
+BIONIC_REQUIRED_VERSION=0.1.3
 AC_SUBST([BIONIC_API_VERSION])
 AC_SUBST([BIONIC_REQUIRED_VERSION])
-
 PKG_CHECK_MODULES([BIONIC], [bionic-$BIONIC_API_VERSION >= $BIONIC_REQUIRED_VERSION])
 AC_SUBST([BIONIC_CFLAGS])
 AC_SUBST([BIONIC_LIBS])
+
+LOG_API_VERSION=0.0
+LOG_REQUIRED_VERSION=0.0.8
+AC_SUBST([LOG_API_VERSION])
+AC_SUBST([LOG_REQUIRED_VERSION])
+PKG_CHECK_MODULES([LOG], [android-log-$LOG_API_VERSION >= $LOG_REQUIRED_VERSION])
+AC_SUBST([LOG_CFLAGS])
+AC_SUBST([LOG_LIBS])
+
+CUTILS_API_VERSION=0.0
+CUTILS_REQUIRED_VERSION=0.0.8
+AC_SUBST([CUTILS_API_VERSION])
+AC_SUBST([CUTILS_REQUIRED_VERSION])
+PKG_CHECK_MODULES([CUTILS], [android-cutils-$CUTILS_API_VERSION >= $CUTILS_REQUIRED_VERSION])
+AC_SUBST([CUTILS_CFLAGS])
+AC_SUBST([CUTILS_LIBS])
+
+NATIVEHELPER_API_VERSION=0.0
+NATIVEHELPER_REQUIRED_VERSION=0.0.2
+AC_SUBST([NATIVEHELPER_API_VERSION])
+AC_SUBST([NATIVEHELPER_REQUIRED_VERSION])
+PKG_CHECK_MODULES([NATIVEHELPER], [android-nativehelper-$NATIVEHELPER_API_VERSION >= $NATIVEHELPER_REQUIRED_VERSION])
+AC_SUBST([NATIVEHELPER_CFLAGS])
+AC_SUBST([NATIVEHELPER_LIBS])
+
+PKG_CHECK_MODULES([UNWIND], [libunwind libunwind-ptrace])
+AC_SUBST([UNWIND_CFLAGS])
+AC_SUBST([UNWIND_LIBS])
 
 PKG_CHECK_MODULES([ZLIB], [zlib])
 AC_SUBST([ZLIB_CFLAGS])
@@ -259,15 +286,10 @@ fi
 
 AC_CONFIG_FILES([
   Makefile
-  libcutils/android-cutils-$SYSTEMCORE_API_VERSION.pc
-  libdiskconfig/android-diskconfig-$SYSTEMCORE_API_VERSION.pc
-  liblog/android-log-$SYSTEMCORE_API_VERSION.pc
-  libmincrypt/android-mincrypt-$SYSTEMCORE_API_VERSION.pc
-  libnetutils/android-netutils-$SYSTEMCORE_API_VERSION.pc
-  libsparse/android-sparse-$SYSTEMCORE_API_VERSION.pc
-  libsuspend/android-suspend-$SYSTEMCORE_API_VERSION.pc
-  libsysutils/android-sysutils-$SYSTEMCORE_API_VERSION.pc
-  libusbhost/android-usbhost-$SYSTEMCORE_API_VERSION.pc
-  libzipfile/android-zipfile-$SYSTEMCORE_API_VERSION.pc
+  libbacktrace/android-backtrace-$SYSTEMCORE2_API_VERSION.pc
+  libnativebridge/android-nativebridge-$SYSTEMCORE2_API_VERSION.pc
+  libprocessgroup/android-processgroup-$SYSTEMCORE2_API_VERSION.pc
+  libutils/android-utils-$SYSTEMCORE2_API_VERSION.pc
+  libziparchive/android-ziparchive-$SYSTEMCORE2_API_VERSION.pc
 ])
 AC_OUTPUT
