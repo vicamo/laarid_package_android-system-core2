@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include <sys/socket.h>
 #include <sys/select.h>
 #include <sys/time.h>
