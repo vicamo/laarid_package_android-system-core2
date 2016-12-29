@@ -197,7 +197,7 @@ void atrace_begin_body(const char* name)
     size_t len;
 
     len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "B|%d|%s", getpid(), name);
-    write(atrace_marker_fd, buf, len);
+    TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
 }
 
 
@@ -208,7 +208,7 @@ void atrace_async_begin_body(const char* name, int32_t cookie)
 
     len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "S|%d|%s|%" PRId32,
             getpid(), name, cookie);
-    write(atrace_marker_fd, buf, len);
+    TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
 }
 
 void atrace_async_end_body(const char* name, int32_t cookie)
@@ -218,7 +218,7 @@ void atrace_async_end_body(const char* name, int32_t cookie)
 
     len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "F|%d|%s|%" PRId32,
             getpid(), name, cookie);
-    write(atrace_marker_fd, buf, len);
+    TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
 }
 
 void atrace_int_body(const char* name, int32_t value)
@@ -228,7 +228,7 @@ void atrace_int_body(const char* name, int32_t value)
 
     len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "C|%d|%s|%" PRId32,
             getpid(), name, value);
-    write(atrace_marker_fd, buf, len);
+    TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
 }
 
 void atrace_int64_body(const char* name, int64_t value)
@@ -238,5 +238,5 @@ void atrace_int64_body(const char* name, int64_t value)
 
     len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "C|%d|%s|%" PRId64,
             getpid(), name, value);
-    write(atrace_marker_fd, buf, len);
+    TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
 }

@@ -327,7 +327,10 @@ bool NetlinkEvent::parseNfPacketMessage(struct nlmsghdr *nh) {
         hex[5 + (i * 2)] = "0123456789abcdef"[raw[i] & 0xf];
     }
 
-    asprintf(&mParams[0], "UID=%d", uid);
+    if (asprintf(&mParams[0], "UID=%d", uid) < 0) {
+        return false;
+    }
+
     mParams[1] = hex;
     mSubsystem = strdup("strict");
     mAction = Action::kChange;

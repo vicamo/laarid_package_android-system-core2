@@ -398,7 +398,7 @@ static uid_t get_best_effective_uid()
     if (i > 0) {
         gid_t list[i];
 
-        getgroups(i, list);
+        i = getgroups(i, list);
         while (--i >= 0) {
             if (uid_has_log_permission(list[i])) {
                 return last_uid = list[i];
