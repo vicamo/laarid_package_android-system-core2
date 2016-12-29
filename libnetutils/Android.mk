@@ -1,6 +1,9 @@
 lib_LTLIBRARIES += \
 	%reldir%/libandroid-netutils.la
 
+%canon_reldir%_libandroid_netutils_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS)
 %canon_reldir%_libandroid_netutils_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)

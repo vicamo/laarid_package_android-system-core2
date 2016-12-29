@@ -8,4 +8,4 @@ Description: Android System Core Libraries - log
 Version: @VERSION@
 Requires.private: android-bionic-@BIONIC_API_VERSION@ >= @BIONIC_REQUIRED_VERSION@
 Libs: -L${libdir} -landroid-log
-Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@
+Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@ @BIONIC_CFLAGS@
