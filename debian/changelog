@@ -1,3 +1,15 @@
+android-system-core (0.0.8+b1) stretch; urgency=medium
+
+  * debian: lintian: fix shlib-without-PT_GNU_STACK-section after spliting
+    packages
+  * ci: check distcheck and git work tree clean
+  * fix dist check
+  * ci: update notification secure vars
+  * pkg-config: prevent overlinking
+  * correct pkg-config module names
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Wed, 28 Dec 2016 14:29:03 +0800
+
 android-system-core (0.0.8) unstable; urgency=medium
 
   * split package by soname

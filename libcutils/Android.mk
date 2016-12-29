@@ -106,7 +106,8 @@ endif
 if CPU_X86
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
 	%reldir%/arch-x86/android_memset16.S \
-	%reldir%/arch-x86/android_memset32.S
+	%reldir%/arch-x86/android_memset32.S \
+	%reldir%/arch-x86/cache.h
 endif
 if CPU_X86_64
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
