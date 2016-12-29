@@ -29,11 +29,11 @@ AM_CPPFLAGS = \
 
 AM_CFLAGS = \
 	-Wall -Werror \
-	-std=gnu89
+	-std=gnu11
 
 AM_CXXFLAGS = \
 	-Wall -Werror \
-	-std=gnu++98
+	-std=gnu++11
 
 AM_LDFLAGS = \
 	-Wl,--as-needed
