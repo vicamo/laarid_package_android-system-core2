@@ -100,6 +100,11 @@ if CPU_X86
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
 	%reldir%/arch-x86/android_memset16.S \
 	%reldir%/arch-x86/android_memset32.S
+# These files are included, not compiled directly.
+EXTRA_DIST += \
+	%reldir%/arch-x86/cache_wrapper.S \
+	%reldir%/arch-x86/sse2-memset16-atom.S \
+	%reldir%/arch-x86/sse2-memset32-atom.S
 %canon_reldir%_libandroid_cutils_la_CPPFLAGS += \
 	-DHAVE_MEMSET16 \
 	-DHAVE_MEMSET32
