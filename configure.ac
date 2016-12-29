@@ -155,6 +155,10 @@ PKG_CHECK_MODULES([ZLIB], [zlib])
 AC_SUBST([ZLIB_CFLAGS])
 AC_SUBST([ZLIB_LIBS])
 
+PKG_CHECK_MODULES([NL], [libnl-3.0])
+AC_SUBST([NL_CFLAGS])
+AC_SUBST([NL_LIBS])
+
 # Required headers
 # ----------------
 AC_CHECK_HEADERS([linux/android_alarm.h linux/ioprio.h sched.h sys/socket.h linux/netfilter_ipv4/ipt_ULOG.h])
