@@ -536,17 +536,18 @@ static int android_log_printBinaryEvent(const unsigned char** pEventData,
     case EVENT_TYPE_FLOAT:
         /* float */
         {
-            uint32_t ival;
-            float fval;
+            union {
+                uint32_t ival;
+                float fval;
+            } u;
 
             if (eventDataLen < 4)
                 return -1;
-            ival = get4LE(eventData);
-            fval = *(float*)&ival;
+            u.ival = get4LE(eventData);
             eventData += 4;
             eventDataLen -= 4;
 
-            outCount = snprintf(outBuf, outBufLen, "%f", fval);
+            outCount = snprintf(outBuf, outBufLen, "%f", u.fval);
             if (outCount < outBufLen) {
                 outBuf += outCount;
                 outBufLen -= outCount;
