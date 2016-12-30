@@ -12,17 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-noinst_PROGRAMS += \
+if HAVE_GTEST
+check_PROGRAMS += \
+	%reldir%/libcutils_test
+
+TESTS += \
 	%reldir%/libcutils_test
 
 %canon_reldir%_libcutils_test_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
-	$(BIONIC_CFLAGS)
+	$(BIONIC_CFLAGS) \
+	$(GTEST_CPPFLAGS)
 %canon_reldir%_libcutils_test_LDADD = \
 	$(BIONIC_LIBS) \
-	liblog/libandroid-log.la
-	libcutils/libandroid-cutils.la
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la \
+	$(GTEST_LIBS)
+%canon_reldir%_libcutils_test_DEPENDENCIES = \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la \
+	$(GTEST_LIBS)
 %canon_reldir%_libcutils_test_SOURCES = \
 	%reldir%/MemsetTest.cpp \
 	%reldir%/PropertiesTest.cpp \
 	%reldir%/test_str_parms.cpp
+endif

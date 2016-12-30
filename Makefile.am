@@ -48,12 +48,16 @@ libtool_opts = \
 	-export-dynamic \
 	-rpath $(libdir)
 
+TESTS =
 bin_SCRIPTS =
 bin_PROGRAMS =
 noinst_PROGRAMS =
+check_LTLIBRARIES =
+check_PROGRAMS =
 lib_LTLIBRARIES =
 pkgconfig_DATA =
 
+include $(srcdir)/gtest.mk
 include $(srcdir)/include/Makefile.am
 
 # Installable libraries
