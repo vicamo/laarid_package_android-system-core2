@@ -31,7 +31,8 @@ GITIGNOREFILES = \
 # -------------------
 AM_CPPFLAGS = \
 	-include config.h \
-	-I$(top_srcdir)/include
+	-I$(top_srcdir)/include \
+	-DNDEBUG
 
 AM_CFLAGS = \
 	-Wall -Werror \
