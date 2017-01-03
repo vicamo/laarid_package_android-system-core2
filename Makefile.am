@@ -19,6 +19,7 @@ MAINTAINERCLEANFILES = \
 DISTCHECK_CONFIGURE_FLAGS = \
 	--host=$(host) \
 	--build=$(build) \
+	--disable-dependency-tracking \
 	--disable-maintainer-mode
 
 GITIGNOREFILES = \
