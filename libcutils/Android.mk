@@ -90,31 +90,29 @@ endif
 if CPU_ARM
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
 	%reldir%/arch-arm/memset32.S
-endif
+else
 if CPU_AARCH64
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
 	%reldir%/arch-arm64/android_memset.S
-endif
-if CPU_MIPS
-%canon_reldir%_libandroid_cutils_la_SOURCES += \
-	%reldir%/arch-mips/android_memset.c
-endif
-if CPU_MIPS64
-%canon_reldir%_libandroid_cutils_la_SOURCES += \
-	%reldir%/arch-mips/android_memset.c
-endif
+else
 if CPU_X86
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
 	%reldir%/arch-x86/android_memset16.S \
 	%reldir%/arch-x86/android_memset32.S \
 	%reldir%/arch-x86/cache.h
-endif
+else
 if CPU_X86_64
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
 	%reldir%/arch-x86_64/android_memset16.S \
 	%reldir%/arch-x86_64/android_memset32.S \
 	%reldir%/arch-x86_64/cache.h
-endif
+else
+%canon_reldir%_libandroid_cutils_la_SOURCES += \
+	%reldir%/arch-mips/android_memset.c
+endif # CPU_X86_64
+endif # CPU_X86
+endif # CPU_AARCH64
+endif # CPU_ARM
 
 pkgconfig_DATA += \
 	%reldir%/android-cutils-$(SYSTEMCORE_API_VERSION).pc
