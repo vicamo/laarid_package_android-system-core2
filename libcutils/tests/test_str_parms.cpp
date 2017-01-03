@@ -22,7 +22,9 @@ static void test_str_parms_str(const char* str, const char* expected) {
     str_parms_add_str(str_parms, "dude", "woah");
     str_parms_add_str(str_parms, "dude", "woah");
     str_parms_del(str_parms, "dude");
-    str_parms_dump(str_parms);
+    // FIXME: https://github.com/laarid/package_android-system-core/issues/13
+    // Disabled due to the lack of running logd.
+    //str_parms_dump(str_parms);
     char* out_str = str_parms_to_str(str_parms);
     str_parms_destroy(str_parms);
     ASSERT_STREQ(expected, out_str) << str;
