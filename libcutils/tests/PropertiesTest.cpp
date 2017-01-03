@@ -56,9 +56,13 @@ static ::testing::AssertionResult AssertEqualHex(const char *mExpr,
         ", actual: " << HexString(n) << ") are not equal";
 }
 
-class PropertiesTest : public testing::Test {
+/* FIXME: https://github.com/laarid/package_android-system-core/issues/12
+ * Disable properties tests for now due to the lack of property service
+ * running in the background.
+ */
+class DISABLED_PropertiesTest : public testing::Test {
 public:
-    PropertiesTest() : mValue() {}
+    DISABLED_PropertiesTest() : mValue() {}
 protected:
     virtual void SetUp() {
         EXPECT_OK(property_set(PROPERTY_TEST_KEY, /*value*/NULL));
@@ -91,7 +95,7 @@ protected:
     }
 };
 
-TEST_F(PropertiesTest, SetString) {
+TEST_F(DISABLED_PropertiesTest, SetString) {
 
     // Null key -> unsuccessful set
     {
@@ -155,7 +159,7 @@ TEST_F(PropertiesTest, SetString) {
     }
 }
 
-TEST_F(PropertiesTest, GetString) {
+TEST_F(DISABLED_PropertiesTest, GetString) {
 
     // Try to use a default value that's too long => set fails
     {
@@ -172,7 +176,7 @@ TEST_F(PropertiesTest, GetString) {
     }
 }
 
-TEST_F(PropertiesTest, GetBool) {
+TEST_F(DISABLED_PropertiesTest, GetBool) {
     /**
      * TRUE
      */
@@ -212,7 +216,7 @@ TEST_F(PropertiesTest, GetBool) {
     }
 }
 
-TEST_F(PropertiesTest, GetInt64) {
+TEST_F(DISABLED_PropertiesTest, GetInt64) {
     const int64_t DEFAULT_VALUE = INT64_C(0xDEADBEEFBEEFDEAD);
 
     const std::string longMaxString = ToString(INT64_MAX);
@@ -259,7 +263,7 @@ TEST_F(PropertiesTest, GetInt64) {
     }
 }
 
-TEST_F(PropertiesTest, GetInt32) {
+TEST_F(DISABLED_PropertiesTest, GetInt32) {
     const int32_t DEFAULT_VALUE = INT32_C(0xDEADBEEF);
 
     const std::string intMaxString = ToString(INT32_MAX);
