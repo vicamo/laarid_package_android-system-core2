@@ -1,6 +1,9 @@
 lib_LTLIBRARIES += \
 	%reldir%/libandroid-netutils.la
 
+%canon_reldir%_libandroid_netutils_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS)
 %canon_reldir%_libandroid_netutils_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
@@ -15,6 +18,14 @@ lib_LTLIBRARIES += \
 	%reldir%/ifc_utils.c \
 	%reldir%/packet.c \
 	%reldir%/packet.h
+
+bin_PROGRAMS += \
+	%reldir%/dhcptool
+
+%canon_reldir%_dhcptool_LDADD = \
+	%reldir%/libandroid-netutils.la
+%canon_reldir%_dhcptool_SOURCES = \
+	%reldir%/dhcptool.c
 
 pkgconfig_DATA += \
 	%reldir%/android-netutils-$(SYSTEMCORE_API_VERSION).pc

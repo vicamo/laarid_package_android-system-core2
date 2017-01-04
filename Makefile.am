@@ -19,6 +19,7 @@ MAINTAINERCLEANFILES = \
 DISTCHECK_CONFIGURE_FLAGS = \
 	--host=$(host) \
 	--build=$(build) \
+	--disable-dependency-tracking \
 	--disable-maintainer-mode
 
 GITIGNOREFILES = \
@@ -30,15 +31,16 @@ GITIGNOREFILES = \
 # -------------------
 AM_CPPFLAGS = \
 	-include config.h \
-	-I$(top_srcdir)/include
+	-I$(top_srcdir)/include \
+	-DNDEBUG
 
 AM_CFLAGS = \
 	-Wall -Werror \
-	-std=gnu89
+	-std=gnu11
 
 AM_CXXFLAGS = \
 	-Wall -Werror \
-	-std=gnu++98
+	-std=gnu++11
 
 AM_LDFLAGS = \
 	-Wl,--as-needed
@@ -48,12 +50,16 @@ libtool_opts = \
 	-export-dynamic \
 	-rpath $(libdir)
 
+TESTS =
 bin_SCRIPTS =
 bin_PROGRAMS =
 noinst_PROGRAMS =
+check_LTLIBRARIES =
+check_PROGRAMS =
 lib_LTLIBRARIES =
 pkgconfig_DATA =
 
+include $(srcdir)/gtest.mk
 include $(srcdir)/include/Makefile.am
 
 # Installable libraries
@@ -72,7 +78,6 @@ include $(srcdir)/include/Makefile.am
 include $(srcdir)/liblog/Android.mk
 include $(srcdir)/libmincrypt/Android.mk
 include $(srcdir)/libsparse/Android.mk
-include $(srcdir)/libzipfile/Android.mk
 
 # Stage 0-1: depends on any of above packages
 include $(srcdir)/libcutils/Android.mk

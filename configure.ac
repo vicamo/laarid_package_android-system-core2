@@ -80,6 +80,8 @@ AM_CONDITIONAL(OS_LINUX, test "$os_linux" = "yes")
 
 cpu_arm=no
 cpu_aarch64=no
+cpu_mips=no
+cpu_mips64=no
 cpu_x86=no
 cpu_x86_64=no
 case "$host_cpu" in
@@ -88,6 +90,12 @@ case "$host_cpu" in
     ;;
   aarch64*)
     cpu_aarch64=yes
+    ;;
+  mips64*)
+    cpu_mips64=yes
+    ;;
+  mips*)
+    cpu_mips=yes
     ;;
   i?86 | x86)
     cpu_x86=yes
@@ -99,6 +107,8 @@ esac
 
 AM_CONDITIONAL(CPU_ARM, test "$cpu_arm" = "yes")
 AM_CONDITIONAL(CPU_AARCH64, test "$cpu_aarch64" = "yes")
+AM_CONDITIONAL(CPU_MIPS, test "$cpu_mips" = "yes")
+AM_CONDITIONAL(CPU_MIPS64, test "$cpu_mips64" = "yes")
 AM_CONDITIONAL(CPU_X86, test "$cpu_x86" = "yes")
 AM_CONDITIONAL(CPU_X86_64, test "$cpu_x86_64" = "yes")
 
@@ -144,6 +154,10 @@ AC_SUBST([BIONIC_LIBS])
 PKG_CHECK_MODULES([ZLIB], [zlib])
 AC_SUBST([ZLIB_CFLAGS])
 AC_SUBST([ZLIB_LIBS])
+
+PKG_CHECK_MODULES([NL], [libnl-3.0])
+AC_SUBST([NL_CFLAGS])
+AC_SUBST([NL_LIBS])
 
 # Required headers
 # ----------------
@@ -257,6 +271,39 @@ if test x$os_windows = xyes; then
     [Define to 1 if we have Windows {Map,Unmap}ViewOfFile.])
 fi
 
+# Optional features
+# -----------------
+AC_ARG_ENABLE([cpusets],
+  [AS_HELP_STRING([--enable-cpusets], [enable use of /dev/cpuset @<:@default=yes@:>@])])
+AM_CONDITIONAL([ENABLE_CPUSETS], [test x$enable_cpusets = xyes])
+
+# GTest
+# -----
+AC_LANG_PUSH([C++])
+AC_ARG_WITH([gtest],
+  [AS_HELP_STRING([--with-gtest],
+    [Build with Google Test Frameworks based tests @<:@default=check@:>@])],
+  [], [])
+AS_IF([test "x${with_gtest}" != xno],
+  [GTEST_SRCDIR="/usr/src/gtest"
+  AS_IF([test "x${with_gtest}" != xyes],
+    [AS_IF([test -e "${with_gtest}/include/gtest/gtest.h"],
+      [GTEST_SRCDIR="${with_gtest}"])])
+  CPPFLAGS_save="$CPPFLAGS"
+  GTEST_CPPFLAGS="-I ${GTEST_SRCDIR}/include"
+  GTEST_LIBS="libgtest.la libgtest_main.la"
+  CPPFLAGS="${GTEST_CPPFLAGS}"
+  AC_CHECK_HEADER([gtest/gtest.h], [],
+    [AS_IF([test "x${with_gtest}" != xyes],
+      [AC_MSG_ERROR([Google Test Frameworks source folder not found])],
+      [with_gtest=no])])
+  CPPFLAGS="$CPPFLAGS_save"])
+AC_SUBST([GTEST_CPPFLAGS])
+AC_SUBST([GTEST_LIBS])
+AC_SUBST([GTEST_SRCDIR])
+AC_LANG_POP()
+AM_CONDITIONAL([HAVE_GTEST], [test "x${with_gtest}" != xno])
+
 AC_CONFIG_FILES([
   Makefile
   libcutils/android-cutils-$SYSTEMCORE_API_VERSION.pc
@@ -268,6 +315,5 @@ AC_CONFIG_FILES([
   libsuspend/android-suspend-$SYSTEMCORE_API_VERSION.pc
   libsysutils/android-sysutils-$SYSTEMCORE_API_VERSION.pc
   libusbhost/android-usbhost-$SYSTEMCORE_API_VERSION.pc
-  libzipfile/android-zipfile-$SYSTEMCORE_API_VERSION.pc
 ])
 AC_OUTPUT

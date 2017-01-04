@@ -31,32 +31,28 @@
 #include <linux/if_addr.h>
 #include <linux/if_link.h>
 #include <linux/netfilter/nfnetlink.h>
+#include <linux/netfilter/nfnetlink_log.h>
 #if defined(HAVE_LINUX_NETFILETER_IPV4_IPT_ULOG_H)
 #include <linux/netfilter_ipv4/ipt_ULOG.h>
 #endif
+
 /* From kernel's net/netfilter/xt_quota2.c */
-const int QLOG_NL_EVENT  = 112;
+const int LOCAL_QLOG_NL_EVENT = 112;
+const int LOCAL_NFLOG_PACKET = NFNL_SUBSYS_ULOG << 8 | NFULNL_MSG_PACKET;
 
 #include <linux/netlink.h>
 #include <linux/rtnetlink.h>
 
+#include <netlink/attr.h>
+#include <netlink/genl/genl.h>
+#include <netlink/handlers.h>
+#include <netlink/msg.h>
+
 /* <linux/if.h> conflicts with <net/if.h>, but we need if_indextoname here. */
 extern "C" char *if_indextoname (unsigned int __ifindex, char *__ifname) __THROW;
 
-const int NetlinkEvent::NlActionUnknown = 0;
-const int NetlinkEvent::NlActionAdd = 1;
-const int NetlinkEvent::NlActionRemove = 2;
-const int NetlinkEvent::NlActionChange = 3;
-const int NetlinkEvent::NlActionLinkUp = 4;
-const int NetlinkEvent::NlActionLinkDown = 5;
-const int NetlinkEvent::NlActionAddressUpdated = 6;
-const int NetlinkEvent::NlActionAddressRemoved = 7;
-const int NetlinkEvent::NlActionRdnss = 8;
-const int NetlinkEvent::NlActionRouteUpdated = 9;
-const int NetlinkEvent::NlActionRouteRemoved = 10;
-
 NetlinkEvent::NetlinkEvent() {
-    mAction = NlActionUnknown;
+    mAction = Action::kUnknown;
     memset(mParams, 0, sizeof(mParams));
     mPath = NULL;
     mSubsystem = NULL;
@@ -107,7 +103,8 @@ static const char *rtMessageName(int type) {
         NL_EVENT_RTM_NAME(RTM_NEWROUTE);
         NL_EVENT_RTM_NAME(RTM_DELROUTE);
         NL_EVENT_RTM_NAME(RTM_NEWNDUSEROPT);
-        NL_EVENT_RTM_NAME(QLOG_NL_EVENT);
+        NL_EVENT_RTM_NAME(LOCAL_QLOG_NL_EVENT);
+        NL_EVENT_RTM_NAME(LOCAL_NFLOG_PACKET);
         default:
             return NULL;
     }
@@ -161,8 +158,8 @@ bool NetlinkEvent::parseIfInfoMessage(const struct nlmsghdr *nh) {
                     break;
                 }
 
-                mAction = (ifi->ifi_flags & IFF_LOWER_UP) ?  NlActionLinkUp :
-                                                             NlActionLinkDown;
+                mAction = (ifi->ifi_flags & IFF_LOWER_UP) ? Action::kLinkUp :
+                                                            Action::kLinkDown;
                 mSubsystem = strdup("net");
                 return true;
         }
@@ -269,8 +266,8 @@ bool NetlinkEvent::parseIfAddrMessage(const struct nlmsghdr *nh) {
         return false;
     }
 
-    mAction = (type == RTM_NEWADDR) ? NlActionAddressUpdated :
-                                      NlActionAddressRemoved;
+    mAction = (type == RTM_NEWADDR) ? Action::kAddressUpdated :
+                                      Action::kAddressRemoved;
     return true;
 }
 
@@ -297,8 +294,46 @@ bool NetlinkEvent::parseUlogPacketMessage(const struct nlmsghdr *nh) {
         return false;
     }
 
-    mAction = NlActionChange;
+    mAction = Action::kChange;
 #endif
+    return true;
+}
+
+/*
+ * Parse a LOCAL_NFLOG_PACKET message.
+ */
+bool NetlinkEvent::parseNfPacketMessage(struct nlmsghdr *nh) {
+    int uid = -1;
+    int len = 0;
+    char* raw = NULL;
+
+    struct nlattr *uid_attr = nlmsg_find_attr(nh, sizeof(struct genlmsghdr), NFULA_UID);
+    if (uid_attr) {
+        uid = ntohl(nla_get_u32(uid_attr));
+    }
+
+    struct nlattr *payload = nlmsg_find_attr(nh, sizeof(struct genlmsghdr), NFULA_PAYLOAD);
+    if (payload) {
+        /* First 256 bytes is plenty */
+        len = nla_len(payload);
+        if (len > 256) len = 256;
+        raw = (char*) nla_data(payload);
+    }
+
+    char* hex = (char*) calloc(1, 5 + (len * 2));
+    strcpy(hex, "HEX=");
+    for (int i = 0; i < len; i++) {
+        hex[4 + (i * 2)] = "0123456789abcdef"[(raw[i] >> 4) & 0xf];
+        hex[5 + (i * 2)] = "0123456789abcdef"[raw[i] & 0xf];
+    }
+
+    if (asprintf(&mParams[0], "UID=%d", uid) < 0) {
+        return false;
+    }
+
+    mParams[1] = hex;
+    mSubsystem = strdup("strict");
+    mAction = Action::kChange;
     return true;
 }
 
@@ -396,8 +431,8 @@ bool NetlinkEvent::parseRtMessage(const struct nlmsghdr *nh) {
         return false;
     }
 
-    mAction = (type == RTM_NEWROUTE) ? NlActionRouteUpdated :
-                                       NlActionRouteRemoved;
+    mAction = (type == RTM_NEWROUTE) ? Action::kRouteUpdated :
+                                       Action::kRouteRemoved;
 
     return true;
 }
@@ -463,25 +498,27 @@ bool NetlinkEvent::parseNdUserOptMessage(const struct nlmsghdr *nh) {
             SLOGE("Invalid optlen %d for RDNSS option\n", optlen);
             return false;
         }
-        int numaddrs = (optlen - 1) / 2;
+        const int numaddrs = (optlen - 1) / 2;
 
         // Find the lifetime.
         struct nd_opt_rdnss *rndss_opt = (struct nd_opt_rdnss *) opthdr;
-        uint32_t lifetime = ntohl(rndss_opt->nd_opt_rdnss_lifetime);
+        const uint32_t lifetime = ntohl(rndss_opt->nd_opt_rdnss_lifetime);
 
         // Construct "SERVERS=<comma-separated string of DNS addresses>".
-        // Reserve (INET6_ADDRSTRLEN + 1) chars for each address: all but the
-        // the last address are followed by ','; the last is followed by '\0'.
         static const char kServerTag[] = "SERVERS=";
-        static const int kTagLength = sizeof(kServerTag) - 1;
-        int bufsize = kTagLength + numaddrs * (INET6_ADDRSTRLEN + 1);
+        static const size_t kTagLength = strlen(kServerTag);
+        // Reserve sufficient space for an IPv6 link-local address: all but the
+        // last address are followed by ','; the last is followed by '\0'.
+        static const size_t kMaxSingleAddressLength =
+                INET6_ADDRSTRLEN + strlen("%") + IFNAMSIZ + strlen(",");
+        const size_t bufsize = kTagLength + numaddrs * kMaxSingleAddressLength;
         char *buf = (char *) malloc(bufsize);
         if (!buf) {
             SLOGE("RDNSS option: out of memory\n");
             return false;
         }
         strcpy(buf, kServerTag);
-        int pos = kTagLength;
+        size_t pos = kTagLength;
 
         struct in6_addr *addrs = (struct in6_addr *) (rndss_opt + 1);
         for (int i = 0; i < numaddrs; i++) {
@@ -490,6 +527,10 @@ bool NetlinkEvent::parseNdUserOptMessage(const struct nlmsghdr *nh) {
             }
             inet_ntop(AF_INET6, addrs + i, buf + pos, bufsize - pos);
             pos += strlen(buf + pos);
+            if (IN6_IS_ADDR_LINKLOCAL(addrs + i)) {
+                buf[pos++] = '%';
+                pos += strlcpy(buf + pos, ifname, bufsize - pos);
+            }
         }
         buf[pos] = '\0';
 
@@ -505,7 +546,7 @@ bool NetlinkEvent::parseNdUserOptMessage(const struct nlmsghdr *nh) {
             return false;
         }
 
-        mAction = NlActionRdnss;
+        mAction = Action::kRdnss;
         mParams[2] = buf;
 
         return true;
@@ -528,7 +569,7 @@ bool NetlinkEvent::parseNdUserOptMessage(const struct nlmsghdr *nh) {
  * TODO: consider only ever looking at the first message.
  */
 bool NetlinkEvent::parseBinaryNetlinkMessage(char *buffer, int size) {
-    const struct nlmsghdr *nh;
+    struct nlmsghdr *nh;
 
     for (nh = (struct nlmsghdr *) buffer;
          NLMSG_OK(nh, (unsigned) size) && (nh->nlmsg_type != NLMSG_DONE);
@@ -543,7 +584,7 @@ bool NetlinkEvent::parseBinaryNetlinkMessage(char *buffer, int size) {
             if (parseIfInfoMessage(nh))
                 return true;
 
-        } else if (nh->nlmsg_type == QLOG_NL_EVENT) {
+        } else if (nh->nlmsg_type == LOCAL_QLOG_NL_EVENT) {
             if (parseUlogPacketMessage(nh))
                 return true;
 
@@ -559,6 +600,10 @@ bool NetlinkEvent::parseBinaryNetlinkMessage(char *buffer, int size) {
 
         } else if (nh->nlmsg_type == RTM_NEWNDUSEROPT) {
             if (parseNdUserOptMessage(nh))
+                return true;
+
+        } else if (nh->nlmsg_type == LOCAL_NFLOG_PACKET) {
+            if (parseNfPacketMessage(nh))
                 return true;
 
         }
@@ -619,11 +664,11 @@ bool NetlinkEvent::parseAsciiNetlinkMessage(char *buffer, int size) {
             const char* a;
             if ((a = HAS_CONST_PREFIX(s, end, "ACTION=")) != NULL) {
                 if (!strcmp(a, "add"))
-                    mAction = NlActionAdd;
+                    mAction = Action::kAdd;
                 else if (!strcmp(a, "remove"))
-                    mAction = NlActionRemove;
+                    mAction = Action::kRemove;
                 else if (!strcmp(a, "change"))
-                    mAction = NlActionChange;
+                    mAction = Action::kChange;
             } else if ((a = HAS_CONST_PREFIX(s, end, "SEQNUM=")) != NULL) {
                 mSeq = atoi(a);
             } else if ((a = HAS_CONST_PREFIX(s, end, "SUBSYSTEM=")) != NULL) {
@@ -638,7 +683,8 @@ bool NetlinkEvent::parseAsciiNetlinkMessage(char *buffer, int size) {
 }
 
 bool NetlinkEvent::decode(char *buffer, int size, int format) {
-    if (format == NetlinkListener::NETLINK_FORMAT_BINARY) {
+    if (format == NetlinkListener::NETLINK_FORMAT_BINARY
+            || format == NetlinkListener::NETLINK_FORMAT_BINARY_UNICAST) {
         return parseBinaryNetlinkMessage(buffer, size);
     } else {
         return parseAsciiNetlinkMessage(buffer, size);

@@ -53,6 +53,8 @@ static struct healthd_config healthd_config = {
     .batteryCurrentAvgPath = String8(String8::kEmptyString),
     .batteryChargeCounterPath = String8(String8::kEmptyString),
     .energyCounter = NULL,
+    .boot_min_cap = 0,
+    .screen_on = NULL,
 };
 
 static int eventct;
@@ -64,7 +66,6 @@ static int epollfd;
 #define MAX_EPOLL_EVENTS 40
 static int uevent_fd;
 static int wakealarm_fd;
-static int binder_fd;
 
 // -1 for no epoll timeout
 static int awake_poll_interval = -1;
@@ -314,8 +315,8 @@ static int healthd_init() {
         return -1;
     }
 
-    healthd_mode_ops->init(&healthd_config);
     healthd_board_init(&healthd_config);
+    healthd_mode_ops->init(&healthd_config);
     wakealarm_init();
     uevent_init();
     gBatteryMonitor = new BatteryMonitor();

@@ -16,6 +16,7 @@
 #include <stdio.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include <sys/socket.h>
 #include <sys/select.h>
 #include <sys/time.h>
@@ -86,6 +87,7 @@ int SocketListener::startListener(int backlog) {
             return -1;
         }
         SLOGV("got mSock = %d for %s", mSock, mSocketName);
+        fcntl(mSock, F_SETFD, FD_CLOEXEC);
     }
 
     if (mListen && listen(mSock, backlog) < 0) {
@@ -212,6 +214,7 @@ void SocketListener::runListener() {
                 sleep(1);
                 continue;
             }
+            fcntl(c, F_SETFD, FD_CLOEXEC);
             pthread_mutex_lock(&mClientsLock);
             mClients->push_back(new SocketClient(c, true, mUseCmdNum));
             pthread_mutex_unlock(&mClientsLock);

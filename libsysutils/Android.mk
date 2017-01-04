@@ -1,6 +1,10 @@
 lib_LTLIBRARIES += \
 	%reldir%/libandroid-sysutils.la
 
+%canon_reldir%_libandroid_sysutils_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	$(NL_CFLAGS)
 %canon_reldir%_libandroid_sysutils_la_CXXFLAGS = \
 	$(AM_CXXFLAGS) \
 	$(PTHREAD_CFLAGS)
@@ -10,6 +14,7 @@ lib_LTLIBRARIES += \
 	$(libtool_opts)
 %canon_reldir%_libandroid_sysutils_la_LIBADD = \
 	-lpthread \
+	$(NL_LIBS) \
 	liblog/libandroid-log.la \
 	libcutils/libandroid-cutils.la
 %canon_reldir%_libandroid_sysutils_la_SOURCES = \

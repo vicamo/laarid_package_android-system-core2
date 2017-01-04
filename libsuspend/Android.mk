@@ -5,6 +5,7 @@ lib_LTLIBRARIES += \
 
 %canon_reldir%_libandroid_suspend_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
 	-I$(top_srcdir)/%reldir%/include
 %canon_reldir%_libandroid_suspend_la_CFLAGS = \
 	$(AM_CFLAGS) \
