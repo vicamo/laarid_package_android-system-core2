@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
+#include <errno.h>
 #include <unistd.h>
+#include <linux/reboot.h>
 #include <sys/reboot.h>
 #include <sys/syscall.h>
 #include <sys/types.h>
@@ -75,7 +77,7 @@ static void remount_ro(void)
     if (fd < 0) {
         return;
     }
-    write(fd, "u", 1);
+    TEMP_FAILURE_RETRY(write(fd, "u", 1));
     close(fd);
 
 
