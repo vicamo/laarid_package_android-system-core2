@@ -65,7 +65,6 @@ endif
 	%reldir%/socket_network_client.c \
 	%reldir%/sockets.c \
 	%reldir%/str_parms.c \
-	%reldir%/strlcpy.c \
 	%reldir%/strdup16to8.c \
 	%reldir%/strdup8to16.c \
 	%reldir%/threads.c \
