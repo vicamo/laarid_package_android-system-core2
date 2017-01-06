@@ -305,6 +305,7 @@ AC_CONFIG_FILES([
   base/android-base-$SYSTEMCORE_API_VERSION.pc
   libcutils/android-cutils-$SYSTEMCORE_API_VERSION.pc
   libdiskconfig/android-diskconfig-$SYSTEMCORE_API_VERSION.pc
+  libion/android-ion-$SYSTEMCORE_API_VERSION.pc
   liblog/android-log-$SYSTEMCORE_API_VERSION.pc
   libmincrypt/android-mincrypt-$SYSTEMCORE_API_VERSION.pc
   libnetutils/android-netutils-$SYSTEMCORE_API_VERSION.pc

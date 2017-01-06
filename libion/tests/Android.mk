@@ -14,19 +14,34 @@
 # limitations under the License.
 #
 
-LOCAL_PATH:= $(call my-dir)
+if HAVE_GTEST
+check_PROGRAMS += \
+	%reldir%/ion-unit-tests
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := ion-unit-tests
-LOCAL_CFLAGS += -g -Wall -Werror -std=gnu++11 -Wno-missing-field-initializers
-LOCAL_SHARED_LIBRARIES += libion
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/../kernel-headers
-LOCAL_SRC_FILES := \
-	ion_test_fixture.cpp \
-	allocate_test.cpp \
-	formerly_valid_handle_test.cpp \
-	invalid_values_test.cpp \
-	map_test.cpp \
-	device_test.cpp \
-	exit_test.cpp
-include $(BUILD_NATIVE_TEST)
+TESTS += \
+	%reldir%/ion-unit-tests
+
+%canon_reldir%_ion_unit_tests_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(GTEST_CPPFLAGS) \
+	-I$(srcdir)/libion/include \
+	-I$(srcdir)/libion/kernel-headers
+%canon_reldir%_ion_unit_tests_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	-g -Wno-missing-field-initializers
+%canon_reldir%_ion_unit_tests_LDADD = \
+	libion/libandroid-ion.la \
+	$(GTEST_LIBS)
+%canon_reldir%_ion_unit_tests_DEPENDENCIES = \
+	libion/libandroid-ion.la \
+	$(GTEST_LIBS)
+%canon_reldir%_ion_unit_tests_SOURCES = \
+	%reldir%/ion_test_fixture.cpp \
+	%reldir%/ion_test_fixture.h \
+	%reldir%/allocate_test.cpp \
+	%reldir%/formerly_valid_handle_test.cpp \
+	%reldir%/invalid_values_test.cpp \
+	%reldir%/map_test.cpp \
+	%reldir%/device_test.cpp \
+	%reldir%/exit_test.cpp
+endif

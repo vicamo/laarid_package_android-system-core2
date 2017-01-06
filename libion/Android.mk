@@ -1,22 +1,42 @@
-LOCAL_PATH := $(call my-dir)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-ion.la
 
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := ion.c
-LOCAL_MODULE := libion
-LOCAL_MODULE_TAGS := optional
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include $(LOCAL_PATH)/kernel-headers
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include $(LOCAL_PATH)/kernel-headers
-LOCAL_CFLAGS := -Werror
-include $(BUILD_SHARED_LIBRARY)
+%canon_reldir%_libandroid_ion_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	-I$(srcdir)/%reldir%/include \
+	-I$(srcdir)/%reldir%/kernel-headers
+%canon_reldir%_libandroid_ion_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_ion_la_LIBADD = \
+	liblog/libandroid-log.la
+%canon_reldir%_libandroid_ion_la_SOURCES = \
+	%reldir%/ion.c
 
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := ion.c ion_test.c
-LOCAL_MODULE := iontest
-LOCAL_MODULE_TAGS := optional tests
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include $(LOCAL_PATH)/kernel-headers
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_CFLAGS := -Werror
-include $(BUILD_EXECUTABLE)
+%canon_reldir%_libandroid_ion_incdir = $(androidincdir)/ion
+%canon_reldir%_libandroid_ion_inc_HEADERS = \
+	%reldir%/include/ion/ion.h
 
-include $(call first-makefiles-under,$(LOCAL_PATH))
+%canon_reldir%_libandroid_ion_kernel_incdir = $(includedir)/linux
+%canon_reldir%_libandroid_ion_kernel_inc_HEADERS = \
+	%reldir%/kernel-headers/linux/ion.h \
+	%reldir%/kernel-headers/linux/ion_test.h
+
+noinst_PROGRAMS += \
+	%reldir%/iontest
+%canon_reldir%_iontest_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	-I$(srcdir)/%reldir%/include \
+	-I$(srcdir)/%reldir%/kernel-headers
+%canon_reldir%_iontest_LDADD = \
+	liblog/libandroid-log.la \
+	%reldir%/libandroid-ion.la
+%canon_reldir%_iontest_SOURCES = \
+	%reldir%/ion_test.c
+
+pkgconfig_DATA += \
+	%reldir%/android-ion-$(SYSTEMCORE_API_VERSION).pc
+
+include %reldir%/tests/Android.mk

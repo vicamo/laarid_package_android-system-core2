@@ -81,6 +81,7 @@ include $(srcdir)/libsparse/Android.mk
 
 # Stage 0-1: depends on any of above packages
 include $(srcdir)/libcutils/Android.mk
+include $(srcdir)/libion/Android.mk
 
 # Stage 0-2: depends on any of above packages
 include $(srcdir)/base/Android.mk

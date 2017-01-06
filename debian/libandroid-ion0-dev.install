@@ -1,0 +1,6 @@
+usr/include/android/system-core-*/ion
+usr/include/linux/ion.h
+usr/include/linux/ion_test.h
+usr/lib/*/libandroid-ion.a
+usr/lib/*/libandroid-ion.so
+usr/lib/*/pkgconfig/android-ion-*.pc
