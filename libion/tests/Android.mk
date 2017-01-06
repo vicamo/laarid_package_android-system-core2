@@ -18,8 +18,10 @@ if HAVE_GTEST
 check_PROGRAMS += \
 	%reldir%/ion-unit-tests
 
+if HAVE_DEV_ION
 TESTS += \
 	%reldir%/ion-unit-tests
+endif
 
 %canon_reldir%_ion_unit_tests_CPPFLAGS = \
 	$(AM_CPPFLAGS) \

@@ -300,6 +300,10 @@ AC_SUBST([GTEST_SRCDIR])
 AC_LANG_POP()
 AM_CONDITIONAL([HAVE_GTEST], [test "x${with_gtest}" != xno])
 
+dnl Whether should we run ION unit tests
+AC_CHECK_FILE([/dev/ion])
+AM_CONDITIONAL([HAVE_DEV_ION], [test "x${c_cv_file_dev_ion}" = xyes])
+
 AC_CONFIG_FILES([
   Makefile
   base/android-base-$SYSTEMCORE_API_VERSION.pc
