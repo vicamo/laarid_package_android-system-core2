@@ -25,11 +25,7 @@
 
 #include <gtest/gtest.h>
 
-#ifdef __ANDROID__
 #define HOST_TEST(suite, name) TEST(suite, DISABLED_ ## name)
-#else
-#define HOST_TEST(suite, name) TEST(suite, name)
-#endif
 
 class CapturedStderr {
  public:

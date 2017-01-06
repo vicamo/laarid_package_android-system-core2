@@ -19,7 +19,7 @@
 #include <libgen.h>
 
 // For getprogname(3) or program_invocation_short_name.
-#if defined(__ANDROID__) || defined(__APPLE__)
+#if defined(__APPLE__)
 #include <stdlib.h>
 #elif defined(__GLIBC__)
 #include <errno.h>
@@ -37,24 +37,16 @@
 #include "cutils/threads.h"
 
 // Headers for LogMessage::LogLine.
-#ifdef __ANDROID__
 #include <android/set_abort_message.h>
 #include "cutils/log.h"
-#else
-#include <sys/types.h>
-#include <unistd.h>
-#endif
 
 namespace android {
 namespace base {
 
 static std::mutex logging_lock;
 
-#ifdef __ANDROID__
 static LogFunction gLogger = LogdLogger();
-#else
-static LogFunction gLogger = StderrLogger;
-#endif
+//static LogFunction gLogger = StderrLogger;
 
 static bool gInitialized = false;
 static LogSeverity gMinimumLogSeverity = INFO;
@@ -84,7 +76,6 @@ void StderrLogger(LogId, LogSeverity severity, const char*, const char* file,
 }
 
 
-#ifdef __ANDROID__
 LogdLogger::LogdLogger(LogId default_log_id) : default_log_id_(default_log_id) {
 }
 
@@ -119,7 +110,6 @@ void LogdLogger::operator()(LogId id, LogSeverity severity, const char* tag,
     __android_log_buf_print(lg_id, priority, tag, "%s", message);
   }
 }
-#endif
 
 void InitLogging(char* argv[], LogFunction&& logger) {
   SetLogger(std::forward<LogFunction>(logger));
@@ -273,9 +263,7 @@ LogMessage::~LogMessage() {
 
   // Abort if necessary.
   if (data_->GetSeverity() == FATAL) {
-#ifdef __ANDROID__
     android_set_abort_message(msg.c_str());
-#endif
     abort();
   }
 }
