@@ -1,0 +1,4 @@
+usr/include/android/system-core-*/base
+usr/lib/*/libandroid-base.a
+usr/lib/*/libandroid-base.so
+usr/lib/*/pkgconfig/android-base-*.pc

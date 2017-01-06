@@ -302,6 +302,7 @@ AM_CONDITIONAL([HAVE_GTEST], [test "x${with_gtest}" != xno])
 
 AC_CONFIG_FILES([
   Makefile
+  base/android-base-$SYSTEMCORE_API_VERSION.pc
   libcutils/android-cutils-$SYSTEMCORE_API_VERSION.pc
   libdiskconfig/android-diskconfig-$SYSTEMCORE_API_VERSION.pc
   liblog/android-log-$SYSTEMCORE_API_VERSION.pc

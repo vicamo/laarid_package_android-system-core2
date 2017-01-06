@@ -14,96 +14,69 @@
 # limitations under the License.
 #
 
-LOCAL_PATH := $(call my-dir)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-base.la
 
-libbase_src_files := \
-    file.cpp \
-    stringprintf.cpp \
-    strings.cpp \
+%canon_reldir%_libandroid_base_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	-I$(srcdir)/%reldir%/include
+%canon_reldir%_libandroid_base_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	-Wextra
+%canon_reldir%_libandroid_base_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_base_la_LIBADD = \
+	$(BIONIC_LIBS) \
+	liblog/libandroid-log.la
+%canon_reldir%_libandroid_base_la_SOURCES = \
+	%reldir%/file.cpp \
+	%reldir%/logging.cpp \
+	%reldir%/stringprintf.cpp \
+	%reldir%/strings.cpp
 
-libbase_test_src_files := \
-    file_test.cpp \
-    stringprintf_test.cpp \
-    strings_test.cpp \
-    test_main.cpp \
-    test_utils.cpp \
+%canon_reldir%_libandroid_base_incdir = $(androidincdir)/base
+%canon_reldir%_libandroid_base_inc_HEADERS = \
+	%reldir%/include/base/file.h \
+	%reldir%/include/base/logging.h \
+	%reldir%/include/base/macros.h \
+	%reldir%/include/base/memory.h \
+	%reldir%/include/base/stringprintf.h \
+	%reldir%/include/base/strings.h
 
-libbase_cppflags := \
-    -Wall \
-    -Wextra \
-    -Werror \
+pkgconfig_DATA += \
+	%reldir%/android-base-$(SYSTEMCORE_API_VERSION).pc
 
-# Device
-# ------------------------------------------------------------------------------
-include $(CLEAR_VARS)
-LOCAL_MODULE := libbase
-LOCAL_CLANG := true
-LOCAL_SRC_FILES := $(libbase_src_files) logging.cpp
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_CPPFLAGS := $(libbase_cppflags)
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_STATIC_LIBRARIES := libcutils
-LOCAL_MULTILIB := both
-include $(BUILD_STATIC_LIBRARY)
+if HAVE_GTEST
+check_PROGRAMS += \
+	%reldir%/libbase_test
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libbase
-LOCAL_CLANG := true
-LOCAL_WHOLE_STATIC_LIBRARIES := libbase
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_SHARED_LIBRARIES := libcutils
-LOCAL_MULTILIB := both
-include $(BUILD_SHARED_LIBRARY)
+TESTS += \
+	%reldir%/libbase_test
 
-# Host
-# ------------------------------------------------------------------------------
-include $(CLEAR_VARS)
-LOCAL_MODULE := libbase
-LOCAL_SRC_FILES := $(libbase_src_files)
-ifneq ($(HOST_OS),windows)
-    LOCAL_SRC_FILES += logging.cpp
+%canon_reldir%_libbase_test_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	$(GTEST_CPPFLAGS) \
+	-I$(srcdir)/%reldir%/include
+%canon_reldir%_libbase_test_LDADD = \
+	$(BIONIC_LIBS) \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la \
+	%reldir%/libandroid-base.la \
+	$(GTEST_LIBS)
+%canon_reldir%_libbase_test_DEPENDENCIES = \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la \
+	%reldir%/libandroid-base.la \
+	$(GTEST_LIBS)
+%canon_reldir%_libbase_test_SOURCES = \
+	%reldir%/file_test.cpp \
+	%reldir%/logging.cpp \
+	%reldir%/stringprintf_test.cpp \
+	%reldir%/strings_test.cpp \
+	%reldir%/test_main.cpp \
+	%reldir%/test_utils.cpp \
+	%reldir%/test_utils.h
 endif
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_CPPFLAGS := $(libbase_cppflags)
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_STATIC_LIBRARIES := libcutils
-LOCAL_MULTILIB := both
-include $(BUILD_HOST_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := libbase
-LOCAL_WHOLE_STATIC_LIBRARIES := libbase
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_STATIC_LIBRARIES := libcutils
-LOCAL_MULTILIB := both
-include $(BUILD_HOST_SHARED_LIBRARY)
-
-# Tests
-# ------------------------------------------------------------------------------
-include $(CLEAR_VARS)
-LOCAL_MODULE := libbase_test
-LOCAL_CLANG := true
-LOCAL_SRC_FILES := $(libbase_test_src_files) logging_test.cpp
-LOCAL_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_CPPFLAGS := $(libbase_cppflags)
-LOCAL_SHARED_LIBRARIES := libbase
-LOCAL_MULTILIB := both
-LOCAL_MODULE_STEM_32 := $(LOCAL_MODULE)32
-LOCAL_MODULE_STEM_64 := $(LOCAL_MODULE)64
-include $(BUILD_NATIVE_TEST)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := libbase_test
-LOCAL_SRC_FILES := $(libbase_test_src_files)
-ifneq ($(HOST_OS),windows)
-    LOCAL_SRC_FILES += logging_test.cpp
-endif
-LOCAL_C_INCLUDES := $(LOCAL_PATH)
-LOCAL_CPPFLAGS := $(libbase_cppflags)
-LOCAL_SHARED_LIBRARIES := libbase
-LOCAL_MULTILIB := both
-LOCAL_MODULE_STEM_32 := $(LOCAL_MODULE)32
-LOCAL_MODULE_STEM_64 := $(LOCAL_MODULE)64
-include $(BUILD_HOST_NATIVE_TEST)
