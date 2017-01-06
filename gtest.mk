@@ -7,6 +7,11 @@ libgtest_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(GTEST_CPPFLAGS) \
 	-I $(GTEST_SRCDIR)
+libgtest_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	$(PTHREAD_CFLAGS)
+libgtest_la_LIBADD = \
+	$(PTHREAD_LIBS)
 nodist_libgtest_la_SOURCES = \
 	$(top_builddir)/gtest-all.cc
 
@@ -16,6 +21,11 @@ $(top_builddir)/gtest-all.cc: $(top_builddir)
 libgtest_main_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(GTEST_CPPFLAGS)
+libgtest_main_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	$(PTHREAD_CFLAGS)
+libgtest_main_la_LIBADD = \
+	$(PTHREAD_LIBS)
 nodist_libgtest_main_la_SOURCES = \
 	$(top_builddir)/gtest_main.cc
 
