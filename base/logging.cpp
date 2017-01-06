@@ -37,7 +37,10 @@
 #include "cutils/threads.h"
 
 // Headers for LogMessage::LogLine.
+#if 0
+/* FIXME: https://github.com/laarid/package_android-system-core/issues/19 */
 #include <android/set_abort_message.h>
+#endif
 #include "cutils/log.h"
 
 namespace android {
@@ -263,7 +266,10 @@ LogMessage::~LogMessage() {
 
   // Abort if necessary.
   if (data_->GetSeverity() == FATAL) {
+#if 0
+    /* FIXME: https://github.com/laarid/package_android-system-core/issues/19 */
     android_set_abort_message(msg.c_str());
+#endif
     abort();
   }
 }
