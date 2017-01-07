@@ -1,3 +1,13 @@
+android-system-core (0.0.10) stretch; urgency=low
+
+  * ci: split process into multiple build flavors
+  * build libandroid-base
+  * build libandroid-ion
+  * build libandroid-logwrap, logwrapper
+  * mincrypt: build unit tests
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Sat, 7 Jan 2017 11:13:24 +0800
+
 android-system-core (0.0.9+b1) stretch; urgency=low
 
   * disable bintray version sign and enable override
