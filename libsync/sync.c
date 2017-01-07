@@ -38,6 +38,8 @@ struct sw_sync_create_fence_data {
 #define SW_SYNC_IOC_CREATE_FENCE _IOWR(SW_SYNC_IOC_MAGIC, 0, struct sw_sync_create_fence_data)
 #define SW_SYNC_IOC_INC _IOW(SW_SYNC_IOC_MAGIC, 1, __u32)
 
+#include <bionic/bionic.h>
+
 int sync_wait(int fd, int timeout)
 {
     __s32 to = timeout;
