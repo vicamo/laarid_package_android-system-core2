@@ -74,14 +74,14 @@ include $(srcdir)/include/Makefile.am
 #  collect2: error: ld returned 1 exit status
 #  libtool: install: error: relink `libandroid-cutils-0.la' with the above command before installing it
 
-# Stage 1: depends on external packages that depend on stage 0 packages
+# Stage 2-1: depends on external packages that depend on stage 0 packages
 include $(srcdir)/libbacktrace/Android.mk
 include $(srcdir)/libnativebridge/Android.mk
 
-# Stage 1-1: depends on any of above packages
+# Stage 2-2: depends on any of above packages
 include $(srcdir)/libutils/Android.mk
 
-# Stage 1-2: depends on any of above packages
+# Stage 2-3: depends on any of above packages
 include $(srcdir)/libprocessgroup/Android.mk
 include $(srcdir)/libziparchive/Android.mk
 
