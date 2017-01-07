@@ -17,3 +17,5 @@ lib_LTLIBRARIES += \
 
 pkgconfig_DATA += \
 	%reldir%/android-mincrypt-$(SYSTEMCORE_API_VERSION).pc
+
+include $(srcdir)/%reldir%/test/Android.mk
