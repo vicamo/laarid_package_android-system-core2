@@ -25,7 +25,7 @@ extern "C" {
 #include <crypto_scrypt.h>
 }
 
-#include <UniquePtr.h>
+#include <nativehelper/UniquePtr.h>
 #include <gatekeeper/gatekeeper.h>
 #include <iostream>
 #include <unordered_map>

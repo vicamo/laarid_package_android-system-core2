@@ -18,7 +18,11 @@
 #define _LIBS_CUTILS_TRACE_H
 
 #include <inttypes.h>
+#ifdef __cplusplus
+#include <atomic>
+#else
 #include <stdatomic.h>
+#endif
 #include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -115,7 +119,11 @@ void atrace_set_tracing_enabled(bool enabled);
  * Nonzero indicates setup has completed.
  * Note: This does NOT indicate whether or not setup was successful.
  */
+#ifdef __cplusplus
+extern std::atomic_bool atrace_is_ready;
+#else
 extern atomic_bool atrace_is_ready;
+#endif
 
 /**
  * Set of ATRACE_TAG flags to trace for, initialized to ATRACE_TAG_NOT_READY.
@@ -138,6 +146,9 @@ extern int atrace_marker_fd;
 #define ATRACE_INIT() atrace_init()
 static inline void atrace_init()
 {
+#ifdef __cplusplus
+    using std::memory_order_acquire;
+#endif
     if (CC_UNLIKELY(!atomic_load_explicit(&atrace_is_ready, memory_order_acquire))) {
         atrace_setup();
     }

@@ -27,10 +27,10 @@
 #include <backtrace/Backtrace.h>
 #include <backtrace/BacktraceMap.h>
 
+#include <bionic/bionic.h>
 #include <cutils/threads.h>
 
 #include "BacktraceLog.h"
-#include "thread_utils.h"
 #include "UnwindCurrent.h"
 #include "UnwindPtrace.h"
 
