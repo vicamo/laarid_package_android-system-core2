@@ -306,6 +306,14 @@ if test x$os_windows = xyes; then
     [Define to 1 if we have Windows {Map,Unmap}ViewOfFile.])
 fi
 
+# Optional features
+# -----------------
+AC_ARG_ENABLE([arm-neon],
+  [AS_HELP_STRING([--enable-arm-neon], [Enable ARM NEON optimizations])],
+  [AS_IF([test "x${enable_arm_neon}" = xyes],
+    [AS_IF([test "x${cpu_arm}" != xyes], [enable_arm_neon=no])])])
+AM_CONDITIONAL([CPU_ARM_HAVE_NEON], [test "x${enable_arm_neon}" = xyes])
+
 # GTest
 # -----
 AC_LANG_PUSH([C++])
@@ -337,6 +345,7 @@ AC_CONFIG_FILES([
   Makefile
   libbacktrace/android-backtrace-$SYSTEMCORE2_API_VERSION.pc
   libnativebridge/android-nativebridge-$SYSTEMCORE2_API_VERSION.pc
+  libpixelflinger/android-pixelflinger-$SYSTEMCORE2_API_VERSION.pc
   libprocessgroup/android-processgroup-$SYSTEMCORE2_API_VERSION.pc
   libutils/android-utils-$SYSTEMCORE2_API_VERSION.pc
   libziparchive/android-ziparchive-$SYSTEMCORE2_API_VERSION.pc

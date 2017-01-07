@@ -1,83 +1,115 @@
-LOCAL_PATH:= $(call my-dir)
-include $(CLEAR_VARS)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-pixelflinger.la
 
-#
-# C/C++ and ARMv5 objects
-#
+%canon_reldir%_libandroid_pixelflinger_la_SOURCES = \
+	%reldir%/codeflinger/ARMAssemblerInterface.cpp \
+	%reldir%/codeflinger/ARMAssemblerInterface.h \
+	%reldir%/codeflinger/ARMAssemblerProxy.cpp \
+	%reldir%/codeflinger/ARMAssemblerProxy.h \
+	%reldir%/codeflinger/CodeCache.cpp \
+	%reldir%/codeflinger/CodeCache.h \
+	%reldir%/codeflinger/GGLAssembler.cpp \
+	%reldir%/codeflinger/GGLAssembler.h \
+	%reldir%/codeflinger/load_store.cpp \
+	%reldir%/codeflinger/blending.cpp \
+	%reldir%/codeflinger/texturing.cpp \
+	%reldir%/codeflinger/tinyutils/smartpointer.h \
+	%reldir%/include/private/pixelflinger/ggl_context.h \
+	%reldir%/include/private/pixelflinger/ggl_fixed.h \
+	%reldir%/fixed.cpp \
+	%reldir%/picker.cpp \
+	%reldir%/picker.h \
+	%reldir%/pixelflinger.cpp \
+	%reldir%/trap.cpp \
+	%reldir%/trap.h \
+	%reldir%/scanline.cpp \
+	%reldir%/scanline.h \
+	%reldir%/format.cpp \
+	%reldir%/clear.cpp \
+	%reldir%/clear.h \
+	%reldir%/raster.cpp \
+	%reldir%/raster.h \
+	%reldir%/buffer.cpp \
+	%reldir%/buffer.h
+%canon_reldir%_libandroid_pixelflinger_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	$(LOG_CFLAGS) \
+	$(CUTILS_CFLAGS) \
+	-I$(srcdir)/%reldir% \
+	-I$(srcdir)/%reldir%/include
+%canon_reldir%_libandroid_pixelflinger_la_CFLAGS = \
+	$(AM_CFLAGS) \
+	-fstrict-aliasing \
+	-fomit-frame-pointer
+%canon_reldir%_libandroid_pixelflinger_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	-fstrict-aliasing \
+	-fomit-frame-pointer
 
-include $(CLEAR_VARS)
-PIXELFLINGER_SRC_FILES:= \
-	codeflinger/ARMAssemblerInterface.cpp \
-	codeflinger/ARMAssemblerProxy.cpp \
-	codeflinger/CodeCache.cpp \
-	codeflinger/GGLAssembler.cpp \
-	codeflinger/load_store.cpp \
-	codeflinger/blending.cpp \
-	codeflinger/texturing.cpp \
-	fixed.cpp.arm \
-	picker.cpp.arm \
-	pixelflinger.cpp.arm \
-	trap.cpp.arm \
-	scanline.cpp.arm \
-	format.cpp \
-	clear.cpp \
-	raster.cpp \
-	buffer.cpp
-
-PIXELFLINGER_CFLAGS := -fstrict-aliasing -fomit-frame-pointer
-
-PIXELFLINGER_SRC_FILES_arm := \
-	codeflinger/ARMAssembler.cpp \
-	codeflinger/disassem.c \
-	col32cb16blend.S \
-	t32cb16blend.S \
-
-ifeq ($(ARCH_ARM_HAVE_NEON),true)
-PIXELFLINGER_SRC_FILES_arm += col32cb16blend_neon.S
-PIXELFLINGER_CFLAGS_arm += -D__ARM_HAVE_NEON
+if CPU_ARM
+%canon_reldir%_libandroid_pixelflinger_la_SOURCES += \
+	%reldir%/codeflinger/ARMAssembler.cpp \
+	%reldir%/codeflinger/ARMAssembler.h \
+	%reldir%/codeflinger/armreg.h \
+	%reldir%/codeflinger/disassem.c \
+	%reldir%/codeflinger/disassem.h \
+	%reldir%/col32cb16blend.S \
+	%reldir%/t32cb16blend.S
+if CPU_ARM_HAVE_NEON
+%canon_reldir%_libandroid_pixelflinger_la_SOURCES += \
+	%reldir%/col32cb16blend_neon.S
+%canon_reldir%_libandroid_pixelflinger_la_CPPFLAGS += \
+	-D__ARM_HAVE_NEON
 endif
+else
+if CPU_AARCH64
+%canon_reldir%_libandroid_pixelflinger_la_SOURCES += \
+	%reldir%/codeflinger/Arm64Assembler.cpp \
+	%reldir%/codeflinger/Arm64Assembler.h \
+	%reldir%/codeflinger/Arm64Disassembler.cpp \
+	%reldir%/codeflinger/Arm64Disassembler.h \
+	%reldir%/arch-arm64/col32cb16blend.S \
+	%reldir%/arch-arm64/t32cb16blend.S
+else
+if CPU_MIPS
+%canon_reldir%_libandroid_pixelflinger_la_SOURCES += \
+	%reldir%/codeflinger/MIPSAssembler.cpp \
+	%reldir%/codeflinger/MIPSAssembler.h \
+	%reldir%/codeflinger/mips_disassem.c \
+	%reldir%/codeflinger/mips_disassem.h \
+	%reldir%/codeflinger/mips_opcode.h \
+	%reldir%/arch-mips/t32cb16blend.S
+else
+if CPU_MIPS64
+%canon_reldir%_libandroid_pixelflinger_la_SOURCES += \
+	%reldir%/codeflinger/MIPSAssembler.cpp \
+	%reldir%/codeflinger/MIPSAssembler.h \
+	%reldir%/codeflinger/MIPS64Assembler.cpp \
+	%reldir%/codeflinger/MIPS64Assembler.h \
+	%reldir%/codeflinger/mips_disassem.h \
+	%reldir%/codeflinger/mips_opcode.h \
+	%reldir%/codeflinger/mips64_disassem.c \
+	%reldir%/codeflinger/mips64_disassem.h \
+	%reldir%/arch-mips64/col32cb16blend.S \
+	%reldir%/arch-mips64/t32cb16blend.S
+endif # CPU_MIPS64
+endif # CPU_MIPS
+endif # CPU_AARCH64
+endif # CPU_ARM
 
-PIXELFLINGER_SRC_FILES_arm64 := \
-	codeflinger/Arm64Assembler.cpp \
-	codeflinger/Arm64Disassembler.cpp \
-	arch-arm64/col32cb16blend.S \
-	arch-arm64/t32cb16blend.S \
+%canon_reldir%_libandroid_pixelflinger_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_pixelflinger_la_LIBADD = \
+	$(LOG_LIBS) \
+	$(CUTILS_LIBS) \
+	libutils/libandroid-utils.la
 
-ifndef ARCH_MIPS_REV6
-PIXELFLINGER_SRC_FILES_mips := \
-	codeflinger/MIPSAssembler.cpp \
-	codeflinger/mips_disassem.c \
-	arch-mips/t32cb16blend.S \
+%canon_reldir%_libandroid_pixelflinger_incdir = $(androidincdir)/pixelflinger
+%canon_reldir%_libandroid_pixelflinger_inc_HEADERS = \
+	%reldir%/include/pixelflinger/format.h \
+	%reldir%/include/pixelflinger/pixelflinger.h
 
-endif
-
-PIXELFLINGER_SRC_FILES_mips64 := \
-        codeflinger/MIPSAssembler.cpp \
-	codeflinger/MIPS64Assembler.cpp \
-	codeflinger/mips64_disassem.c \
-	arch-mips64/col32cb16blend.S \
-	arch-mips64/t32cb16blend.S \
-
-#
-# Shared library
-#
-
-LOCAL_MODULE:= libpixelflinger
-LOCAL_SRC_FILES := $(PIXELFLINGER_SRC_FILES)
-LOCAL_SRC_FILES_arm := $(PIXELFLINGER_SRC_FILES_arm)
-LOCAL_SRC_FILES_arm64 := $(PIXELFLINGER_SRC_FILES_arm64)
-LOCAL_SRC_FILES_mips := $(PIXELFLINGER_SRC_FILES_mips)
-LOCAL_SRC_FILES_mips64 := $(PIXELFLINGER_SRC_FILES_mips64)
-LOCAL_CFLAGS := $(PIXELFLINGER_CFLAGS)
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_C_INCLUDES += $(LOCAL_EXPORT_C_INCLUDE_DIRS) \
-		    external/safe-iop/include
-LOCAL_SHARED_LIBRARIES := libcutils liblog libutils
-
-# Really this should go away entirely or at least not depend on
-# libhardware, but this at least gets us built.
-LOCAL_SHARED_LIBRARIES += libhardware_legacy
-LOCAL_CFLAGS += -DWITH_LIB_HARDWARE
-include $(BUILD_SHARED_LIBRARY)
-
-include $(call all-makefiles-under,$(LOCAL_PATH))
+pkgconfig_DATA += \
+	%reldir%/android-pixelflinger-$(SYSTEMCORE2_API_VERSION).pc

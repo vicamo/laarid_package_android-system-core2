@@ -82,6 +82,7 @@ include $(srcdir)/libnativebridge/Android.mk
 include $(srcdir)/libutils/Android.mk
 
 # Stage 2-3: depends on any of above packages
+include $(srcdir)/libpixelflinger/Android.mk
 include $(srcdir)/libprocessgroup/Android.mk
 include $(srcdir)/libziparchive/Android.mk
 
