@@ -185,7 +185,7 @@ db_addr_t mips_disassem(db_addr_t loc, char *di_buffer, int alt_dis_format);
 static db_addr_t
 db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
 {
-    bool bdslot = false;
+    // bool bdslot = false;
     InstFmt i;
 
     i.word = insn;
@@ -266,7 +266,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
         case OP_JR:
         case OP_JALR:
             db_printf("\t%s", reg_name[i.RType.rs]);
-            bdslot = true;
+            // bdslot = true;
             break;
         case OP_MTLO:
         case OP_MTHI:
@@ -374,7 +374,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
             reg_name[i.IType.rt]);
     pr_displ:
         print_addr(loc + 4 + ((short)i.IType.imm << 2));
-        bdslot = true;
+        // bdslot = true;
         break;
 
     case OP_COP0:
@@ -459,7 +459,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
     case OP_JAL:
         db_printf("%s\t", op_name[i.JType.op]);
         print_addr((loc & 0xF0000000) | (i.JType.target << 2));
-        bdslot = true;
+        // bdslot = true;
         break;
 
     case OP_LWC1:

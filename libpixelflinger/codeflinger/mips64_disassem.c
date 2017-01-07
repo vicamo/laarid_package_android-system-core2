@@ -150,7 +150,7 @@ db_addr_t mips_disassem(db_addr_t loc, char *di_buffer, int alt_dis_format);
 static db_addr_t
 db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
 {
-    bool bdslot = false;
+    //bool bdslot = false;
     InstFmt i;
 
     i.word = insn;
@@ -215,7 +215,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
 
         if (i.RType.func == OP_JALR && i.RType.rd == 0) {
             db_printf("jr\t%s", reg_name[i.RType.rs]);
-            bdslot = true;
+            //bdslot = true;
             break;
         }
 
@@ -264,7 +264,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
                 db_printf("%s,", reg_name[i.RType.rd]);
             }
             db_printf("%s", reg_name[i.RType.rs]);
-            bdslot = true;
+            //bdslot = true;
             break;
 
         case OP_SYSCALL:
@@ -375,7 +375,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
             reg_name[i.IType.rt]);
     pr_displ:
         print_addr(loc + 4 + ((short)i.IType.imm << 2));
-        bdslot = true;
+        //bdslot = true;
         break;
 
     case OP_COP0:
@@ -460,7 +460,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
     case OP_JAL:
         db_printf("%s\t", op_name[i.JType.op]);
         print_addr((loc & 0xFFFFFFFFF0000000) | (i.JType.target << 2));
-        bdslot = true;
+        //bdslot = true;
         break;
 
     case OP_LWC1:

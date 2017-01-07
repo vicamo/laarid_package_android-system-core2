@@ -466,11 +466,6 @@ void ggl_pick_scanline(context_t* c)
 
 // ----------------------------------------------------------------------------
 
-static void blending(context_t* c, pixel_t* fragment, pixel_t* fb);
-static void blend_factor(context_t* c, pixel_t* r, uint32_t factor,
-        const pixel_t* src, const pixel_t* dst);
-static void rescale(uint32_t& u, uint8_t& su, uint32_t& v, uint8_t& sv);
-
 #if ANDROID_ARM_CODEGEN && (ANDROID_CODEGEN == ANDROID_CODEGEN_GENERATED)
 
 // no need to compile the generic-pipeline, it can't be reached
@@ -480,7 +475,7 @@ void scanline(context_t*)
 
 #else
 
-void rescale(uint32_t& u, uint8_t& su, uint32_t& v, uint8_t& sv)
+static void rescale(uint32_t& u, uint8_t& su, uint32_t& v, uint8_t& sv)
 {
     if (su && sv) {
         if (su > sv) {
@@ -493,7 +488,10 @@ void rescale(uint32_t& u, uint8_t& su, uint32_t& v, uint8_t& sv)
     }
 }
 
-void blending(context_t* c, pixel_t* fragment, pixel_t* fb)
+static void blend_factor(context_t* c, pixel_t* r, uint32_t factor,
+        const pixel_t* src, const pixel_t* dst);
+
+static void blending(context_t* c, pixel_t* fragment, pixel_t* fb)
 {
     rescale(fragment->c[0], fragment->s[0], fb->c[0], fb->s[0]);
     rescale(fragment->c[1], fragment->s[1], fb->c[1], fb->s[1]);
@@ -2149,7 +2147,6 @@ void scanline_t32cb16(context_t* c)
     const int32_t u = (c->state.texture[0].shade.is0>>16) + x;
     const int32_t v = (c->state.texture[0].shade.it0>>16) + y;
     uint32_t *src = reinterpret_cast<uint32_t*>(tex->data)+(u+(tex->stride*v));
-    int sR, sG, sB;
     uint32_t s, d;
 
     if (ct==1 || uintptr_t(dst)&2) {

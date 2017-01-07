@@ -56,6 +56,10 @@
 #include "armreg.h"
 //#include <ddb/ddb.h>
 
+#ifndef __unused
+#define __unused __attribute__((__unused__))
+#endif
+
 /*
  * General instruction format
  *

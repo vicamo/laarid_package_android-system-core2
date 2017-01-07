@@ -1348,7 +1348,7 @@ void MIPSAssembler::disassemble(const char* name)
     // mArmPC[iArm] holds the value of the Mips-PC for the first MIPS
     // instruction corresponding to that Arm instruction number
 
-    int iArm = 0;
+    //int iArm = 0;
     size_t count = pc()-base();
     uint32_t* mipsPC = base();
     while (count--) {
