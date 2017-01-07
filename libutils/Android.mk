@@ -59,3 +59,5 @@ lib_LTLIBRARIES += \
 
 pkgconfig_DATA += \
 	%reldir%/android-utils-$(SYSTEMCORE2_API_VERSION).pc
+
+include $(srcdir)/libutils/tests/Android.mk
