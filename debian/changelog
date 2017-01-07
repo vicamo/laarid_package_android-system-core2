@@ -1,3 +1,9 @@
+android-system-core (0.0.11) stretch; urgency=low
+
+  * sync source changes between stage 2
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Sun, 8 Jan 2017 00:08:29 +0800
+
 android-system-core (0.0.10) stretch; urgency=low
 
   * ci: split process into multiple build flavors
