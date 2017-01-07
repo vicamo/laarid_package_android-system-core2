@@ -1,0 +1,4 @@
+usr/include/android/system-core-*/logwrap
+usr/lib/*/libandroid-logwrap.a
+usr/lib/*/libandroid-logwrap.so
+usr/lib/*/pkgconfig/android-logwrap-*.pc

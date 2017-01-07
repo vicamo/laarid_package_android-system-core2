@@ -1,37 +1,36 @@
-LOCAL_PATH:= $(call my-dir)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-logwrap.la
 
-include $(CLEAR_VARS)
+%canon_reldir%_libandroid_logwrap_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	-I$(srcdir)/%reldir%/include
+%canon_reldir%_libandroid_logwrap_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_logwrap_la_LIBADD = \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la
+%canon_reldir%_libandroid_logwrap_la_SOURCES = \
+	%reldir%/logwrap.c
 
-# ========================================================
-# Static library
-# ========================================================
-include $(CLEAR_VARS)
-LOCAL_MODULE := liblogwrap
-LOCAL_SRC_FILES := logwrap.c
-LOCAL_SHARED_LIBRARIES := libcutils liblog
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_CFLAGS := -Werror
-include $(BUILD_STATIC_LIBRARY)
+%canon_reldir%_libandroid_logwrap_incdir = $(androidincdir)/logwrap
+%canon_reldir%_libandroid_logwrap_inc_HEADERS = \
+	%reldir%/include/logwrap/logwrap.h
 
-# ========================================================
-# Shared library
-# ========================================================
-include $(CLEAR_VARS)
-LOCAL_MODULE := liblogwrap
-LOCAL_SHARED_LIBRARIES := libcutils liblog
-LOCAL_WHOLE_STATIC_LIBRARIES := liblogwrap
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_CFLAGS := -Werror
-include $(BUILD_SHARED_LIBRARY)
+bin_PROGRAMS += \
+	%reldir%/logwrapper
 
-# ========================================================
-# Executable
-# ========================================================
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES:= logwrapper.c
-LOCAL_MODULE := logwrapper
-LOCAL_STATIC_LIBRARIES := liblog liblogwrap libcutils
-LOCAL_CFLAGS := -Werror
-include $(BUILD_EXECUTABLE)
+%canon_reldir%_logwrapper_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	-I$(srcdir)/%reldir%/include
+%canon_reldir%_logwrapper_LDADD = \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la \
+	%reldir%/libandroid-logwrap.la
+%canon_reldir%_logwrapper_SOURCES = \
+	%reldir%/logwrapper.c
+
+pkgconfig_DATA += \
+	%reldir%/android-logwrap-$(SYSTEMCORE_API_VERSION).pc

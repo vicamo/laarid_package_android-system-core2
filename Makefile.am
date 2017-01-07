@@ -86,6 +86,7 @@ include $(srcdir)/libion/Android.mk
 # Stage 0-2: depends on any of above packages
 include $(srcdir)/base/Android.mk
 include $(srcdir)/libdiskconfig/Android.mk
+include $(srcdir)/logwrapper/Android.mk
 include $(srcdir)/libnetutils/Android.mk
 include $(srcdir)/libsuspend/Android.mk
 include $(srcdir)/libsysutils/Android.mk
