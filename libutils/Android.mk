@@ -35,7 +35,6 @@ lib_LTLIBRARIES += \
 	%reldir%/CallStack.cpp \
 	%reldir%/FileMap.cpp \
 	%reldir%/JenkinsHash.cpp \
-	%reldir%/LinearAllocator.cpp \
 	%reldir%/LinearTransform.cpp \
 	%reldir%/Log.cpp \
 	%reldir%/Looper.cpp \

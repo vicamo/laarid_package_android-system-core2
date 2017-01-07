@@ -15,7 +15,7 @@
  */
 
 #define LOG_TAG "Properties_test"
-#include <utils/Log.h>
+#include <log/log.h>
 #include <gtest/gtest.h>
 
 #include <cutils/properties.h>
@@ -56,9 +56,13 @@ static ::testing::AssertionResult AssertEqualHex(const char *mExpr,
         ", actual: " << HexString(n) << ") are not equal";
 }
 
-class PropertiesTest : public testing::Test {
+/* FIXME: https://github.com/laarid/package_android-system-core/issues/12
+ * Disable properties tests for now due to the lack of property service
+ * running in the background.
+ */
+class DISABLED_PropertiesTest : public testing::Test {
 public:
-    PropertiesTest() : mValue() {}
+    DISABLED_PropertiesTest() : mValue() {}
 protected:
     virtual void SetUp() {
         EXPECT_OK(property_set(PROPERTY_TEST_KEY, /*value*/NULL));
@@ -91,7 +95,7 @@ protected:
     }
 };
 
-TEST_F(PropertiesTest, SetString) {
+TEST_F(DISABLED_PropertiesTest, SetString) {
 
     // Null key -> unsuccessful set
     {
@@ -106,14 +110,14 @@ TEST_F(PropertiesTest, SetString) {
         ResetValue();
 
         // Since the value is null, default value will be returned
-        int len = property_get(PROPERTY_TEST_KEY, mValue, PROPERTY_TEST_VALUE_DEFAULT);
+        size_t len = property_get(PROPERTY_TEST_KEY, mValue, PROPERTY_TEST_VALUE_DEFAULT);
         EXPECT_EQ(strlen(PROPERTY_TEST_VALUE_DEFAULT), len);
         EXPECT_STREQ(PROPERTY_TEST_VALUE_DEFAULT, mValue);
     }
 
     // Trivial case => get returns what was set
     {
-        int len = SetAndGetProperty("hello_world");
+        size_t len = SetAndGetProperty("hello_world");
         EXPECT_EQ(strlen("hello_world"), len) << "hello_world key";
         EXPECT_STREQ("hello_world", mValue);
         ResetValue();
@@ -122,7 +126,7 @@ TEST_F(PropertiesTest, SetString) {
     // Set to empty string => get returns default always
     {
         const char* EMPTY_STRING_DEFAULT = "EMPTY_STRING";
-        int len = SetAndGetProperty("", EMPTY_STRING_DEFAULT);
+        size_t len = SetAndGetProperty("", EMPTY_STRING_DEFAULT);
         EXPECT_EQ(strlen(EMPTY_STRING_DEFAULT), len) << "empty key";
         EXPECT_STREQ(EMPTY_STRING_DEFAULT, mValue);
         ResetValue();
@@ -147,7 +151,7 @@ TEST_F(PropertiesTest, SetString) {
 
         // Expect that the value set fails since it's too long
         EXPECT_GT(0, property_set(PROPERTY_TEST_KEY, oneLongerString.c_str()));
-        int len = property_get(PROPERTY_TEST_KEY, mValue, PROPERTY_TEST_VALUE_DEFAULT);
+        size_t len = property_get(PROPERTY_TEST_KEY, mValue, PROPERTY_TEST_VALUE_DEFAULT);
 
         EXPECT_EQ(strlen(VALID_TEST_VALUE), len) << "set should've failed";
         EXPECT_STREQ(VALID_TEST_VALUE, mValue);
@@ -155,7 +159,7 @@ TEST_F(PropertiesTest, SetString) {
     }
 }
 
-TEST_F(PropertiesTest, GetString) {
+TEST_F(DISABLED_PropertiesTest, GetString) {
 
     // Try to use a default value that's too long => set fails
     {
@@ -172,7 +176,7 @@ TEST_F(PropertiesTest, GetString) {
     }
 }
 
-TEST_F(PropertiesTest, GetBool) {
+TEST_F(DISABLED_PropertiesTest, GetBool) {
     /**
      * TRUE
      */
@@ -212,7 +216,7 @@ TEST_F(PropertiesTest, GetBool) {
     }
 }
 
-TEST_F(PropertiesTest, GetInt64) {
+TEST_F(DISABLED_PropertiesTest, GetInt64) {
     const int64_t DEFAULT_VALUE = INT64_C(0xDEADBEEFBEEFDEAD);
 
     const std::string longMaxString = ToString(INT64_MAX);
@@ -259,7 +263,7 @@ TEST_F(PropertiesTest, GetInt64) {
     }
 }
 
-TEST_F(PropertiesTest, GetInt32) {
+TEST_F(DISABLED_PropertiesTest, GetInt32) {
     const int32_t DEFAULT_VALUE = INT32_C(0xDEADBEEF);
 
     const std::string intMaxString = ToString(INT32_MAX);

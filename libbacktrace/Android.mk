@@ -22,6 +22,7 @@ lib_LTLIBRARIES += \
 	$(UNWIND_CFLAGS) \
 	$(BIONIC_CFLAGS) \
 	$(LOG_CFLAGS) \
+	$(BASE_CFLAGS) \
 	$(CUTILS_CFLAGS)
 %canon_reldir%_libandroid_backtrace_la_CXXFLAGS = \
 	$(AM_CXXFLAGS) \
@@ -33,16 +34,21 @@ lib_LTLIBRARIES += \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_backtrace_la_LIBADD = \
+	$(PTHREAD_LIBS) -lpthread \
 	$(UNWIND_LIBS) \
 	$(BIONIC_LIBS) \
-	$(LOG_LIBS)
+	$(LOG_LIBS) \
+	$(BASE_LIBS)
 %canon_reldir%_libandroid_backtrace_la_SOURCES = \
-	%reldir%/BacktraceImpl.cpp \
-	%reldir%/BacktraceImpl.h \
+	%reldir%/Backtrace.cpp \
+	%reldir%/BacktraceCurrent.cpp \
+	%reldir%/BacktraceCurrent.h \
 	%reldir%/BacktraceLog.h \
 	%reldir%/BacktraceMap.cpp \
-	%reldir%/BacktraceThread.cpp \
-	%reldir%/BacktraceThread.h \
+	%reldir%/BacktracePtrace.cpp \
+	%reldir%/BacktracePtrace.h \
+	%reldir%/ThreadEntry.cpp \
+	%reldir%/ThreadEntry.h \
 	%reldir%/UnwindCurrent.cpp \
 	%reldir%/UnwindCurrent.h \
 	%reldir%/UnwindPtrace.cpp \

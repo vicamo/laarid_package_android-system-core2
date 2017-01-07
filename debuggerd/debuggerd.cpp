@@ -30,6 +30,8 @@
 #include <sys/stat.h>
 #include <sys/poll.h>
 
+#include <selinux/android.h>
+
 #include <log/logger.h>
 
 #include <cutils/sockets.h>
@@ -44,6 +46,14 @@
 #include "getevent.h"
 #include "tombstone.h"
 #include "utility.h"
+
+// If the 32 bit executable is compiled on a 64 bit system,
+// use the 32 bit socket name.
+#if defined(TARGET_IS_64_BIT) && !defined(__LP64__)
+#define SOCKET_NAME DEBUGGER32_SOCKET_NAME
+#else
+#define SOCKET_NAME DEBUGGER_SOCKET_NAME
+#endif
 
 struct debugger_request_t {
   debugger_action_t action;
@@ -77,7 +87,7 @@ static void wait_for_user_action(const debugger_request_t &request) {
         "*\n"
         "* Wait for gdb to start, then press the VOLUME DOWN key\n"
         "* to let the process continue crashing.\n"
-        "********************************************************\n",
+        "********************************************************",
         request.pid, exe, request.tid);
 
   // Wait for VOLUME DOWN.
@@ -124,16 +134,63 @@ static int get_process_info(pid_t tid, pid_t* out_pid, uid_t* out_uid, uid_t* ou
   return fields == 7 ? 0 : -1;
 }
 
+static int selinux_enabled;
+
+/*
+ * Corresponds with debugger_action_t enum type in
+ * include/cutils/debugger.h.
+ */
+static const char *debuggerd_perms[] = {
+  NULL, /* crash is only used on self, no check applied */
+  "dump_tombstone",
+  "dump_backtrace"
+};
+
+static bool selinux_action_allowed(int s, pid_t tid, debugger_action_t action)
+{
+  char *scon = NULL, *tcon = NULL;
+  const char *tclass = "debuggerd";
+  const char *perm;
+  bool allowed = false;
+
+  if (selinux_enabled <= 0)
+    return true;
+
+  if (action <= 0 || action >= (sizeof(debuggerd_perms)/sizeof(debuggerd_perms[0]))) {
+    ALOGE("SELinux:  No permission defined for debugger action %d", action);
+    return false;
+  }
+
+  perm = debuggerd_perms[action];
+
+  if (getpeercon(s, &scon) < 0) {
+    ALOGE("Cannot get peer context from socket\n");
+    goto out;
+  }
+
+  if (getpidcon(tid, &tcon) < 0) {
+    ALOGE("Cannot get context for tid %d\n", tid);
+    goto out;
+  }
+
+  allowed = (selinux_check_access(scon, tcon, tclass, perm, NULL) == 0);
+
+out:
+   freecon(scon);
+   freecon(tcon);
+   return allowed;
+}
+
 static int read_request(int fd, debugger_request_t* out_request) {
   ucred cr;
   socklen_t len = sizeof(cr);
   int status = getsockopt(fd, SOL_SOCKET, SO_PEERCRED, &cr, &len);
   if (status != 0) {
-    ALOGE("cannot get credentials\n");
+    ALOGE("cannot get credentials");
     return -1;
   }
 
-  ALOGV("reading tid\n");
+  ALOGV("reading tid");
   fcntl(fd, F_SETFL, O_NONBLOCK);
 
   pollfd pollfds[1];
@@ -158,7 +215,7 @@ static int read_request(int fd, debugger_request_t* out_request) {
     return -1;
   }
 
-  out_request->action = msg.action;
+  out_request->action = static_cast<debugger_action_t>(msg.action);
   out_request->tid = msg.tid;
   out_request->pid = cr.pid;
   out_request->uid = cr.uid;
@@ -186,6 +243,9 @@ static int read_request(int fd, debugger_request_t* out_request) {
       ALOGE("tid %d does not exist. ignoring explicit dump request\n", out_request->tid);
       return -1;
     }
+
+    if (!selinux_action_allowed(fd, out_request->tid, out_request->action))
+      return -1;
   } else {
     // No one else is allowed to dump arbitrary processes.
     return -1;
@@ -203,6 +263,85 @@ static bool should_attach_gdb(debugger_request_t* request) {
   return false;
 }
 
+#if defined(__LP64__)
+static bool is32bit(pid_t tid) {
+  char* exeline;
+  if (asprintf(&exeline, "/proc/%d/exe", tid) == -1) {
+    return false;
+  }
+  int fd = TEMP_FAILURE_RETRY(open(exeline, O_RDONLY | O_CLOEXEC));
+  int saved_errno = errno;
+  free(exeline);
+  if (fd == -1) {
+    ALOGW("Failed to open /proc/%d/exe %s", tid, strerror(saved_errno));
+    return false;
+  }
+
+  char ehdr[EI_NIDENT];
+  ssize_t bytes = TEMP_FAILURE_RETRY(read(fd, &ehdr, sizeof(ehdr)));
+  close(fd);
+  if (bytes != (ssize_t) sizeof(ehdr) || memcmp(ELFMAG, ehdr, SELFMAG) != 0) {
+    return false;
+  }
+  if (ehdr[EI_CLASS] == ELFCLASS32) {
+    return true;
+  }
+  return false;
+}
+
+static void redirect_to_32(int fd, debugger_request_t* request) {
+  debugger_msg_t msg;
+  memset(&msg, 0, sizeof(msg));
+  msg.tid = request->tid;
+  msg.action = request->action;
+
+  int sock_fd = socket_local_client(DEBUGGER32_SOCKET_NAME, ANDROID_SOCKET_NAMESPACE_ABSTRACT,
+                                    SOCK_STREAM | SOCK_CLOEXEC);
+  if (sock_fd < 0) {
+    ALOGE("Failed to connect to debuggerd32: %s", strerror(errno));
+    return;
+  }
+
+  if (TEMP_FAILURE_RETRY(write(sock_fd, &msg, sizeof(msg))) != (ssize_t) sizeof(msg)) {
+    ALOGE("Failed to write request to debuggerd32 socket: %s", strerror(errno));
+    close(sock_fd);
+    return;
+  }
+
+  char ack;
+  if (TEMP_FAILURE_RETRY(read(sock_fd, &ack, 1)) == -1) {
+    ALOGE("Failed to read ack from debuggerd32 socket: %s", strerror(errno));
+    close(sock_fd);
+    return;
+  }
+
+  char buffer[1024];
+  ssize_t bytes_read;
+  while ((bytes_read = TEMP_FAILURE_RETRY(read(sock_fd, buffer, sizeof(buffer)))) > 0) {
+    ssize_t bytes_to_send = bytes_read;
+    ssize_t bytes_written;
+    do {
+      bytes_written = TEMP_FAILURE_RETRY(write(fd, buffer + bytes_read - bytes_to_send,
+                                               bytes_to_send));
+      if (bytes_written == -1) {
+        if (errno == EAGAIN) {
+          // Retry the write.
+          continue;
+        }
+        ALOGE("Error while writing data to fd: %s", strerror(errno));
+        break;
+      }
+      bytes_to_send -= bytes_written;
+    } while (bytes_written != 0 && bytes_to_send > 0);
+    if (bytes_to_send != 0) {
+        ALOGE("Failed to write all data to fd: read %zd, sent %zd", bytes_read, bytes_to_send);
+        break;
+    }
+  }
+  close(sock_fd);
+}
+#endif
+
 static void handle_request(int fd) {
   ALOGV("handle_request(%d)\n", fd);
 
@@ -212,6 +351,24 @@ static void handle_request(int fd) {
   if (!status) {
     ALOGV("BOOM: pid=%d uid=%d gid=%d tid=%d\n",
          request.pid, request.uid, request.gid, request.tid);
+
+#if defined(__LP64__)
+    // On 64 bit systems, requests to dump 32 bit and 64 bit tids come
+    // to the 64 bit debuggerd. If the process is a 32 bit executable,
+    // redirect the request to the 32 bit debuggerd.
+    if (is32bit(request.tid)) {
+      // Only dump backtrace and dump tombstone requests can be redirected.
+      if (request.action == DEBUGGER_ACTION_DUMP_BACKTRACE
+          || request.action == DEBUGGER_ACTION_DUMP_TOMBSTONE) {
+        redirect_to_32(fd, &request);
+      } else {
+        ALOGE("debuggerd: Not allowed to redirect action %d to 32 bit debuggerd\n",
+              request.action);
+      }
+      close(fd);
+      return;
+    }
+#endif
 
     // At this point, the thread that made the request is blocked in
     // a read() call.  If the thread has crashed, then this gives us
@@ -227,6 +384,7 @@ static void handle_request(int fd) {
       ALOGE("ptrace attach failed: %s\n", strerror(errno));
     } else {
       bool detach_failed = false;
+      bool tid_unresponsive = false;
       bool attach_gdb = should_attach_gdb(&request);
       if (TEMP_FAILURE_RETRY(write(fd, "\0", 1)) != 1) {
         ALOGE("failed responding to client: %s\n", strerror(errno));
@@ -240,8 +398,9 @@ static void handle_request(int fd) {
 
         int total_sleep_time_usec = 0;
         for (;;) {
-          int signal = wait_for_signal(request.tid, &total_sleep_time_usec);
-          if (signal < 0) {
+          int signal = wait_for_sigstop(request.tid, &total_sleep_time_usec, &detach_failed);
+          if (signal == -1) {
+            tid_unresponsive = true;
             break;
           }
 
@@ -308,27 +467,21 @@ static void handle_request(int fd) {
         free(tombstone_path);
       }
 
-      ALOGV("detaching\n");
-      if (attach_gdb) {
-        // stop the process so we can debug
-        kill(request.pid, SIGSTOP);
-
-        // detach so we can attach gdbserver
-        if (ptrace(PTRACE_DETACH, request.tid, 0, 0)) {
-          ALOGE("ptrace detach from %d failed: %s\n", request.tid, strerror(errno));
-          detach_failed = true;
+      if (!tid_unresponsive) {
+        ALOGV("detaching");
+        if (attach_gdb) {
+          // stop the process so we can debug
+          kill(request.pid, SIGSTOP);
         }
-
-        // if debug.db.uid is set, its value indicates if we should wait
-        // for user action for the crashing process.
-        // in this case, we log a message and turn the debug LED on
-        // waiting for a gdb connection (for instance)
-        wait_for_user_action(request);
-      } else {
-        // just detach
         if (ptrace(PTRACE_DETACH, request.tid, 0, 0)) {
-          ALOGE("ptrace detach from %d failed: %s\n", request.tid, strerror(errno));
+          ALOGE("ptrace detach from %d failed: %s", request.tid, strerror(errno));
           detach_failed = true;
+        } else if (attach_gdb) {
+          // if debug.db.uid is set, its value indicates if we should wait
+          // for user action for the crashing process.
+          // in this case, we log a message and turn the debug LED on
+          // waiting for a gdb connection (for instance)
+          wait_for_user_action(request);
         }
       }
 
@@ -380,7 +533,7 @@ static int do_server() {
   act.sa_flags = SA_NOCLDWAIT;
   sigaction(SIGCHLD, &act, 0);
 
-  int s = socket_local_server(DEBUGGER_SOCKET_NAME, ANDROID_SOCKET_NAMESPACE_ABSTRACT, SOCK_STREAM);
+  int s = socket_local_server(SOCKET_NAME, ANDROID_SOCKET_NAMESPACE_ABSTRACT, SOCK_STREAM);
   if (s < 0)
     return 1;
   fcntl(s, F_SETFD, FD_CLOEXEC);
@@ -434,7 +587,11 @@ static void usage() {
 }
 
 int main(int argc, char** argv) {
+  union selinux_callback cb;
   if (argc == 1) {
+    selinux_enabled = is_selinux_enabled();
+    cb.func_log = selinux_log_callback;
+    selinux_set_callback(SELINUX_CB_LOG, cb);
     return do_server();
   }
 

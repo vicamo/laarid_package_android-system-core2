@@ -12,37 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-LOCAL_PATH := $(call my-dir)
+if HAVE_GTEST
+check_PROGRAMS += \
+	%reldir%/libcutils_test
 
-test_src_files := \
-    MemsetTest.cpp \
-    PropertiesTest.cpp \
+TESTS += \
+	%reldir%/libcutils_test
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libcutils_test
-LOCAL_SRC_FILES := $(test_src_files)
-LOCAL_SHARED_LIBRARIES := \
-    libcutils \
-    liblog \
-    libutils \
-
-LOCAL_MULTILIB := both
-LOCAL_MODULE_STEM_32 := $(LOCAL_MODULE)32
-LOCAL_MODULE_STEM_64 := $(LOCAL_MODULE)64
-include $(BUILD_NATIVE_TEST)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := libcutils_test_static
-LOCAL_FORCE_STATIC_EXECUTABLE := true
-LOCAL_SRC_FILES := $(test_src_files)
-LOCAL_STATIC_LIBRARIES := \
-    libc \
-    libcutils \
-    liblog \
-    libstlport_static \
-    libutils \
-
-LOCAL_MULTILIB := both
-LOCAL_MODULE_STEM_32 := $(LOCAL_MODULE)32
-LOCAL_MODULE_STEM_64 := $(LOCAL_MODULE)64
-include $(BUILD_NATIVE_TEST)
+%canon_reldir%_libcutils_test_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	$(GTEST_CPPFLAGS)
+%canon_reldir%_libcutils_test_LDADD = \
+	$(BIONIC_LIBS) \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la \
+	$(GTEST_LIBS)
+%canon_reldir%_libcutils_test_DEPENDENCIES = \
+	liblog/libandroid-log.la \
+	libcutils/libandroid-cutils.la \
+	$(GTEST_LIBS)
+%canon_reldir%_libcutils_test_SOURCES = \
+	%reldir%/MemsetTest.cpp \
+	%reldir%/PropertiesTest.cpp \
+	%reldir%/test_str_parms.cpp
+endif

@@ -150,7 +150,7 @@ void ion_share_test()
         cmsg->cmsg_level = SOL_SOCKET;
         cmsg->cmsg_type = SCM_RIGHTS;
         cmsg->cmsg_len = CMSG_LEN(sizeof(int));
-        *(int *)CMSG_DATA(cmsg) = share_fd;
+        memcpy(CMSG_DATA(cmsg), &share_fd, sizeof(share_fd));
         /* send the fd */
         printf("master? [%10s] should be [master]\n", ptr);
         printf("master sending msg 1\n");
@@ -164,8 +164,9 @@ void ion_share_test()
         printf("master->master? [%10s]\n", ptr);
         if (recvmsg(sd[0], &msg, 0) < 0)
             perror("master recv 1");
+        close(fd);
+        _exit(0);
     } else {
-        struct msghdr msg;
         struct cmsghdr *cmsg;
         char* ptr;
         int fd, recv_fd;
@@ -190,7 +191,7 @@ void ion_share_test()
             printf("no cmsg rcvd in child");
             return;
         }
-        recv_fd = *(int*)CMSG_DATA(cmsg);
+        memcpy(&recv_fd, CMSG_DATA(cmsg), sizeof(recv_fd));
         if (recv_fd < 0) {
             printf("could not get recv_fd from socket");
             return;
@@ -205,6 +206,7 @@ void ion_share_test()
         strcpy(ptr, "child");
         printf("child sending msg 2\n");
         sendmsg(sd[1], &child_msg, 0);
+        close(fd);
     }
 }
 

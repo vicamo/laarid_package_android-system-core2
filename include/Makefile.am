@@ -42,13 +42,13 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 	%reldir%/utils/Functor.h \
 	%reldir%/utils/JenkinsHash.h \
 	%reldir%/utils/KeyedVector.h \
-	%reldir%/utils/LinearAllocator.h \
 	%reldir%/utils/LinearTransform.h \
 	%reldir%/utils/List.h \
 	%reldir%/utils/Log.h \
 	%reldir%/utils/Looper.h \
 	%reldir%/utils/LruCache.h \
 	%reldir%/utils/Mutex.h \
+	%reldir%/utils/NativeHandle.h \
 	%reldir%/utils/Printer.h \
 	%reldir%/utils/ProcessCallStack.h \
 	%reldir%/utils/PropertyMap.h \

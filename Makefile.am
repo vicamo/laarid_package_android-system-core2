@@ -13,7 +13,13 @@ MAINTAINERCLEANFILES = \
 	$(srcdir)/ChangeLog \
 	$(srcdir)/INSTALL
 
+# We're running CI in docker, which reports host architecture as host,
+# not the docker image architecture as we expected, so specifying the
+# host/build information is necessary here.
 DISTCHECK_CONFIGURE_FLAGS = \
+	--host=$(host) \
+	--build=$(build) \
+	--disable-dependency-tracking \
 	--disable-maintainer-mode
 
 GITIGNOREFILES = \
@@ -25,15 +31,16 @@ GITIGNOREFILES = \
 # -------------------
 AM_CPPFLAGS = \
 	-include config.h \
-	-I$(top_srcdir)/include
+	-I$(top_srcdir)/include \
+	-DNDEBUG
 
 AM_CFLAGS = \
 	-Wall -Werror \
-	-std=gnu89
+	-std=gnu11
 
 AM_CXXFLAGS = \
 	-Wall -Werror \
-	-std=gnu++98
+	-std=gnu++11
 
 AM_LDFLAGS = \
 	-Wl,--as-needed
@@ -43,12 +50,16 @@ libtool_opts = \
 	-export-dynamic \
 	-rpath $(libdir)
 
+TESTS =
 bin_SCRIPTS =
 bin_PROGRAMS =
 noinst_PROGRAMS =
+check_LTLIBRARIES =
+check_PROGRAMS =
 lib_LTLIBRARIES =
 pkgconfig_DATA =
 
+include $(srcdir)/gtest.mk
 include $(srcdir)/include/Makefile.am
 
 # Installable libraries
@@ -73,7 +84,6 @@ include $(srcdir)/libutils/Android.mk
 # Stage 1-2: depends on any of above packages
 include $(srcdir)/libprocessgroup/Android.mk
 include $(srcdir)/libziparchive/Android.mk
-
 
 # PKG-CONFIG data files
 # ---------------------

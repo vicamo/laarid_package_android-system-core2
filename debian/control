@@ -4,10 +4,14 @@ Maintainer: You-Sheng Yang <vicamo@gmail.com>
 Build-Depends: debhelper (>= 9),
                dh-autoreconf,
                autoconf-archive,
-               libandroid-cutils0-dev,
-               libandroid-log0-dev,
-               libandroid-nativehelper0-dev,
-               libunwind8-dev
+               pkg-config,
+               libandroid-bionic0-dev (>= 0.1.4),
+               libandroid-cutils0-dev (>= 0.0.10),
+               libandroid-log0-dev (>= 0.0.10),
+               libandroid-nativehelper0-dev (>= 0.0.3),
+               libgtest-dev,
+               libunwind8-dev,
+               zlib1g-dev
 Standards-Version: 3.9.5
 Section: libs
 Homepage: https://github.com/laarid/package_android-system-core2

@@ -311,7 +311,7 @@ static int parent(const char *tag, int parent_read, pid_t pid,
     bool found_child = false;
     char tmpbuf[256];
 
-    log_info.btag = basename(tag);
+    log_info.btag = basename((char *)tag);
     if (!log_info.btag) {
         log_info.btag = (char*) tag;
     }
@@ -325,7 +325,7 @@ static int parent(const char *tag, int parent_read, pid_t pid,
 
     if (log_target & LOG_KLOG) {
         snprintf(log_info.klog_fmt, sizeof(log_info.klog_fmt),
-                 "<6>%.*s: %%s", MAX_KLOG_TAG, log_info.btag);
+                 "<6>%.*s: %%s\n", MAX_KLOG_TAG, log_info.btag);
     }
 
     if ((log_target & LOG_FILE) && !file_path) {

@@ -20,8 +20,13 @@ lib_LTLIBRARIES += \
 %canon_reldir%_libandroid_cutils_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(BIONIC_CFLAGS)
+if ENABLE_CPUSETS
+%canon_reldir%_libandroid_cutils_la_CPPFLAGS += \
+	-DUSE_CPUSETS
+endif
 %canon_reldir%_libandroid_cutils_la_CFLAGS = \
 	$(AM_CFLAGS) \
+	-std=gnu90 \
 	$(PTHREAD_CFLAGS) \
 	$(BIONIC_CFLAGS)
 %canon_reldir%_libandroid_cutils_la_LDFLAGS = \
@@ -34,16 +39,16 @@ lib_LTLIBRARIES += \
 %canon_reldir%_libandroid_cutils_la_DEPENDENCIES = \
 	liblog/libandroid-log.la
 %canon_reldir%_libandroid_cutils_la_SOURCES = \
+	%reldir%/android_reboot.c \
 	%reldir%/atomic.c \
 	%reldir%/config_utils.c \
-	%reldir%/cpu_info.c \
 	%reldir%/debugger.c \
 	%reldir%/fs.c \
+	%reldir%/fs_config.c \
 	%reldir%/hashmap.c \
 	%reldir%/iosched_policy.c \
 	%reldir%/klog.c \
 	%reldir%/load_file.c \
-	%reldir%/memory.c \
 	%reldir%/multiuser.c \
 	%reldir%/native_handle.c \
 	%reldir%/partition_utils.c \
@@ -66,9 +71,6 @@ lib_LTLIBRARIES += \
 	%reldir%/threads.c \
 	%reldir%/uevent.c
 
-# Need kernel uapi/linux/reboot.h
-#	%reldir%/android_reboot.c
-
 if HAVE_ASHMEM
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
        %reldir%/ashmem-dev.c
@@ -79,55 +81,37 @@ endif
 
 if OS_LINUX
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
-	%reldir%/trace.c
+	%reldir%/trace-dev.c
 endif
 
 if CPU_ARM
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
 	%reldir%/arch-arm/memset32.S
-%canon_reldir%_libandroid_cutils_la_CPPFLAGS += \
-	-DHAVE_MEMSET16 \
-	-DHAVE_MEMSET32
-endif
+else
 if CPU_AARCH64
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
 	%reldir%/arch-arm64/android_memset.S
-%canon_reldir%_libandroid_cutils_la_CPPFLAGS += \
-	-DHAVE_MEMSET16 \
-	-DHAVE_MEMSET32
-endif
+else
 if CPU_X86
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
 	%reldir%/arch-x86/android_memset16.S \
-	%reldir%/arch-x86/android_memset32.S
-%canon_reldir%_libandroid_cutils_la_CPPFLAGS += \
-	-DHAVE_MEMSET16 \
-	-DHAVE_MEMSET32
-endif
+	%reldir%/arch-x86/android_memset32.S \
+	%reldir%/arch-x86/cache.h
+else
 if CPU_X86_64
 %canon_reldir%_libandroid_cutils_la_SOURCES += \
-	%reldir%/arch-x86_64/android_memset16_SSE2-atom.S \
-	%reldir%/arch-x86_64/android_memset32_SSE2-atom.S \
+	%reldir%/arch-x86_64/android_memset16.S \
+	%reldir%/arch-x86_64/android_memset32.S \
 	%reldir%/arch-x86_64/cache.h
-%canon_reldir%_libandroid_cutils_la_CPPFLAGS += \
-	-DHAVE_MEMSET16 \
-	-DHAVE_MEMSET32
-endif
-
-noinst_PROGRAMS += \
-	%reldir%/tst_str_parms
-
-%canon_reldir%_tst_str_parms_CPPFLAGS = \
-	$(AM_CPPFLAGS) \
-	$(BIONIC_CFLAGS) \
-	-DTEST_STR_PARMS
-%canon_reldir%_tst_str_parms_LDADD = \
-	$(BIONIC_LIBS) \
-	liblog/libandroid-log.la
-%canon_reldir%_tst_str_parms_SOURCES = \
-	%reldir%/hashmap.c \
-	%reldir%/memory.c \
-	%reldir%/str_parms.c
+else
+%canon_reldir%_libandroid_cutils_la_SOURCES += \
+	%reldir%/arch-mips/android_memset.c
+endif # CPU_X86_64
+endif # CPU_X86
+endif # CPU_AARCH64
+endif # CPU_ARM
 
 pkgconfig_DATA += \
 	%reldir%/android-cutils-$(SYSTEMCORE_API_VERSION).pc
+
+include $(srcdir)/libcutils/tests/Android.mk

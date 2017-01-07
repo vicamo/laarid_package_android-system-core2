@@ -80,6 +80,8 @@ AM_CONDITIONAL(OS_LINUX, test "$os_linux" = "yes")
 
 cpu_arm=no
 cpu_aarch64=no
+cpu_mips=no
+cpu_mips64=no
 cpu_x86=no
 cpu_x86_64=no
 case "$host_cpu" in
@@ -88,6 +90,12 @@ case "$host_cpu" in
     ;;
   aarch64*)
     cpu_aarch64=yes
+    ;;
+  mips64*)
+    cpu_mips64=yes
+    ;;
+  mips*)
+    cpu_mips=yes
     ;;
   i?86 | x86)
     cpu_x86=yes
@@ -99,6 +107,8 @@ esac
 
 AM_CONDITIONAL(CPU_ARM, test "$cpu_arm" = "yes")
 AM_CONDITIONAL(CPU_AARCH64, test "$cpu_aarch64" = "yes")
+AM_CONDITIONAL(CPU_MIPS, test "$cpu_mips" = "yes")
+AM_CONDITIONAL(CPU_MIPS64, test "$cpu_mips64" = "yes")
 AM_CONDITIONAL(CPU_X86, test "$cpu_x86" = "yes")
 AM_CONDITIONAL(CPU_X86_64, test "$cpu_x86_64" = "yes")
 
@@ -133,23 +143,31 @@ LT_OUTPUT
 # Required libraries
 # ------------------
 BIONIC_API_VERSION=0.0
-BIONIC_REQUIRED_VERSION=0.1.3
+BIONIC_REQUIRED_VERSION=0.1.4
 AC_SUBST([BIONIC_API_VERSION])
 AC_SUBST([BIONIC_REQUIRED_VERSION])
-PKG_CHECK_MODULES([BIONIC], [bionic-$BIONIC_API_VERSION >= $BIONIC_REQUIRED_VERSION])
+PKG_CHECK_MODULES([BIONIC], [android-bionic-$BIONIC_API_VERSION >= $BIONIC_REQUIRED_VERSION])
 AC_SUBST([BIONIC_CFLAGS])
 AC_SUBST([BIONIC_LIBS])
 
 LOG_API_VERSION=0.0
-LOG_REQUIRED_VERSION=0.0.8
+LOG_REQUIRED_VERSION=0.0.10
 AC_SUBST([LOG_API_VERSION])
 AC_SUBST([LOG_REQUIRED_VERSION])
 PKG_CHECK_MODULES([LOG], [android-log-$LOG_API_VERSION >= $LOG_REQUIRED_VERSION])
 AC_SUBST([LOG_CFLAGS])
 AC_SUBST([LOG_LIBS])
 
+BASE_API_VERSION=0.0
+BASE_REQUIRED_VERSION=0.0.10
+AC_SUBST([BASE_API_VERSION])
+AC_SUBST([BASE_REQUIRED_VERSION])
+PKG_CHECK_MODULES([BASE], [android-base-$BASE_API_VERSION >= $BASE_REQUIRED_VERSION])
+AC_SUBST([BASE_CFLAGS])
+AC_SUBST([BASE_LIBS])
+
 CUTILS_API_VERSION=0.0
-CUTILS_REQUIRED_VERSION=0.0.8
+CUTILS_REQUIRED_VERSION=0.0.10
 AC_SUBST([CUTILS_API_VERSION])
 AC_SUBST([CUTILS_REQUIRED_VERSION])
 PKG_CHECK_MODULES([CUTILS], [android-cutils-$CUTILS_API_VERSION >= $CUTILS_REQUIRED_VERSION])
@@ -157,7 +175,7 @@ AC_SUBST([CUTILS_CFLAGS])
 AC_SUBST([CUTILS_LIBS])
 
 NATIVEHELPER_API_VERSION=0.0
-NATIVEHELPER_REQUIRED_VERSION=0.0.2
+NATIVEHELPER_REQUIRED_VERSION=0.0.3
 AC_SUBST([NATIVEHELPER_API_VERSION])
 AC_SUBST([NATIVEHELPER_REQUIRED_VERSION])
 PKG_CHECK_MODULES([NATIVEHELPER], [android-nativehelper-$NATIVEHELPER_API_VERSION >= $NATIVEHELPER_REQUIRED_VERSION])
@@ -283,6 +301,33 @@ if test x$os_windows = xyes; then
   AC_DEFINE([HAVE_WIN32_FILEMAP], [1],
     [Define to 1 if we have Windows {Map,Unmap}ViewOfFile.])
 fi
+
+# GTest
+# -----
+AC_LANG_PUSH([C++])
+AC_ARG_WITH([gtest],
+  [AS_HELP_STRING([--with-gtest],
+    [Build with Google Test Frameworks based tests @<:@default=check@:>@])],
+  [], [])
+AS_IF([test "x${with_gtest}" != xno],
+  [GTEST_SRCDIR="/usr/src/gtest"
+  AS_IF([test "x${with_gtest}" != xyes],
+    [AS_IF([test -e "${with_gtest}/include/gtest/gtest.h"],
+      [GTEST_SRCDIR="${with_gtest}"])])
+  CPPFLAGS_save="$CPPFLAGS"
+  GTEST_CPPFLAGS="-I ${GTEST_SRCDIR}/include"
+  GTEST_LIBS="libgtest.la libgtest_main.la"
+  CPPFLAGS="${GTEST_CPPFLAGS}"
+  AC_CHECK_HEADER([gtest/gtest.h], [],
+    [AS_IF([test "x${with_gtest}" != xyes],
+      [AC_MSG_ERROR([Google Test Frameworks source folder not found])],
+      [with_gtest=no])])
+  CPPFLAGS="$CPPFLAGS_save"])
+AC_SUBST([GTEST_CPPFLAGS])
+AC_SUBST([GTEST_LIBS])
+AC_SUBST([GTEST_SRCDIR])
+AC_LANG_POP()
+AM_CONDITIONAL([HAVE_GTEST], [test "x${with_gtest}" != xno])
 
 AC_CONFIG_FILES([
   Makefile

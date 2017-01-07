@@ -15,6 +15,7 @@
  */
 
 #include <sys/mman.h>
+#include <unistd.h>
 
 #include <gtest/gtest.h>
 
@@ -81,29 +82,31 @@ TEST_F(Map, MapFd)
 
 TEST_F(Map, MapOffset)
 {
+    size_t pagesize = static_cast<size_t>(sysconf(_SC_PAGE_SIZE));
+
     for (unsigned int heapMask : m_allHeaps) {
         SCOPED_TRACE(::testing::Message() << "heap " << heapMask);
         int map_fd = -1;
 
-        ASSERT_EQ(0, ion_alloc_fd(m_ionFd, PAGE_SIZE * 2, 0, heapMask, 0, &map_fd));
+        ASSERT_EQ(0, ion_alloc_fd(m_ionFd, pagesize * 2, 0, heapMask, 0, &map_fd));
         ASSERT_GE(map_fd, 0);
 
         unsigned char *ptr;
-        ptr = (unsigned char *)mmap(NULL, PAGE_SIZE * 2, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
+        ptr = (unsigned char *)mmap(NULL, pagesize * 2, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, 0);
         ASSERT_TRUE(ptr != NULL);
 
-        memset(ptr, 0, PAGE_SIZE);
-        memset(ptr + PAGE_SIZE, 0xaa, PAGE_SIZE);
+        memset(ptr, 0, pagesize);
+        memset(ptr + pagesize, 0xaa, pagesize);
 
-        ASSERT_EQ(0, munmap(ptr, PAGE_SIZE * 2));
+        ASSERT_EQ(0, munmap(ptr, pagesize * 2));
 
-        ptr = (unsigned char *)mmap(NULL, PAGE_SIZE, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, PAGE_SIZE);
+        ptr = (unsigned char *)mmap(NULL, pagesize, PROT_READ | PROT_WRITE, MAP_SHARED, map_fd, pagesize);
         ASSERT_TRUE(ptr != NULL);
 
         ASSERT_EQ(ptr[0], 0xaa);
-        ASSERT_EQ(ptr[PAGE_SIZE - 1], 0xaa);
+        ASSERT_EQ(ptr[pagesize - 1], 0xaa);
 
-        ASSERT_EQ(0, munmap(ptr, PAGE_SIZE));
+        ASSERT_EQ(0, munmap(ptr, pagesize));
 
         ASSERT_EQ(0, close(map_fd));
     }

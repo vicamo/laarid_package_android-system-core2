@@ -20,6 +20,7 @@ lib_LTLIBRARIES += \
 	$(AM_CPPFLAGS) \
 	$(ZLIB_CFLAGS) \
 	$(LOG_CFLAGS) \
+	$(BASE_CFLAGS) \
 	$(CUTILS_CFLAGS)
 %canon_reldir%_libandroid_ziparchive_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
@@ -27,8 +28,10 @@ lib_LTLIBRARIES += \
 %canon_reldir%_libandroid_ziparchive_la_LIBADD = \
 	$(ZLIB_LIBS) \
 	$(LOG_LIBS) \
+	$(BASE_LIBS) \
 	libutils/libandroid-utils.la
 %canon_reldir%_libandroid_ziparchive_la_SOURCES = \
+	%reldir%/entry_name_utils-inl.h \
 	%reldir%/zip_archive.cc
 
 pkgconfig_DATA += \
