@@ -319,6 +319,7 @@ AC_CONFIG_FILES([
   libnetutils/android-netutils-$SYSTEMCORE_API_VERSION.pc
   libsparse/android-sparse-$SYSTEMCORE_API_VERSION.pc
   libsuspend/android-suspend-$SYSTEMCORE_API_VERSION.pc
+  libsync/android-sync-$SYSTEMCORE_API_VERSION.pc
   libsysutils/android-sysutils-$SYSTEMCORE_API_VERSION.pc
   libusbhost/android-usbhost-$SYSTEMCORE_API_VERSION.pc
   logwrapper/android-logwrap-$SYSTEMCORE_API_VERSION.pc

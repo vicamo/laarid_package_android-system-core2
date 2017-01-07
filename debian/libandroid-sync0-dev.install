@@ -1,0 +1,3 @@
+usr/lib/*/libandroid-sync.a
+usr/lib/*/libandroid-sync.so
+usr/lib/*/pkgconfig/android-sync-*.pc

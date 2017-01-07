@@ -1,20 +1,36 @@
-LOCAL_PATH:= $(call my-dir)
+lib_LTLIBRARIES += \
+	%reldir%/libandroid-sync.la
 
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := sync.c
-LOCAL_MODULE := libsync
-LOCAL_MODULE_TAGS := optional
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_EXPORT_C_INCLUDE_DIRS := $(LOCAL_PATH)/include
-LOCAL_CFLAGS := -Werror
-include $(BUILD_SHARED_LIBRARY)
+%canon_reldir%_libandroid_sync_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BIONIC_CFLAGS) \
+	-I$(srcdir)/%reldir%/include
+%canon_reldir%_libandroid_sync_la_LDFLAGS = \
+	$(AM_LDFLAGS) \
+	$(libtool_opts)
+%canon_reldir%_libandroid_sync_la_LIBADD = \
+	$(BIONIC_LIBS)
+%canon_reldir%_libandroid_sync_la_SOURCES = \
+	%reldir%/sw_sync.h \
+	%reldir%/sync.c
 
-include $(CLEAR_VARS)
-LOCAL_SRC_FILES := sync.c sync_test.c
-LOCAL_MODULE := sync_test
-LOCAL_MODULE_TAGS := optional tests
-LOCAL_SHARED_LIBRARIES := liblog
-LOCAL_C_INCLUDES := $(LOCAL_PATH)/include
-LOCAL_CFLAGS := -Werror
-include $(BUILD_EXECUTABLE)
+%canon_reldir%_libandroid_sync_incdir = $(androidincdir)/sync
+%canon_reldir%_libandroid_sync_inc_HEADERS = \
+	%reldir%/include/sync/sync.h
+
+bin_PROGRAMS += \
+	%reldir%/sync_test
+%canon_reldir%_sync_test_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	-I$(srcdir)/%reldir%/include
+%canon_reldir%_sync_test_CFLAGS = \
+	$(AM_CFLAGS) \
+	$(PTHREAD_CFLAGS)
+%canon_reldir%_sync_test_LDADD = \
+	$(PTHREAD_LIBS) -lpthread \
+	%reldir%/libandroid-sync.la
+%canon_reldir%_sync_test_SOURCES = \
+	%reldir%/sync_test.c
+
+pkgconfig_DATA += \
+	%reldir%/android-sync-$(SYSTEMCORE_API_VERSION).pc
