@@ -1,3 +1,11 @@
+android-system-core2 (0.0.9) stretch; urgency=medium
+
+  * merge aosp/marshmallow-dev
+  * reconcile with stage 1
+  * tests: build libutils_tests
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Sun, 8 Jan 2017 00:29:42 +0800
+
 android-system-core2 (0.0.8) stretch; urgency=medium
 
   * libziparchive: fix format string

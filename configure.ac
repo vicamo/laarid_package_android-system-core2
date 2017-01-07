@@ -24,8 +24,8 @@
 #   systemcore2_interface_revision = 0
 m4_define([systemcore2_major_version], [0])
 m4_define([systemcore2_minor_version], [0])
-m4_define([systemcore2_micro_version], [8])
-m4_define([systemcore2_interface_revision], [7])
+m4_define([systemcore2_micro_version], [9])
+m4_define([systemcore2_interface_revision], [0])
 m4_define([systemcore2_api_version], [systemcore2_major_version.0])
 m4_define([systemcore2_release_number], [systemcore2_major_version])
 m4_define([systemcore2_version],
@@ -151,7 +151,7 @@ AC_SUBST([BIONIC_CFLAGS])
 AC_SUBST([BIONIC_LIBS])
 
 LOG_API_VERSION=0.0
-LOG_REQUIRED_VERSION=0.0.10
+LOG_REQUIRED_VERSION=0.0.11
 AC_SUBST([LOG_API_VERSION])
 AC_SUBST([LOG_REQUIRED_VERSION])
 PKG_CHECK_MODULES([LOG], [android-log-$LOG_API_VERSION >= $LOG_REQUIRED_VERSION])
@@ -159,7 +159,7 @@ AC_SUBST([LOG_CFLAGS])
 AC_SUBST([LOG_LIBS])
 
 BASE_API_VERSION=0.0
-BASE_REQUIRED_VERSION=0.0.10
+BASE_REQUIRED_VERSION=0.0.11
 AC_SUBST([BASE_API_VERSION])
 AC_SUBST([BASE_REQUIRED_VERSION])
 PKG_CHECK_MODULES([BASE], [android-base-$BASE_API_VERSION >= $BASE_REQUIRED_VERSION])
@@ -167,7 +167,7 @@ AC_SUBST([BASE_CFLAGS])
 AC_SUBST([BASE_LIBS])
 
 CUTILS_API_VERSION=0.0
-CUTILS_REQUIRED_VERSION=0.0.10
+CUTILS_REQUIRED_VERSION=0.0.11
 AC_SUBST([CUTILS_API_VERSION])
 AC_SUBST([CUTILS_REQUIRED_VERSION])
 PKG_CHECK_MODULES([CUTILS], [android-cutils-$CUTILS_API_VERSION >= $CUTILS_REQUIRED_VERSION])
