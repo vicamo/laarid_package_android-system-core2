@@ -29,12 +29,12 @@
 #include <backtrace/Backtrace.h>
 #include <backtrace/BacktraceMap.h>
 
+#include <bionic/bionic.h>
 #include <cutils/threads.h>
 
 #include "BacktraceCurrent.h"
 #include "BacktraceLog.h"
 #include "ThreadEntry.h"
-#include "thread_utils.h"
 
 bool BacktraceCurrent::ReadWord(uintptr_t ptr, word_t* out_value) {
   if (!VerifyReadWordArgs(ptr, out_value)) {
