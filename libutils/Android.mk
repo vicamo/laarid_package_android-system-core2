@@ -19,7 +19,8 @@ lib_LTLIBRARIES += \
 	$(AM_CPPFLAGS) \
 	$(BIONIC_CFLAGS) \
 	$(LOG_CFLAGS) \
-	$(CUTILS_CFLAGS)
+	$(CUTILS_CFLAGS) \
+	$(NATIVEHELPER_CFLAGS)
 %canon_reldir%_libandroid_utils_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)

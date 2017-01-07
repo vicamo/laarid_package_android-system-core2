@@ -69,7 +69,6 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 	%reldir%/utils/Trace.h \
 	%reldir%/utils/TypeHelpers.h \
 	%reldir%/utils/Unicode.h \
-	%reldir%/utils/UniquePtr.h \
 	%reldir%/utils/Vector.h \
 	%reldir%/utils/VectorImpl.h \
 	%reldir%/utils/ashmem.h \
