@@ -15,26 +15,42 @@
 #
 
 # Build the unit tests.
-LOCAL_PATH := $(call my-dir)
+if HAVE_GTEST
+check_PROGRAMS += \
+	%reldir%/libutils_tests
 
-include $(CLEAR_VARS)
+TESTS += \
+	%reldir%/libutils_tests
 
-LOCAL_MODULE := libutils_tests
-
-LOCAL_SRC_FILES := \
-    BasicHashtable_test.cpp \
-    BlobCache_test.cpp \
-    BitSet_test.cpp \
-    Looper_test.cpp \
-    LruCache_test.cpp \
-    String8_test.cpp \
-    Unicode_test.cpp \
-    Vector_test.cpp \
-
-LOCAL_SHARED_LIBRARIES := \
-    libz \
-    liblog \
-    libcutils \
-    libutils \
-
-include $(BUILD_NATIVE_TEST)
+%canon_reldir%_libutils_tests_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(ZLIB_CFLAGS) \
+	$(BIONIC_CFLAGS) \
+	$(LOG_CFLAGS) \
+	$(CUTILS_CFLAGS) \
+	$(NATIVEHELPER_CFLAGS) \
+	$(GTEST_CPPFLAGS)
+%canon_reldir%_libutils_tests_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	-Wno-error
+%canon_reldir%_libutils_tests_LDADD = \
+	$(ZLIB_LIBS) \
+	$(BIONIC_LIBS) \
+	$(LOG_LIBS) \
+	$(CUTILS_LIBS) \
+	libutils/libandroid-utils.la \
+	$(GTEST_LIBS)
+%canon_reldir%_libutils_tests_DEPENDENCIES = \
+	libutils/libandroid-utils.la \
+	$(GTEST_LIBS)
+%canon_reldir%_libutils_tests_SOURCES = \
+	%reldir%/BasicHashtable_test.cpp \
+	%reldir%/BlobCache_test.cpp \
+	%reldir%/BitSet_test.cpp \
+	%reldir%/Looper_test.cpp \
+	%reldir%/LruCache_test.cpp \
+	%reldir%/String8_test.cpp \
+	%reldir%/TestHelpers.h \
+	%reldir%/Unicode_test.cpp \
+	%reldir%/Vector_test.cpp
+endif
