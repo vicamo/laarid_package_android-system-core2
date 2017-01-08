@@ -5,12 +5,13 @@ Build-Depends: debhelper (>= 9),
                dh-autoreconf,
                autoconf-archive,
                pkg-config,
+               libandroid-base0-dev (>= 0.0.11),
                libandroid-bionic0-dev (>= 0.1.4),
-               libandroid-cutils0-dev (>= 0.0.10),
-               libandroid-log0-dev (>= 0.0.10),
+               libandroid-cutils0-dev (>= 0.0.11),
+               libandroid-log0-dev (>= 0.0.11),
                libandroid-nativehelper0-dev (>= 0.0.3),
                libgtest-dev,
-               libunwind8-dev,
+               libunwind-dev,
                zlib1g-dev
 Standards-Version: 3.9.5
 Section: libs
