@@ -39,6 +39,8 @@ matrix:
   fast_finish: true
   allow_failures:
   - env: BUILD_FLAVOR=mips64el_deb
+  - env: BUILD_FLAVOR=s390x_deb
+  - env: BUILD_FLAVOR=s390x_distcheck
 
 branches:
   only:
