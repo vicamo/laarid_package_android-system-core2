@@ -1,70 +1,25 @@
-LOCAL_PATH:= $(call my-dir)
+if HAVE_GTEST
 
-NATIVE_BRIDGE_COMMON_SRC_FILES := \
-  DummyNativeBridge.cpp
+check_LTLIBRARIES += \
+	%reldir%/libnativebridge-dummy.la \
+	%reldir%/libnativebridge2-dummy.la
 
-# Shared library for target
-# ========================================================
-include $(CLEAR_VARS)
+%canon_reldir%_libnativebridge_dummy_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(NATIVEHELPER_CFLAGS)
+%canon_reldir%_libnativebridge_dummy_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	-fvisibility=protected
+%canon_reldir%_libnativebridge_dummy_la_SOURCES = \
+	%reldir%/DummyNativeBridge.cpp
 
-LOCAL_MODULE:= libnativebridge-dummy
+%canon_reldir%_libnativebridge2_dummy_la_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(NATIVEHELPER_CFLAGS)
+%canon_reldir%_libnativebridge2_dummy_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	-fvisibility=protected
+%canon_reldir%_libnativebridge2_dummy_la_SOURCES = \
+	%reldir%/DummyNativeBridge2.cpp
 
-LOCAL_SRC_FILES:= $(NATIVE_BRIDGE_COMMON_SRC_FILES)
-LOCAL_CLANG := true
-LOCAL_CFLAGS += -Werror -Wall
-LOCAL_CPPFLAGS := -std=gnu++11 -fvisibility=protected
-LOCAL_LDFLAGS := -ldl
-LOCAL_MULTILIB := both
-
-include $(BUILD_SHARED_LIBRARY)
-
-# Shared library for host
-# ========================================================
-include $(CLEAR_VARS)
-
-LOCAL_MODULE:= libnativebridge-dummy
-
-LOCAL_SRC_FILES:= $(NATIVE_BRIDGE_COMMON_SRC_FILES)
-LOCAL_CLANG := true
-LOCAL_CFLAGS += -Werror -Wall
-LOCAL_CPPFLAGS := -std=gnu++11 -fvisibility=protected
-LOCAL_LDFLAGS := -ldl
-LOCAL_MULTILIB := both
-
-include $(BUILD_HOST_SHARED_LIBRARY)
-
-
-# v2.
-
-NATIVE_BRIDGE2_COMMON_SRC_FILES := \
-  DummyNativeBridge2.cpp
-
-# Shared library for target
-# ========================================================
-include $(CLEAR_VARS)
-
-LOCAL_MODULE:= libnativebridge2-dummy
-
-LOCAL_SRC_FILES:= $(NATIVE_BRIDGE2_COMMON_SRC_FILES)
-LOCAL_CLANG := true
-LOCAL_CFLAGS += -Werror -Wall
-LOCAL_CPPFLAGS := -std=gnu++11 -fvisibility=protected
-LOCAL_LDFLAGS := -ldl
-LOCAL_MULTILIB := both
-
-include $(BUILD_SHARED_LIBRARY)
-
-# Shared library for host
-# ========================================================
-include $(CLEAR_VARS)
-
-LOCAL_MODULE:= libnativebridge2-dummy
-
-LOCAL_SRC_FILES:= $(NATIVE_BRIDGE2_COMMON_SRC_FILES)
-LOCAL_CLANG := true
-LOCAL_CFLAGS += -Werror -Wall
-LOCAL_CPPFLAGS := -std=gnu++11 -fvisibility=protected
-LOCAL_LDFLAGS := -ldl
-LOCAL_MULTILIB := both
-
-include $(BUILD_HOST_SHARED_LIBRARY)
+endif

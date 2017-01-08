@@ -21,3 +21,5 @@ lib_LTLIBRARIES += \
 
 pkgconfig_DATA += \
 	%reldir%/android-nativebridge-$(SYSTEMCORE2_API_VERSION).pc
+
+include %reldir%/tests/Android.mk
