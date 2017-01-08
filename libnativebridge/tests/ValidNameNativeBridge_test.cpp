@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#include <NativeBridgeTest.h>
+#include "NativeBridgeTest.h"
 
 namespace android {
 
