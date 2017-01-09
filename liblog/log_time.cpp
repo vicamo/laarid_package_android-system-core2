@@ -18,6 +18,7 @@
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
+#include <time.h> // for strptime
 
 #include <log/log_read.h>
 
@@ -64,7 +65,7 @@ LIBLOG_ABI_PRIVATE char *log_time::strptime(const char *s, const char *format) {
         }
         char *e = cp;
         ++e;
-#if (defined(__BIONIC__))
+#if (defined(HAVE_STRPTIME))
         if (*e == 's') {
             *cp = '\0';
             if (*f) {

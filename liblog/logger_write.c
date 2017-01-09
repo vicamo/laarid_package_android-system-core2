@@ -51,7 +51,6 @@ static enum {
 
 static int check_log_uid_permissions()
 {
-#if defined(__BIONIC__)
     uid_t uid = __android_log_uid();
 
     /* Matches clientHasLogCredentials() in logd */
@@ -92,7 +91,7 @@ static int check_log_uid_permissions()
             }
         }
     }
-#endif
+
     return 0;
 }
 
@@ -200,7 +199,6 @@ static int __write_to_log_daemon(log_id_t log_id, struct iovec *vec, size_t nr)
         return -EINVAL;
     }
 
-#if defined(__BIONIC__)
     if (log_id == LOG_ID_SECURITY) {
         if (vec[0].iov_len < 4) {
             return -EINVAL;
@@ -289,15 +287,6 @@ static int __write_to_log_daemon(log_id_t log_id, struct iovec *vec, size_t nr)
     }
 
     clock_gettime(android_log_clockid(), &ts);
-#else
-    /* simulate clock_gettime(CLOCK_REALTIME, &ts); */
-    {
-        struct timeval tv;
-        gettimeofday(&tv, NULL);
-        ts.tv_sec = tv.tv_sec;
-        ts.tv_nsec = tv.tv_usec * 1000;
-    }
-#endif
 
     ret = 0;
     i = 1 << log_id;
