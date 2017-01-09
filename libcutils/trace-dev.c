@@ -18,7 +18,11 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <pthread.h>
+#ifdef __cplusplus
+#include <atomic>
+#else
 #include <stdatomic.h>
+#endif
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +40,12 @@
  * Names should be kept short to get the most use of the trace buffer.
  */
 #define ATRACE_MESSAGE_LENGTH 1024
+
+#ifdef __cplusplus
+using std::atomic_bool;
+using std::memory_order_acquire;
+using std::memory_order_release;
+#endif
 
 atomic_bool             atrace_is_ready      = ATOMIC_VAR_INIT(false);
 int                     atrace_marker_fd     = -1;
@@ -67,11 +77,11 @@ void atrace_set_tracing_enabled(bool enabled)
 static bool atrace_is_cmdline_match(const char* cmdline)
 {
     int count = property_get_int32("debug.atrace.app_number", 0);
-
+    int i;
     char buf[PROPERTY_KEY_MAX];
     char value[PROPERTY_VALUE_MAX];
 
-    for (int i = 0; i < count; i++) {
+    for (i = 0; i < count; i++) {
         snprintf(buf, sizeof(buf), "debug.atrace.app_%d", i);
         property_get(buf, value, "");
         if (strcmp(value, cmdline) == 0) {

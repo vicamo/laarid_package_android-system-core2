@@ -46,7 +46,7 @@ typedef struct {
 } android_log_context_internal;
 
 LIBLOG_ABI_PUBLIC android_log_context create_android_logger(uint32_t tag) {
-    size_t needed, i;
+    size_t needed;
     android_log_context_internal *context;
 
     context = calloc(1, sizeof(android_log_context_internal));
@@ -71,7 +71,6 @@ LIBLOG_ABI_PUBLIC android_log_context create_android_log_parser(
         const char *msg,
         size_t len) {
     android_log_context_internal *context;
-    size_t i;
 
     context = calloc(1, sizeof(android_log_context_internal));
     if (!context) {
@@ -261,7 +260,7 @@ LIBLOG_ABI_PUBLIC int android_log_write_float32(android_log_context ctx,
         context->overflow = true;
         return -EIO;
     }
-    ivalue = *(uint32_t *)&value;
+    memcpy(&ivalue, &value, sizeof(ivalue));
     context->count[context->list_nest_depth]++;
     context->storage[context->pos + 0] = EVENT_TYPE_FLOAT;
     copy4LE(&context->storage[context->pos + 1], ivalue);

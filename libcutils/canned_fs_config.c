@@ -85,9 +85,9 @@ static const int kDebugCannedFsConfig = 0;
 void canned_fs_config(const char* path, int dir, const char* target_out_path,
 					  unsigned* uid, unsigned* gid, unsigned* mode, uint64_t* capabilities) {
 	Path key;
-    key.path = path;
-    if (path[0] == '/')
-        key.path++;   // canned paths lack the leading '/'
+	key.path = path;
+	if (path[0] == '/')
+		key.path++;   // canned paths lack the leading '/'
 	Path* p = (Path*) bsearch(&key, canned_data, canned_used, sizeof(Path), path_compare);
 	if (p == NULL) {
 		fprintf(stderr, "failed to find [%s] in canned fs_config\n", path);

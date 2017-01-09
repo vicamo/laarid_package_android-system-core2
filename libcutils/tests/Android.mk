@@ -22,6 +22,7 @@ TESTS += \
 %canon_reldir%_libcutils_test_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(BIONIC_CFLAGS) \
+	-I$(srcdir)/base/include \
 	$(GTEST_CPPFLAGS)
 %canon_reldir%_libcutils_test_LDADD = \
 	$(BIONIC_LIBS) \

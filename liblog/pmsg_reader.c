@@ -17,6 +17,7 @@
 #include <ctype.h>
 #include <errno.h>
 #include <fcntl.h>
+#include <limits.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -104,7 +105,7 @@ static uid_t get_best_effective_uid()
     if (i > 0) {
         gid_t list[i];
 
-        getgroups(i, list);
+        i = getgroups(i, list);
         while (--i >= 0) {
             if (uid_has_log_permission(list[i])) {
                 return last_uid = list[i];
@@ -140,7 +141,6 @@ static int pmsgRead(struct android_log_logger_list *logger_list,
     ssize_t ret;
     off_t current, next;
     uid_t uid;
-    struct android_log_logger *logger;
     struct __attribute__((__packed__)) {
         android_pmsg_log_header_t p;
         android_log_header_t l;

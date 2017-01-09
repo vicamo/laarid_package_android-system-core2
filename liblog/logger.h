@@ -18,7 +18,7 @@
 #define _LIBLOG_LOGGER_H__
 
 #include <stdbool.h>
-#include <log/uio.h>
+#include <sys/uio.h>
 
 #include <cutils/list.h>
 #include <log/log.h>

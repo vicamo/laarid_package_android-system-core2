@@ -38,6 +38,10 @@
 #define READONLY_CHECK_MS 5000
 #define READONLY_CHECK_TIMES 50
 
+#ifndef __unused
+#define __unused __attribute__((__unused__))
+#endif
+
 typedef struct {
     struct listnode list;
     struct mntent entry;

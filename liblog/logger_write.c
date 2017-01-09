@@ -45,9 +45,9 @@ static int (*write_to_log)(log_id_t, struct iovec *vec, size_t nr) = __write_to_
  * the C code.  Basically, if /dev/socket/logd is available, we're running in
  * the simulator rather than a desktop tool and want to use the device.
  */
-static enum {
+enum {
     kLogUninitialized, kLogNotAvailable, kLogAvailable
-} g_log_status = kLogUninitialized;
+};
 
 static int check_log_uid_permissions()
 {
