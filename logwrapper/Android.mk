@@ -3,6 +3,7 @@ lib_LTLIBRARIES += \
 
 %canon_reldir%_libandroid_logwrap_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
+	$(PTHREAD_CFLAGS) \
 	$(BIONIC_CFLAGS) \
 	-I$(srcdir)/%reldir%/include
 %canon_reldir%_libandroid_logwrap_la_CFLAGS = \
@@ -12,6 +13,7 @@ lib_LTLIBRARIES += \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_logwrap_la_LIBADD = \
+	$(PTHREAD_LIBS) -lpthread \
 	liblog/libandroid-log.la \
 	libcutils/libandroid-cutils.la
 %canon_reldir%_libandroid_logwrap_la_SOURCES = \

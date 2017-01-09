@@ -37,7 +37,7 @@ endif
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_cutils_la_LIBADD = \
-	$(PTHREAD_LIBS) \
+	$(PTHREAD_LIBS) -lpthread\
 	$(BIONIC_LIBS) \
 	liblog/libandroid-log.la
 %canon_reldir%_libandroid_cutils_la_DEPENDENCIES = \

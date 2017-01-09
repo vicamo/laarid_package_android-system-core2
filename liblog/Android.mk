@@ -31,9 +31,11 @@ lib_LTLIBRARIES += \
 	-DSNET_EVENT_LOG_TAG=1397638484
 %canon_reldir%_libandroid_log_la_CFLAGS = \
 	$(AM_CFLAGS) \
+	$(PTHREAD_CFLAGS) \
 	$(BIONIC_CFLAGS) \
 	-fvisibility=hidden
 %canon_reldir%_libandroid_log_la_LIBADD = \
+	$(PTHREAD_LIBS) -lpthread \
 	$(BIONIC_LIBS)
 %canon_reldir%_libandroid_log_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
