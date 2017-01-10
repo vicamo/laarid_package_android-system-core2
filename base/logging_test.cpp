@@ -121,9 +121,12 @@ std::string make_log_pattern(android::base::LogSeverity severity,
   static const char* log_characters = "VDIWEF";
   char log_char = log_characters[severity];
   std::string holder(__FILE__);
+  std::string escaped_message =
+      std::regex_replace(message,
+          std::regex("([\\^\\$\\\\\\.\\*\\+\\?\\(\\)\\[\\]\\{\\}\\|])"), "\\$1");
   return android::base::StringPrintf(
       "%c[[:space:]]+[[:digit:]]+[[:space:]]+[[:digit:]]+ %s:[[:digit:]]+] %s",
-      log_char, basename(&holder[0]), message);
+      log_char, basename(&holder[0]), escaped_message.c_str());
 }
 
 TEST(logging, LOG) {
