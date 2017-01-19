@@ -1,3 +1,9 @@
+android-system-core2 (0.0.10) stretch; urgency=medium
+
+  * libbacktrace: build against libandroid-unwind8
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Thu, 19 Jan 2017 23:12:31 +0800
+
 android-system-core2 (0.0.9) stretch; urgency=medium
 
   * merge aosp/marshmallow-dev
