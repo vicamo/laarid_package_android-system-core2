@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-#define _GNU_SOURCE 1
 #include <dirent.h>
 #include <dlfcn.h>
 #include <errno.h>
@@ -50,7 +49,6 @@
 
 // For the THREAD_SIGNAL definition.
 #include "BacktraceCurrent.h"
-#include "thread_utils.h"
 
 // Number of microseconds per milliseconds.
 #define US_PER_MSEC             1000

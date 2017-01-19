@@ -52,3 +52,43 @@ lib_LTLIBRARIES += \
 
 pkgconfig_DATA += \
 	%reldir%/android-backtrace-$(SYSTEMCORE2_API_VERSION).pc
+
+if HAVE_GTEST
+
+check_LTLIBRARIES += \
+	%reldir%/libbacktrace_test.la
+
+%canon_reldir%_libbacktrace_test_la_CFLAGS = \
+	$(AM_CFLAGS) \
+	-O0
+%canon_reldir%_libbacktrace_test_la_SOURCES = \
+	%reldir%/backtrace_testlib.c
+
+check_PROGRAMS += \
+	%reldir%/backtrace_test
+
+TESTS += \
+	%reldir%/backtrace_test
+
+%canon_reldir%_backtrace_test_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(BASE_CFLAGS) \
+	$(CUTILS_CFLAGS) \
+	$(GTEST_CPPFLAGS) \
+	-DENABLE_PSS_TESTS
+%canon_reldir%_backtrace_test_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	-fno-builtin -O0 -g
+%canon_reldir%_backtrace_test_LDADD = \
+	$(BASE_LIBS) \
+	$(CUTILS_LIBS) \
+	%reldir%/libandroid-backtrace.la \
+	$(GTEST_LIBS)
+%canon_reldir%_backtrace_test_DEPENDENCIES = \
+	%reldir%/libandroid-backtrace.la \
+	$(GTEST_LIBS)
+%canon_reldir%_backtrace_test_SOURCES = \
+	%reldir%/backtrace_test.cpp \
+	%reldir%/GetPss.cpp
+
+endif # HAVE_GTEST
