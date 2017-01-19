@@ -51,14 +51,10 @@ lib_LTLIBRARIES += \
 	%reldir%/ThreadEntry.h \
 	%reldir%/UnwindCurrent.cpp \
 	%reldir%/UnwindCurrent.h \
+	%reldir%/UnwindMap.cpp \
+	%reldir%/UnwindMap.h \
 	%reldir%/UnwindPtrace.cpp \
 	%reldir%/UnwindPtrace.h
-
-# UnwindMap depneds on Android specific speedups for libunwind which
-# are just not available in generic, packaged libunwind.
-#
-# %reldir%/UnwindMap.cpp
-# %reldir%/UnwindMap.h
 
 pkgconfig_DATA += \
 	%reldir%/android-backtrace-$(SYSTEMCORE2_API_VERSION).pc

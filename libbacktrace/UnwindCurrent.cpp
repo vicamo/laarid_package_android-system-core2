@@ -30,7 +30,6 @@
 
 std::string UnwindCurrent::GetFunctionNameRaw(uintptr_t pc, uintptr_t* offset) {
   *offset = 0;
-#if 0 /* FIXME: don't know how to reimplement unw_get_proc_name_by_ip */
   char buf[512];
   unw_word_t value;
   if (unw_get_proc_name_by_ip(unw_local_addr_space, pc, buf, sizeof(buf),
@@ -38,7 +37,6 @@ std::string UnwindCurrent::GetFunctionNameRaw(uintptr_t pc, uintptr_t* offset) {
     *offset = static_cast<uintptr_t>(value);
     return buf;
   }
-#endif
   return "";
 }
 
