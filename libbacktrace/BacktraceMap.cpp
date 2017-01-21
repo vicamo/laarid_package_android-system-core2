@@ -131,6 +131,9 @@ bool BacktraceMap::Build() {
   return true;
 }
 
+#if defined(__APPLE__)
+// Corkscrew and libunwind don't compile on the mac, so create a generic
+// map object.
 BacktraceMap* BacktraceMap::Create(pid_t pid, bool uncached) {
   BacktraceMap* map = new BacktraceMap(pid);
   if (!map->Build()) {
@@ -139,3 +142,4 @@ BacktraceMap* BacktraceMap::Create(pid_t pid, bool uncached) {
   }
   return map;
 }
+#endif
