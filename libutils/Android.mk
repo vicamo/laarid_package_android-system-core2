@@ -17,6 +17,7 @@ lib_LTLIBRARIES += \
 
 %canon_reldir%_libandroid_utils_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
+	$(SAFEIOP_CFLAGS) \
 	$(BIONIC_CFLAGS) \
 	$(LOG_CFLAGS) \
 	$(CUTILS_CFLAGS) \
@@ -27,6 +28,7 @@ lib_LTLIBRARIES += \
 %canon_reldir%_libandroid_utils_la_LIBADD = \
 	-lpthread \
 	libbacktrace/libandroid-backtrace.la \
+	$(SAFEIOP_LIBS) \
 	$(BIONIC_LIBS) \
 	$(LOG_LIBS) \
 	$(CUTILS_LIBS)
