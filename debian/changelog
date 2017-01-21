@@ -1,3 +1,9 @@
+android-system-core2 (0.0.11) stretch; urgency=medium
+
+  * Merge aosp/nougat-dev
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Sat, 21 Jan 2017 23:13:52 +0800
+
 android-system-core2 (0.0.10) stretch; urgency=medium
 
   * libbacktrace: build against libandroid-unwind8
