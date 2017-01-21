@@ -153,4 +153,5 @@ std::string Backtrace::GetErrorString(BacktraceUnwindError error) {
   case BACKTRACE_UNWIND_ERROR_NO_CONTEXT:
     return "Attempt to do an offline unwind without a context";
   }
+  return "Unknown error";
 }

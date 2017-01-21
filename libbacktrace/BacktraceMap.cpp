@@ -18,6 +18,7 @@
 #include <stdint.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <algorithm>
 
 #include <bionic/bionic.h>
 #include <backtrace/backtrace_constants.h>
