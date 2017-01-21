@@ -40,7 +40,6 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 %canon_reldir%_libandroid_cutils_incdir = $(androidincdir)/cutils
 %canon_reldir%_libandroid_cutils_inc_HEADERS = \
 	%reldir%/cutils/android_reboot.h \
-	%reldir%/cutils/aref.h \
 	%reldir%/cutils/ashmem.h \
 	%reldir%/cutils/atomic.h \
 	%reldir%/cutils/bitops.h \
@@ -80,7 +79,6 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 # -------------------------
 %canon_reldir%_libandroid_netutils_incdir = $(androidincdir)/netutils
 %canon_reldir%_libandroid_netutils_inc_HEADERS = \
-	%reldir%/netutils/dhcp.h \
 	%reldir%/netutils/ifc.h
 
 # HEADERS: android/sysutils

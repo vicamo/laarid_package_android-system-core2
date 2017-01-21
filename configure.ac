@@ -270,8 +270,12 @@ fi
 # Optional features
 # -----------------
 AC_ARG_ENABLE([cpusets],
-  [AS_HELP_STRING([--enable-cpusets], [enable use of /dev/cpuset @<:@default=yes@:>@])])
+  [AS_HELP_STRING([--enable-cpusets], [enable use of /dev/cpuset @<:@default=no@:>@])])
 AM_CONDITIONAL([ENABLE_CPUSETS], [test x$enable_cpusets = xyes])
+
+AC_ARG_ENABLE([schedboost],
+  [AS_HELP_STRING([--enable-schedboost], [enable use of /dev/stune/* @<:@default=no@:>@])])
+AM_CONDITIONAL([ENABLE_SCHEDBOOST], [test x$enable_schedboost = xyes])
 
 # GTest
 # -----

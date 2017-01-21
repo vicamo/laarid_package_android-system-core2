@@ -175,7 +175,7 @@ bool NetlinkEvent::parseIfAddrMessage(const struct nlmsghdr *nh) {
     struct ifaddrmsg *ifaddr = (struct ifaddrmsg *) NLMSG_DATA(nh);
     struct ifa_cacheinfo *cacheinfo = NULL;
     char addrstr[INET6_ADDRSTRLEN] = "";
-    char ifname[IFNAMSIZ];
+    char ifname[IFNAMSIZ] = "";
 
     if (!checkRtNetlinkLength(nh, sizeof(*ifaddr)))
         return false;
@@ -223,8 +223,7 @@ bool NetlinkEvent::parseIfAddrMessage(const struct nlmsghdr *nh) {
 
             // Find the interface name.
             if (!if_indextoname(ifaddr->ifa_index, ifname)) {
-                SLOGE("Unknown ifindex %d in %s", ifaddr->ifa_index, msgtype);
-                return false;
+                SLOGD("Unknown ifindex %d in %s", ifaddr->ifa_index, msgtype);
             }
 
         } else if (rta->rta_type == IFA_CACHEINFO) {

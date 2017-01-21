@@ -27,10 +27,12 @@ lib_LTLIBRARIES += \
 #       $(LOCAL_PATH)/event.logtags)
 # so make sure we do not regret hard-coding it as follows:
 %canon_reldir%_libandroid_log_la_CPPFLAGS += \
-	-DLIBLOG_LOG_TAG=1005
+	-DLIBLOG_LOG_TAG=1005 \
+	-DSNET_EVENT_LOG_TAG=1397638484
 %canon_reldir%_libandroid_log_la_CFLAGS = \
 	$(AM_CFLAGS) \
-	$(BIONIC_CFLAGS)
+	$(BIONIC_CFLAGS) \
+	-fvisibility=hidden
 %canon_reldir%_libandroid_log_la_LIBADD = \
 	$(BIONIC_LIBS)
 %canon_reldir%_libandroid_log_la_LDFLAGS = \
@@ -42,12 +44,26 @@ if CPU_ARM
 	-Wl,--hash-style=both
 endif
 %canon_reldir%_libandroid_log_la_SOURCES = \
+	%reldir%/config_read.c \
+	%reldir%/config_read.h \
+	%reldir%/config_write.c \
+	%reldir%/config_write.h \
 	%reldir%/event_tag_map.c \
-	%reldir%/logprint.c \
+	%reldir%/log_event_list.c \
+	%reldir%/log_event_write.c \
 	%reldir%/log_is_loggable.c \
+	%reldir%/log_portability.h \
 	%reldir%/log_time.cpp \
-	%reldir%/log_read.c \
-	%reldir%/logd_write.c
+	%reldir%/logd_reader.c \
+	%reldir%/logd_writer.c \
+	%reldir%/logger.h \
+	%reldir%/logger_lock.c \
+	%reldir%/logger_name.c \
+	%reldir%/logger_read.c \
+	%reldir%/logger_write.c \
+	%reldir%/logprint.c \
+	%reldir%/pmsg_reader.c \
+	%reldir%/pmsg_writer.c
 
 pkgconfig_DATA += \
 	%reldir%/android-log-$(SYSTEMCORE_API_VERSION).pc

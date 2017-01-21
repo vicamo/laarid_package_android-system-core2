@@ -25,15 +25,19 @@ TESTS += \
 	$(GTEST_CPPFLAGS)
 %canon_reldir%_libcutils_test_LDADD = \
 	$(BIONIC_LIBS) \
+	base/libandroid-base.la \
 	liblog/libandroid-log.la \
 	libcutils/libandroid-cutils.la \
 	$(GTEST_LIBS)
 %canon_reldir%_libcutils_test_DEPENDENCIES = \
+	base/libandroid-base.la \
 	liblog/libandroid-log.la \
 	libcutils/libandroid-cutils.la \
 	$(GTEST_LIBS)
 %canon_reldir%_libcutils_test_SOURCES = \
 	%reldir%/MemsetTest.cpp \
 	%reldir%/PropertiesTest.cpp \
-	%reldir%/test_str_parms.cpp
+	%reldir%/sockets_test.cpp \
+	%reldir%/test_str_parms.cpp \
+	%reldir%/trace-dev_test.cpp
 endif

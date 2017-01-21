@@ -44,12 +44,12 @@ TESTS += \
 	libutils/libandroid-utils.la \
 	$(GTEST_LIBS)
 %canon_reldir%_libutils_tests_SOURCES = \
-	%reldir%/BasicHashtable_test.cpp \
 	%reldir%/BlobCache_test.cpp \
 	%reldir%/BitSet_test.cpp \
 	%reldir%/Looper_test.cpp \
 	%reldir%/LruCache_test.cpp \
 	%reldir%/String8_test.cpp \
+	%reldir%/StrongPointer_test.cpp \
 	%reldir%/TestHelpers.h \
 	%reldir%/Unicode_test.cpp \
 	%reldir%/Vector_test.cpp

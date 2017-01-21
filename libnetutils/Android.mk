@@ -14,7 +14,6 @@ lib_LTLIBRARIES += \
 	%reldir%/dhcpclient.c \
 	%reldir%/dhcpmsg.c \
 	%reldir%/dhcpmsg.h \
-	%reldir%/dhcp_utils.c \
 	%reldir%/ifc_utils.c \
 	%reldir%/packet.c \
 	%reldir%/packet.h

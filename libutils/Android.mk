@@ -22,6 +22,9 @@ lib_LTLIBRARIES += \
 	$(LOG_CFLAGS) \
 	$(CUTILS_CFLAGS) \
 	$(NATIVEHELPER_CFLAGS)
+%canon_reldir%_libandroid_utils_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	-fvisibility=protected
 %canon_reldir%_libandroid_utils_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
@@ -33,7 +36,6 @@ lib_LTLIBRARIES += \
 	$(LOG_LIBS) \
 	$(CUTILS_LIBS)
 %canon_reldir%_libandroid_utils_la_SOURCES = \
-	%reldir%/BasicHashtable.cpp \
 	%reldir%/BlobCache.cpp \
 	%reldir%/CallStack.cpp \
 	%reldir%/FileMap.cpp \
@@ -46,6 +48,7 @@ lib_LTLIBRARIES += \
 	%reldir%/PropertyMap.cpp \
 	%reldir%/RefBase.cpp \
 	%reldir%/SharedBuffer.cpp \
+	%reldir%/SharedBuffer.h \
 	%reldir%/Static.cpp \
 	%reldir%/StopWatch.cpp \
 	%reldir%/String8.cpp \
