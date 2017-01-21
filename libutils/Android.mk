@@ -22,9 +22,10 @@ lib_LTLIBRARIES += \
 	$(LOG_CFLAGS) \
 	$(CUTILS_CFLAGS) \
 	$(NATIVEHELPER_CFLAGS)
-%canon_reldir%_libandroid_utils_la_CXXFLAGS = \
-	$(AM_CXXFLAGS) \
-	-fvisibility=protected
+# See https://github.com/laarid/package_android-system-core2/issues/6
+#%canon_reldir%_libandroid_utils_la_CXXFLAGS = \
+#	$(AM_CXXFLAGS) \
+#	-fvisibility=protected
 %canon_reldir%_libandroid_utils_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
