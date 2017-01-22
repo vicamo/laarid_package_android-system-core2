@@ -395,10 +395,12 @@ void RefBase::incStrong(const void* id) const
         return;
     }
 
+#if !LOG_NDEBUG
     int32_t old = refs->mStrong.fetch_sub(INITIAL_STRONG_VALUE,
             std::memory_order_relaxed);
     // A decStrong() must still happen after us.
     ALOG_ASSERT(old > INITIAL_STRONG_VALUE, "0x%x too small", old);
+#endif
     refs->mBase->onFirstRef();
 }
 
