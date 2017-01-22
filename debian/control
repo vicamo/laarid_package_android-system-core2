@@ -92,20 +92,6 @@ Depends: ${shlibs:Depends},
 Description: Android libutils
  This package contains libutils built from Android platform/system/core.
 
-Package: libandroid-processgroup0-bin
-Priority: extra
-Section: misc
-Architecture: any
-Multi-Arch: no
-Depends: libandroid-processgroup0 (= ${binary:Version}),
-         ${misc:Depends},
-         ${shlibs:Depends}
-Description: Android libprocessgroup - utilities
- This package contains libprocessgroup built from Android platform/system/core.
- .
- This package contains the utilities which are used by the libraries
- and other packages.
-
 Package: libandroid-processgroup0-dev
 Priority: extra
 Section: libdevel

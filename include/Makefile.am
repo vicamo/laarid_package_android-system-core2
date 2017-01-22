@@ -28,7 +28,6 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 %canon_reldir%_libandroid_utils_inc_HEADERS = \
 	%reldir%/utils/AndroidThreads.h \
 	%reldir%/utils/Atomic.h \
-	%reldir%/utils/BasicHashtable.h \
 	%reldir%/utils/BitSet.h \
 	%reldir%/utils/BlobCache.h \
 	%reldir%/utils/ByteOrder.h \
@@ -54,7 +53,6 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 	%reldir%/utils/PropertyMap.h \
 	%reldir%/utils/RWLock.h \
 	%reldir%/utils/RefBase.h \
-	%reldir%/utils/SharedBuffer.h \
 	%reldir%/utils/Singleton.h \
 	%reldir%/utils/SortedVector.h \
 	%reldir%/utils/StopWatch.h \
@@ -79,7 +77,9 @@ androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
 # ---------------------------
 %canon_reldir%_libandroid_ziparchive_incdir = $(androidincdir)/ziparchive
 %canon_reldir%_libandroid_ziparchive_inc_HEADERS = \
-	%reldir%/ziparchive/zip_archive.h
+	%reldir%/ziparchive/zip_archive.h \
+	%reldir%/ziparchive/zip_archive_stream_entry.h \
+	%reldir%/ziparchive/zip_writer.h
 
 EXTRA_DIST += \
 	%reldir%/private/android_filesystem_capability.h \
