@@ -27,7 +27,6 @@ Architecture: any
 Multi-Arch: same
 Depends: libandroid-backtrace0 (= ${binary:Version}),
          libandroid-cutils0-dev,
-         libunwind8-dev,
          ${misc:Depends}
 Description: Android libbacktrace - development
  This package contains libbacktrace built from Android platform/system/core.
