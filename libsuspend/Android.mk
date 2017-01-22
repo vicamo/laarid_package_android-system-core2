@@ -14,7 +14,7 @@ lib_LTLIBRARIES += \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_suspend_la_LIBADD = \
-	$(PTHREAD_LIBS)\
+	$(PTHREAD_LIBS) -lpthread \
 	liblog/libandroid-log.la
 %canon_reldir%_libandroid_suspend_la_SOURCES = \
 	%reldir%/autosuspend.c \

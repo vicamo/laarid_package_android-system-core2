@@ -33,17 +33,35 @@ lib_LTLIBRARIES += \
 %canon_reldir%_libandroid_base_la_SOURCES = \
 	%reldir%/file.cpp \
 	%reldir%/logging.cpp \
+	%reldir%/parsenetaddress.cpp \
 	%reldir%/stringprintf.cpp \
-	%reldir%/strings.cpp
+	%reldir%/strings.cpp \
+	%reldir%/test_utils.cpp
 
-%canon_reldir%_libandroid_base_incdir = $(androidincdir)/base
+if OS_LINUX
+%canon_reldir%_libandroid_base_la_SOURCES += \
+	%reldir%/errors_unix.cpp
+else
+%canon_reldir%_libandroid_base_la_SOURCES += \
+	%reldir%/errors_windows.cpp \
+	%reldir%/utf8.cpp
+endif
+
+%canon_reldir%_libandroid_base_incdir = $(androidincdir)/android-base
 %canon_reldir%_libandroid_base_inc_HEADERS = \
-	%reldir%/include/base/file.h \
-	%reldir%/include/base/logging.h \
-	%reldir%/include/base/macros.h \
-	%reldir%/include/base/memory.h \
-	%reldir%/include/base/stringprintf.h \
-	%reldir%/include/base/strings.h
+	%reldir%/include/android-base/errors.h \
+	%reldir%/include/android-base/file.h \
+	%reldir%/include/android-base/logging.h \
+	%reldir%/include/android-base/macros.h \
+	%reldir%/include/android-base/memory.h \
+	%reldir%/include/android-base/parseint.h \
+	%reldir%/include/android-base/parsenetaddress.h \
+	%reldir%/include/android-base/stringprintf.h \
+	%reldir%/include/android-base/strings.h \
+	%reldir%/include/android-base/test_utils.h \
+	%reldir%/include/android-base/thread_annotations.h \
+	%reldir%/include/android-base/unique_fd.h \
+	%reldir%/include/android-base/utf8.h
 
 pkgconfig_DATA += \
 	%reldir%/android-base-$(SYSTEMCORE_API_VERSION).pc
@@ -72,11 +90,18 @@ TESTS += \
 	%reldir%/libandroid-base.la \
 	$(GTEST_LIBS)
 %canon_reldir%_libbase_test_SOURCES = \
+	%reldir%/errors_test.cpp \
 	%reldir%/file_test.cpp \
-	%reldir%/logging.cpp \
+	%reldir%/logging_test.cpp \
+	%reldir%/parseint_test.cpp \
+	%reldir%/parsenetaddress_test.cpp \
 	%reldir%/stringprintf_test.cpp \
 	%reldir%/strings_test.cpp \
-	%reldir%/test_main.cpp \
-	%reldir%/test_utils.cpp \
-	%reldir%/test_utils.h
+	%reldir%/test_main.cpp
+
+if OS_LINUX
+else
+%canon_reldir%_libbase_test_SOURCES += \
+	%reldir%/utf8_test.cpp
 endif
+endif # HAVE_GTEST

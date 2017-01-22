@@ -16,19 +16,7 @@ lib_LTLIBRARIES += \
 	libutils/libandroid-utils.la
 %canon_reldir%_libandroid_processgroup_la_SOURCES = \
 	%reldir%/include/processgroup/processgroup.h \
-	%reldir%/processgroup.cpp \
-	%reldir%/processgroup_priv.h
-
-bin_PROGRAMS += \
-	%reldir%/processgroup_cleanup
-
-%canon_reldir%_processgroup_cleanup_CPPFLAGS = \
-	$(%canon_reldir%_libandroid_processgroup_la_CPPFLAGS)
-%canon_reldir%_processgroup_cleanup_LDADD = \
-	$(BIONIC_LIBS) \
-	%reldir%/libandroid-processgroup.la
-%canon_reldir%_processgroup_cleanup_SOURCES = \
-	%reldir%/cleanup.cpp
+	%reldir%/processgroup.cpp
 
 pkgconfig_DATA += \
 	%reldir%/android-processgroup-$(SYSTEMCORE2_API_VERSION).pc

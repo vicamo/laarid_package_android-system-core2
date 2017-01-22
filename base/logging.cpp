@@ -14,7 +14,11 @@
  * limitations under the License.
  */
 
-#include "base/logging.h"
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
+#include "android-base/logging.h"
 
 #include <libgen.h>
 
@@ -27,13 +31,17 @@
 
 #include <iostream>
 #include <limits>
-#include <mutex>
 #include <sstream>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include "base/strings.h"
+#ifndef _WIN32
+#include <mutex>
+#endif
+
+#include "android-base/macros.h"
+#include "android-base/strings.h"
 #include "cutils/threads.h"
 
 // Headers for LogMessage::LogLine.
@@ -43,23 +51,92 @@
 #endif
 #include "cutils/log.h"
 
-namespace android {
-namespace base {
-
-static std::mutex logging_lock;
-
-static LogFunction gLogger = LogdLogger();
-//static LogFunction gLogger = StderrLogger;
-
-static bool gInitialized = false;
-static LogSeverity gMinimumLogSeverity = INFO;
-static std::unique_ptr<std::string> gProgramInvocationName;
+namespace {
+#ifndef _WIN32
+using std::mutex;
+using std::lock_guard;
 
 #if defined(__GLIBC__)
-static const char* getprogname() {
+const char* getprogname() {
   return program_invocation_short_name;
 }
 #endif
+
+#else
+const char* getprogname() {
+  static bool first = true;
+  static char progname[MAX_PATH] = {};
+
+  if (first) {
+    CHAR longname[MAX_PATH];
+    DWORD nchars = GetModuleFileNameA(nullptr, longname, arraysize(longname));
+    if ((nchars >= arraysize(longname)) || (nchars == 0)) {
+      // String truncation or some other error.
+      strcpy(progname, "<unknown>");
+    } else {
+      strcpy(progname, basename(longname));
+    }
+    first = false;
+  }
+
+  return progname;
+}
+
+class mutex {
+ public:
+  mutex() {
+    InitializeCriticalSection(&critical_section_);
+  }
+  ~mutex() {
+    DeleteCriticalSection(&critical_section_);
+  }
+
+  void lock() {
+    EnterCriticalSection(&critical_section_);
+  }
+
+  void unlock() {
+    LeaveCriticalSection(&critical_section_);
+  }
+
+ private:
+  CRITICAL_SECTION critical_section_;
+};
+
+template <typename LockT>
+class lock_guard {
+ public:
+  explicit lock_guard(LockT& lock) : lock_(lock) {
+    lock_.lock();
+  }
+
+  ~lock_guard() {
+    lock_.unlock();
+  }
+
+ private:
+  LockT& lock_;
+
+  DISALLOW_COPY_AND_ASSIGN(lock_guard);
+};
+#endif
+} // namespace
+
+namespace android {
+namespace base {
+
+static auto& logging_lock = *new mutex();
+
+static auto& gLogger = *new LogFunction(LogdLogger());
+//static auto& gLogger = *new LogFunction(StderrLogger);
+
+static bool gInitialized = false;
+static LogSeverity gMinimumLogSeverity = INFO;
+static auto& gProgramInvocationName = *new std::unique_ptr<std::string>();
+
+LogSeverity GetMinimumLogSeverity() {
+  return gMinimumLogSeverity;
+}
 
 static const char* ProgramInvocationName() {
   if (gProgramInvocationName == nullptr) {
@@ -71,8 +148,9 @@ static const char* ProgramInvocationName() {
 
 void StderrLogger(LogId, LogSeverity severity, const char*, const char* file,
                   unsigned int line, const char* message) {
-  static const char* log_characters = "VDIWEF";
-  CHECK_EQ(strlen(log_characters), FATAL + 1U);
+  static const char log_characters[] = "VDIWEF";
+  static_assert(arraysize(log_characters) - 1 == FATAL + 1,
+                "Mismatch in size of log_characters and values in LogSeverity");
   char severity_char = log_characters[severity];
   fprintf(stderr, "%s %c %5d %5d %s:%u] %s\n", ProgramInvocationName(),
           severity_char, getpid(), gettid(), file, line, message);
@@ -127,8 +205,8 @@ void InitLogging(char* argv[]) {
   gInitialized = true;
 
   // Stash the command line for later use. We can use /proc/self/cmdline on
-  // Linux to recover this, but we don't have that luxury on the Mac, and there
-  // are a couple of argv[0] variants that are commonly used.
+  // Linux to recover this, but we don't have that luxury on the Mac/Windows,
+  // and there are a couple of argv[0] variants that are commonly used.
   if (argv != nullptr) {
     gProgramInvocationName.reset(new std::string(basename(argv[0])));
   }
@@ -175,8 +253,24 @@ void InitLogging(char* argv[]) {
 }
 
 void SetLogger(LogFunction&& logger) {
-  std::lock_guard<std::mutex> lock(logging_lock);
+  lock_guard<mutex> lock(logging_lock);
   gLogger = std::move(logger);
+}
+
+static const char* GetFileBasename(const char* file) {
+  // We can't use basename(3) even on Unix because the Mac doesn't
+  // have a non-modifying basename.
+  const char* last_slash = strrchr(file, '/');
+  if (last_slash != nullptr) {
+    return last_slash + 1;
+  }
+#if defined(_WIN32)
+  const char* last_backslash = strrchr(file, '\\');
+  if (last_backslash != nullptr) {
+    return last_backslash + 1;
+  }
+#endif
+  return file;
 }
 
 // This indirection greatly reduces the stack impact of having lots of
@@ -185,13 +279,11 @@ class LogMessageData {
  public:
   LogMessageData(const char* file, unsigned int line, LogId id,
                  LogSeverity severity, int error)
-      : file_(file),
+      : file_(GetFileBasename(file)),
         line_number_(line),
         id_(id),
         severity_(severity),
         error_(error) {
-    const char* last_slash = strrchr(file, '/');
-    file = (last_slash == nullptr) ? file : last_slash + 1;
   }
 
   const char* GetFile() const {
@@ -239,28 +331,28 @@ LogMessage::LogMessage(const char* file, unsigned int line, LogId id,
 }
 
 LogMessage::~LogMessage() {
-  if (data_->GetSeverity() < gMinimumLogSeverity) {
-    return;  // No need to format something we're not going to output.
-  }
-
   // Finish constructing the message.
   if (data_->GetError() != -1) {
     data_->GetBuffer() << ": " << strerror(data_->GetError());
   }
   std::string msg(data_->ToString());
 
-  if (msg.find('\n') == std::string::npos) {
-    LogLine(data_->GetFile(), data_->GetLineNumber(), data_->GetId(),
-            data_->GetSeverity(), msg.c_str());
-  } else {
-    msg += '\n';
-    size_t i = 0;
-    while (i < msg.size()) {
-      size_t nl = msg.find('\n', i);
-      msg[nl] = '\0';
+  {
+    // Do the actual logging with the lock held.
+    lock_guard<mutex> lock(logging_lock);
+    if (msg.find('\n') == std::string::npos) {
       LogLine(data_->GetFile(), data_->GetLineNumber(), data_->GetId(),
-              data_->GetSeverity(), &msg[i]);
-      i = nl + 1;
+              data_->GetSeverity(), msg.c_str());
+    } else {
+      msg += '\n';
+      size_t i = 0;
+      while (i < msg.size()) {
+        size_t nl = msg.find('\n', i);
+        msg[nl] = '\0';
+        LogLine(data_->GetFile(), data_->GetLineNumber(), data_->GetId(),
+                data_->GetSeverity(), &msg[i]);
+        i = nl + 1;
+      }
     }
   }
 
@@ -281,7 +373,6 @@ std::ostream& LogMessage::stream() {
 void LogMessage::LogLine(const char* file, unsigned int line, LogId id,
                          LogSeverity severity, const char* message) {
   const char* tag = ProgramInvocationName();
-  std::lock_guard<std::mutex> lock(logging_lock);
   gLogger(id, severity, tag, file, line, message);
 }
 

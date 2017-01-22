@@ -24,6 +24,10 @@ if ENABLE_CPUSETS
 %canon_reldir%_libandroid_cutils_la_CPPFLAGS += \
 	-DUSE_CPUSETS
 endif
+if ENABLE_SCHEDBOOST
+%canon_reldir%_libandroid_cutils_la_CPPFLAGS += \
+	-DUSE_SCHEDBOOST
+endif
 %canon_reldir%_libandroid_cutils_la_CFLAGS = \
 	$(AM_CFLAGS) \
 	-std=gnu90 \
@@ -33,7 +37,7 @@ endif
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_cutils_la_LIBADD = \
-	$(PTHREAD_LIBS) \
+	$(PTHREAD_LIBS) -lpthread\
 	$(BIONIC_LIBS) \
 	liblog/libandroid-log.la
 %canon_reldir%_libandroid_cutils_la_DEPENDENCIES = \
@@ -41,6 +45,7 @@ endif
 %canon_reldir%_libandroid_cutils_la_SOURCES = \
 	%reldir%/android_reboot.c \
 	%reldir%/atomic.c \
+	%reldir%/canned_fs_config.c \
 	%reldir%/config_utils.c \
 	%reldir%/debugger.c \
 	%reldir%/fs.c \
@@ -57,14 +62,15 @@ endif
 	%reldir%/qtaguid.c \
 	%reldir%/record_stream.c \
 	%reldir%/sched_policy.c \
-	%reldir%/socket_inaddr_any_server.c \
-	%reldir%/socket_local.h \
-	%reldir%/socket_local_client.c \
-	%reldir%/socket_local_server.c \
-	%reldir%/socket_loopback_client.c \
-	%reldir%/socket_loopback_server.c \
-	%reldir%/socket_network_client.c \
-	%reldir%/sockets.c \
+	%reldir%/socket_inaddr_any_server_unix.c \
+	%reldir%/socket_local_unix.h \
+	%reldir%/socket_local_client_unix.c \
+	%reldir%/socket_local_server_unix.c \
+	%reldir%/socket_loopback_client_unix.c \
+	%reldir%/socket_loopback_server_unix.c \
+	%reldir%/socket_network_client_unix.c \
+	%reldir%/sockets.cpp \
+	%reldir%/sockets_unix.cpp \
 	%reldir%/str_parms.c \
 	%reldir%/strdup16to8.c \
 	%reldir%/strdup8to16.c \
@@ -110,6 +116,9 @@ endif # CPU_X86_64
 endif # CPU_X86
 endif # CPU_AARCH64
 endif # CPU_ARM
+
+EXTRA_DIST += \
+	$(srcdir)/include/private/canned_fs_config.h
 
 pkgconfig_DATA += \
 	%reldir%/android-cutils-$(SYSTEMCORE_API_VERSION).pc

@@ -3,12 +3,17 @@ lib_LTLIBRARIES += \
 
 %canon_reldir%_libandroid_logwrap_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
+	$(PTHREAD_CFLAGS) \
 	$(BIONIC_CFLAGS) \
 	-I$(srcdir)/%reldir%/include
+%canon_reldir%_libandroid_logwrap_la_CFLAGS = \
+	$(AM_CFLAGS) \
+	-std=gnu99
 %canon_reldir%_libandroid_logwrap_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_logwrap_la_LIBADD = \
+	$(PTHREAD_LIBS) -lpthread \
 	liblog/libandroid-log.la \
 	libcutils/libandroid-cutils.la
 %canon_reldir%_libandroid_logwrap_la_SOURCES = \
@@ -25,6 +30,9 @@ bin_PROGRAMS += \
 	$(AM_CPPFLAGS) \
 	$(BIONIC_CFLAGS) \
 	-I$(srcdir)/%reldir%/include
+%canon_reldir%_logwrapper_CFLAGS = \
+	$(AM_CFLAGS) \
+	-std=gnu99
 %canon_reldir%_logwrapper_LDADD = \
 	liblog/libandroid-log.la \
 	libcutils/libandroid-cutils.la \

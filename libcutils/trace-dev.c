@@ -18,7 +18,11 @@
 #include <fcntl.h>
 #include <limits.h>
 #include <pthread.h>
+#ifdef __cplusplus
+#include <atomic>
+#else
 #include <stdatomic.h>
+#endif
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
@@ -36,6 +40,12 @@
  * Names should be kept short to get the most use of the trace buffer.
  */
 #define ATRACE_MESSAGE_LENGTH 1024
+
+#ifdef __cplusplus
+using std::atomic_bool;
+using std::memory_order_acquire;
+using std::memory_order_release;
+#endif
 
 atomic_bool             atrace_is_ready      = ATOMIC_VAR_INIT(false);
 int                     atrace_marker_fd     = -1;
@@ -66,24 +76,17 @@ void atrace_set_tracing_enabled(bool enabled)
 // values listed in the app_cmdlines property.
 static bool atrace_is_cmdline_match(const char* cmdline)
 {
+    int count = property_get_int32("debug.atrace.app_number", 0);
+    int i;
+    char buf[PROPERTY_KEY_MAX];
     char value[PROPERTY_VALUE_MAX];
-    char* start = value;
 
-    property_get("debug.atrace.app_cmdlines", value, "");
-
-    while (start != NULL) {
-        char* end = strchr(start, ',');
-
-        if (end != NULL) {
-            *end = '\0';
-            end++;
-        }
-
-        if (strcmp(cmdline, start) == 0) {
+    for (i = 0; i < count; i++) {
+        snprintf(buf, sizeof(buf), "debug.atrace.app_%d", i);
+        property_get(buf, value, "");
+        if (strcmp(value, cmdline) == 0) {
             return true;
         }
-
-        start = end;
     }
 
     return false;
@@ -104,7 +107,7 @@ static bool atrace_is_app_tracing_enabled()
 
     if (sys_debuggable || atrace_is_debuggable) {
         // Check whether tracing is enabled for this process.
-        FILE * file = fopen("/proc/self/cmdline", "r");
+        FILE * file = fopen("/proc/self/cmdline", "re");
         if (file) {
             char cmdline[4096];
             if (fgets(cmdline, sizeof(cmdline), file)) {
@@ -173,7 +176,7 @@ void atrace_update_tags()
 
 static void atrace_init_once()
 {
-    atrace_marker_fd = open("/sys/kernel/debug/tracing/trace_marker", O_WRONLY);
+    atrace_marker_fd = open("/sys/kernel/debug/tracing/trace_marker", O_WRONLY | O_CLOEXEC);
     if (atrace_marker_fd == -1) {
         ALOGE("Error opening trace file: %s (%d)", strerror(errno), errno);
         atrace_enabled_tags = 0;
@@ -194,49 +197,47 @@ void atrace_setup()
 void atrace_begin_body(const char* name)
 {
     char buf[ATRACE_MESSAGE_LENGTH];
-    size_t len;
 
-    len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "B|%d|%s", getpid(), name);
+    int len = snprintf(buf, sizeof(buf), "B|%d|%s", getpid(), name);
+    if (len >= (int) sizeof(buf)) {
+        ALOGW("Truncated name in %s: %s\n", __FUNCTION__, name);
+        len = sizeof(buf) - 1;
+    }
     TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
 }
 
+#define WRITE_MSG(format_begin, format_end, pid, name, value) { \
+    char buf[ATRACE_MESSAGE_LENGTH]; \
+    int len = snprintf(buf, sizeof(buf), format_begin "%s" format_end, pid, \
+        name, value); \
+    if (len >= (int) sizeof(buf)) { \
+        /* Given the sizeof(buf), and all of the current format buffers, \
+         * it is impossible for name_len to be < 0 if len >= sizeof(buf). */ \
+        int name_len = strlen(name) - (len - sizeof(buf)) - 1; \
+        /* Truncate the name to make the message fit. */ \
+        ALOGW("Truncated name in %s: %s\n", __FUNCTION__, name); \
+        len = snprintf(buf, sizeof(buf), format_begin "%.*s" format_end, pid, \
+            name_len, name, value); \
+    } \
+    TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len)); \
+}
 
 void atrace_async_begin_body(const char* name, int32_t cookie)
 {
-    char buf[ATRACE_MESSAGE_LENGTH];
-    size_t len;
-
-    len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "S|%d|%s|%" PRId32,
-            getpid(), name, cookie);
-    TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
+    WRITE_MSG("S|%d|", "|%" PRId32, getpid(), name, cookie);
 }
 
 void atrace_async_end_body(const char* name, int32_t cookie)
 {
-    char buf[ATRACE_MESSAGE_LENGTH];
-    size_t len;
-
-    len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "F|%d|%s|%" PRId32,
-            getpid(), name, cookie);
-    TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
+    WRITE_MSG("F|%d|", "|%" PRId32, getpid(), name, cookie);
 }
 
 void atrace_int_body(const char* name, int32_t value)
 {
-    char buf[ATRACE_MESSAGE_LENGTH];
-    size_t len;
-
-    len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "C|%d|%s|%" PRId32,
-            getpid(), name, value);
-    TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
+    WRITE_MSG("C|%d|", "|%" PRId32, getpid(), name, value);
 }
 
 void atrace_int64_body(const char* name, int64_t value)
 {
-    char buf[ATRACE_MESSAGE_LENGTH];
-    size_t len;
-
-    len = snprintf(buf, ATRACE_MESSAGE_LENGTH, "C|%d|%s|%" PRId64,
-            getpid(), name, value);
-    TEMP_FAILURE_RETRY(write(atrace_marker_fd, buf, len));
+    WRITE_MSG("C|%d|", "|%" PRId64, getpid(), name, value);
 }

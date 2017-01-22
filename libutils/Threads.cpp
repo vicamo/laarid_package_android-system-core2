@@ -22,6 +22,7 @@
 #include <memory.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <unistd.h>
 
 #if !defined(_WIN32)
@@ -154,9 +155,9 @@ int androidCreateRawThreadEtc(android_thread_func_t entryFunction,
                     (android_pthread_entry)entryFunction, userData);
     pthread_attr_destroy(&attr);
     if (result != 0) {
-        ALOGE("androidCreateRawThreadEtc failed (entry=%p, res=%d, errno=%d)\n"
+        ALOGE("androidCreateRawThreadEtc failed (entry=%p, res=%d, %s)\n"
              "(android threadPriority=%d)",
-            entryFunction, result, errno, threadPriority);
+            entryFunction, result, strerror(errno), threadPriority);
         return 0;
     }
 
@@ -291,8 +292,6 @@ void androidSetCreateThreadFunc(android_create_thread_fn func)
 int androidSetThreadPriority(pid_t tid, int pri)
 {
     int rc = 0;
-
-#if !defined(_WIN32)
     int lasterr = 0;
 
     if (pri >= ANDROID_PRIORITY_BACKGROUND) {
@@ -310,17 +309,12 @@ int androidSetThreadPriority(pid_t tid, int pri)
     } else {
         errno = lasterr;
     }
-#endif
 
     return rc;
 }
 
 int androidGetThreadPriority(pid_t tid) {
-#if !defined(_WIN32)
     return getpriority(PRIO_PROCESS, tid);
-#else
-    return ANDROID_PRIORITY_NORMAL;
-#endif
 }
 
 namespace android {
@@ -665,6 +659,8 @@ status_t Thread::readyToRun()
 
 status_t Thread::run(const char* name, int32_t priority, size_t stack)
 {
+    LOG_ALWAYS_FATAL_IF(name == nullptr, "thread name not provided to Thread::run");
+
     Mutex::Autolock _l(mLock);
 
     if (mRunning) {

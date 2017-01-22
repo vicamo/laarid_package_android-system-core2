@@ -17,21 +17,25 @@ lib_LTLIBRARIES += \
 
 %canon_reldir%_libandroid_utils_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
+	$(SAFEIOP_CFLAGS) \
 	$(BIONIC_CFLAGS) \
 	$(LOG_CFLAGS) \
 	$(CUTILS_CFLAGS) \
 	$(NATIVEHELPER_CFLAGS)
+%canon_reldir%_libandroid_utils_la_CXXFLAGS = \
+	$(AM_CXXFLAGS) \
+	-fvisibility=protected
 %canon_reldir%_libandroid_utils_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_utils_la_LIBADD = \
 	-lpthread \
 	libbacktrace/libandroid-backtrace.la \
+	$(SAFEIOP_LIBS) \
 	$(BIONIC_LIBS) \
 	$(LOG_LIBS) \
 	$(CUTILS_LIBS)
 %canon_reldir%_libandroid_utils_la_SOURCES = \
-	%reldir%/BasicHashtable.cpp \
 	%reldir%/BlobCache.cpp \
 	%reldir%/CallStack.cpp \
 	%reldir%/FileMap.cpp \
@@ -44,6 +48,7 @@ lib_LTLIBRARIES += \
 	%reldir%/PropertyMap.cpp \
 	%reldir%/RefBase.cpp \
 	%reldir%/SharedBuffer.cpp \
+	%reldir%/SharedBuffer.h \
 	%reldir%/Static.cpp \
 	%reldir%/StopWatch.cpp \
 	%reldir%/String8.cpp \
