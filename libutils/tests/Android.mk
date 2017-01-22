@@ -53,4 +53,11 @@ TESTS += \
 	%reldir%/TestHelpers.h \
 	%reldir%/Unicode_test.cpp \
 	%reldir%/Vector_test.cpp
+
+# libutils_tests includes tests with EXPECTS_DEATH, which may result
+# in coredump and fails distcheck. According to
+# https://github.com/google/googletest/issues/237 , this is a known
+# limitation of test frameworks and we have to workaround this by our
+# own.
+CLEANFILES += core
 endif
