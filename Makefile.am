@@ -103,6 +103,8 @@ DISTCLEANFILES += $(pkgconfig_DATA)
 # Somehow $(bin_SCRIPTS) are not included in DIST_SOURCES by default.
 EXTRA_DIST += $(bin_SCRIPTS)
 CLEANFILES += $(BUILT_SOURCES)
+# Running test programs may result in core dump, which fails distcleancheck.
+CLEANFILES += core
 GITIGNOREFILES += $(BUILT_SOURCES)
 
 -include $(top_srcdir)/git.mk
