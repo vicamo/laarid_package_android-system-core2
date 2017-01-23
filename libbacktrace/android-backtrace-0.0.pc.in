@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: android-backtrace-@SYSTEMCORE2_API_VERSION@
 Description: Android System Core Libraries - backtrace
 Version: @VERSION@
-Requires.private: android-bionic-@BIONIC_API_VERSION@ >= @BIONIC_REQUIRED_VERSION@, android-log-@LOG_API_VERSION@ >= @LOG_REQUIRED_VERSION@, android-cutils-@CUTILS_API_VERSION@ >= @CUTILS_REQUIRED_VERSION@, android-unwind-@UNWIND_API_VERSION@ >= @UNWIND_REQUIRED_VERSION@
+Requires.private: android-bionic-@BIONIC_API_VERSION@ >= @BIONIC_REQUIRED_VERSION@, android-log-@LOG_API_VERSION@ >= @LOG_REQUIRED_VERSION@, android-base-@BASE_API_VERSION@ >= @BASE_REQUIRED_VERSION@, android-unwind-@UNWIND_API_VERSION@ >= @UNWIND_REQUIRED_VERSION@
 Libs: -L${libdir} -landroid-backtrace
 Cflags: -I${includedir}/android/system-core-@SYSTEMCORE2_API_VERSION@

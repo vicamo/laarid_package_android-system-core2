@@ -60,9 +60,11 @@ void *sync_thread(void *data)
                 printf("    pt %s %s %d %d.%06d", pt_info->obj_name,
                        pt_info->driver_name, pt_info->status,
                        ts_sec, ts_usec);
-                if (!strcmp(pt_info->driver_name, "sw_sync"))
-                    printf(" val=%d\n", *(uint32_t *)pt_info->driver_data);
-                else
+                if (!strcmp(pt_info->driver_name, "sw_sync")) {
+                    uint32_t val;
+                    memcpy(&val, pt_info->driver_data, sizeof(val));
+                    printf(" val=%d\n", val);
+		} else
                     printf("\n");
             }
             sync_fence_info_free(info);
@@ -122,7 +124,7 @@ int main(int argc __attribute__((unused)), char *argv[] __attribute__((unused)))
     for (i = 0; i < 3; i++) {
         int err;
         printf("press enter to inc to %d\n", i+1);
-        fgets(str, sizeof(str), stdin);
+        TEMP_FAILURE_RETRY(fgets(str, sizeof(str), stdin));
         err = sw_sync_timeline_inc(sync_timeline_fd, 1);
         if (err < 0) {
             perror("can't increment sync obj:");
@@ -131,12 +133,12 @@ int main(int argc __attribute__((unused)), char *argv[] __attribute__((unused)))
     }
 
     printf("press enter to close sync_timeline\n");
-    fgets(str, sizeof(str), stdin);
+    TEMP_FAILURE_RETRY(fgets(str, sizeof(str), stdin));
 
     close(sync_timeline_fd);
 
     printf("press enter to end test\n");
-    fgets(str, sizeof(str), stdin);
+    TEMP_FAILURE_RETRY(fgets(str, sizeof(str), stdin));
 
     for (i = 0; i < 3; i++) {
         void *val;
