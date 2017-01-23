@@ -26,7 +26,10 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libandroid-backtrace0 (= ${binary:Version}),
-         libandroid-cutils0-dev,
+         libandroid-base0-dev (>= 0.0.12),
+         libandroid-bionic0-dev (>= 0.1.4),
+         libandroid-log0-dev (>= 0.0.12),
+         libandroid-unwind8-dev (>= 0.0.3),
          ${misc:Depends}
 Description: Android libbacktrace - development
  This package contains libbacktrace built from Android platform/system/core.
@@ -50,7 +53,8 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libandroid-nativebridge0 (= ${binary:Version}),
-         libandroid-nativehelper0-dev,
+         libandroid-log0-dev (>= 0.0.12),
+         libandroid-nativehelper0-dev (>= 0.0.4),
          ${misc:Depends}
 Description: Android libnativebridge - development
  This package contains libnativebridge built from Android platform/system/core.
@@ -74,7 +78,10 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libandroid-utils0 (= ${binary:Version}),
-         libandroid-cutils0-dev,
+         libandroid-bionic0-dev (>= 0.1.4),
+         libandroid-backtrace0-dev,
+         libandroid-log0-dev (>= 0.0.12),
+         libandroid-cutils0-dev (>= 0.0.12),
          ${misc:Depends}
 Description: Android libutils - development
  This package contains libutils built from Android platform/system/core.
@@ -98,7 +105,6 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libandroid-processgroup0 (= ${binary:Version}),
-         libandroid-utils0-dev,
          ${misc:Depends}
 Description: Android libprocessgroup - development
  This package contains libprocessgroup built from Android platform/system/core.
@@ -122,6 +128,8 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libandroid-ziparchive0 (= ${binary:Version}),
+         libandroid-base0-dev (>= 0.0.12),
+         libandroid-log0-dev (>= 0.0.12),
          libandroid-utils0-dev,
          zlib1g-dev,
          ${misc:Depends}
