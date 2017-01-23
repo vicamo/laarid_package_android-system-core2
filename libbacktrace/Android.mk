@@ -24,12 +24,6 @@ lib_LTLIBRARIES += \
 	$(LOG_CFLAGS) \
 	$(BASE_CFLAGS) \
 	$(CUTILS_CFLAGS)
-%canon_reldir%_libandroid_backtrace_la_CXXFLAGS = \
-	$(AM_CXXFLAGS) \
-	$(UNWIND_CFLAGS) \
-	$(LOG_CFLAGS) \
-	$(CUTILS_CFLAGS) \
-	-std=gnu++11
 %canon_reldir%_libandroid_backtrace_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)

@@ -17,7 +17,7 @@ lib_LTLIBRARIES += \
 
 %canon_reldir%_libandroid_utils_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
-	$(SAFEIOP_CFLAGS) \
+	$(PTHREAD_CFLAGS) \
 	$(BIONIC_CFLAGS) \
 	$(LOG_CFLAGS) \
 	$(CUTILS_CFLAGS) \
@@ -30,12 +30,11 @@ lib_LTLIBRARIES += \
 	$(AM_LDFLAGS) \
 	$(libtool_opts)
 %canon_reldir%_libandroid_utils_la_LIBADD = \
-	-lpthread \
-	libbacktrace/libandroid-backtrace.la \
-	$(SAFEIOP_LIBS) \
+	$(PTHREAD_LIBS) -lpthread \
 	$(BIONIC_LIBS) \
 	$(LOG_LIBS) \
-	$(CUTILS_LIBS)
+	$(CUTILS_LIBS) \
+	libbacktrace/libandroid-backtrace.la
 %canon_reldir%_libandroid_utils_la_SOURCES = \
 	%reldir%/BlobCache.cpp \
 	%reldir%/CallStack.cpp \

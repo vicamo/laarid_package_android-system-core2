@@ -21,7 +21,7 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libandroid-log0 (= ${binary:Version}),
-         libandroid-bionic0-dev,
+         libandroid-bionic0-dev (>= 0.1.4),
          ${misc:Depends}
 Description: Android liblog - development
  This package contains liblog built from Android platform/system/core.
@@ -108,7 +108,7 @@ Architecture: any
 Multi-Arch: same
 Depends: libandroid-cutils0 (= ${binary:Version}),
          libandroid-log0-dev,
-         libandroid-bionic0-dev,
+         libandroid-bionic0-dev (>= 0.1.4),
          ${misc:Depends}
 Description: Android libcutils - development
  This package contains libcutils built from Android platform/system/core.
@@ -133,7 +133,7 @@ Architecture: any
 Multi-Arch: same
 Depends: libandroid-ion0 (= ${binary:Version}),
          libandroid-log0-dev,
-         libandroid-bionic0-dev,
+         libandroid-bionic0-dev (>= 0.1.4),
          ${misc:Depends}
 Description: Android libion - development
  This package contains libion built from Android platform/system/core.
@@ -193,7 +193,7 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libandroid-base0 (= ${binary:Version}),
-         libandroid-cutils0-dev,
+         libandroid-bionic0-dev (>= 0.1.4),
          libandroid-log0-dev,
          ${misc:Depends}
 Description: Android libbase - development
@@ -303,7 +303,6 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libandroid-suspend0 (= ${binary:Version}),
-         libandroid-cutils0-dev,
          libandroid-log0-dev,
          ${misc:Depends}
 Description: Android libsuspend - development
@@ -330,6 +329,7 @@ Multi-Arch: same
 Depends: libandroid-sysutils0 (= ${binary:Version}),
          libandroid-cutils0-dev,
          libandroid-log0-dev,
+         libnl-3-dev,
          ${misc:Depends}
 Description: Android libsysutils - development
  This package contains libsysutils built from Android platform/system/core.
@@ -353,7 +353,6 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libandroid-usbhost0 (= ${binary:Version}),
-         libandroid-cutils0-dev,
          libandroid-log0-dev,
          ${misc:Depends}
 Description: Android libusbhost - development
