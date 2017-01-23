@@ -1,3 +1,9 @@
+android-system-core2 (0.0.11+b1) stretch; urgency=medium
+
+  * update ci secure var for release
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Mon, 23 Jan 2017 11:07:02 +0800
+
 android-system-core2 (0.0.11) stretch; urgency=medium
 
   * Merge aosp/nougat-dev
