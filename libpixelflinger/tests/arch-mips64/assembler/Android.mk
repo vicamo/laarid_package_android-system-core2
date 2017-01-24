@@ -1,21 +1,27 @@
-LOCAL_PATH:= $(call my-dir)
-include $(CLEAR_VARS)
+if HAVE_GTEST
+check_PROGRAMS += \
+    %reldir%/test-pixelflinger-mips64-assembler-test
 
-LOCAL_SRC_FILES:= \
-    mips64_assembler_test.cpp\
-    asm_mips_test_jacket.S
+TESTS += \
+    %reldir%/test-pixelflinger-mips64-assembler-test
 
-LOCAL_SHARED_LIBRARIES := \
-    libcutils \
-    libpixelflinger
+%canon_reldir%_test_pixelflinger_mips64_assembler_test_SOURCES = \
+    %reldir%/mips64_assembler_test.cpp \
+    %reldir%/asm_mips_test_jacket.S
 
-LOCAL_C_INCLUDES := \
-    $(LOCAL_PATH)/../../..
+%canon_reldir%_test_pixelflinger_mips64_assembler_test_LDADD = \
+    $(CUTILS_LIBS) \
+    $(GTEST_LIBS) \
+    libpixelflinger/libandroid-pixelflinger.la
+%canon_reldir%_test_pixelflinger_mips64_assembler_test_DEPENDENCIES = \
+    $(GTEST_LIBS) \
+    libpixelflinger/libandroid-pixelflinger.la
 
-LOCAL_MODULE:= test-pixelflinger-mips64-assembler-test
-
-LOCAL_MODULE_TAGS := tests
-
-LOCAL_MULTILIB := 64
-
-include $(BUILD_NATIVE_TEST)
+%canon_reldir%_test_pixelflinger_mips64_assembler_test_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(BIONIC_CFLAGS) \
+    $(LOG_CFLAGS) \
+    $(CUTILS_CFLAGS) \
+    $(GTEST_CPPFLAGS) \
+    -I$(top_srcdir)/libpixelflinger
+endif # HAVE_GTEST

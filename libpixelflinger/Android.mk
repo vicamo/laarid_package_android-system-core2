@@ -115,3 +115,5 @@ endif # CPU_ARM
 
 pkgconfig_DATA += \
 	%reldir%/android-pixelflinger-$(SYSTEMCORE2_API_VERSION).pc
+
+include $(srcdir)/%reldir%/tests/Android.mk

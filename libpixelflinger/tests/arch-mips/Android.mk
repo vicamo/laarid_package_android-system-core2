@@ -1,6 +1,4 @@
-ifeq ($(TARGET_ARCH),mips)
-include $(all-subdir-makefiles)
-endif
-ifeq ($(TARGET_ARCH),mipsel)
-include $(all-subdir-makefiles)
+if CPU_MIPS
+include $(srcdir)/%reldir%/col32cb16blend/Android.mk
+include $(srcdir)/%reldir%/t32cb16blend/Android.mk
 endif
