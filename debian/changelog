@@ -1,3 +1,10 @@
+android-system-core2 (0.0.12) stretch; urgency=low
+
+  * build libpixelflinger
+  * correct libandroid-processgroup0-dev dependencies
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Tue, 24 Jan 2017 16:20:12 +0800
+
 android-system-core2 (0.0.11+b2) stretch; urgency=medium
 
   * correct package dependencies
