@@ -105,6 +105,9 @@ Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends: libandroid-processgroup0 (= ${binary:Version}),
+         libandroid-bionic0-dev (>= 0.1.4),
+         libandroid-log0-dev (>= 0.0.12),
+         libandroid-utils0-dev,
          ${misc:Depends}
 Description: Android libprocessgroup - development
  This package contains libprocessgroup built from Android platform/system/core.
