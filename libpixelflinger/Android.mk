@@ -31,6 +31,8 @@ lib_LTLIBRARIES += \
 	%reldir%/raster.h \
 	%reldir%/buffer.cpp \
 	%reldir%/buffer.h
+EXTRA_DIST += \
+	%reldir%/codeflinger/dlmalloc/malloc.c
 %canon_reldir%_libandroid_pixelflinger_la_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(BIONIC_CFLAGS) \
