@@ -145,6 +145,15 @@ extern "C" void scanline_col32cb16blend_mips64(uint16_t *dst, uint32_t col, size
 
 // ----------------------------------------------------------------------------
 
+#if BYTE_ORDER == BIG_ENDIAN
+static inline uint32_t  convertAbgr8888ToRgb565_hi16(uint32_t  pix)
+{
+    return uint32_t( ((pix << 24) & 0xf8000000) |
+                      ((pix << 11) & 0x07e00000) |
+                      ((pix >> 3) & 0x001f0000) );
+}
+#endif
+
 static inline uint16_t  convertAbgr8888ToRgb565(uint32_t  pix)
 {
     return uint16_t( ((pix << 8) & 0xf800) |
