@@ -1297,14 +1297,14 @@ void ArmToMips64Assembler::ADDR_STR(int cc, int Rd, int Rn, uint32_t offset) {
 */
 
 MIPS64Assembler::MIPS64Assembler(const sp<Assembly>& assembly, ArmToMips64Assembler *parent)
-    : mParent(parent),
-    MIPSAssembler::MIPSAssembler(assembly, NULL)
+    : MIPSAssembler::MIPSAssembler(assembly, NULL)
+    , mParent(parent)
 {
 }
 
 MIPS64Assembler::MIPS64Assembler(void* assembly, ArmToMips64Assembler *parent)
-    : mParent(parent),
-    MIPSAssembler::MIPSAssembler(assembly)
+    : MIPSAssembler::MIPSAssembler(assembly)
+    , mParent(parent)
 {
 }
 
