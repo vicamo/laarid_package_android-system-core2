@@ -463,7 +463,7 @@ void dataOpTest(dataOpTest_t test, ArmToMips64Assembler *a64asm, uint32_t Rd = R
         }
     }
 
-    if(test.checkRd == 1 && regs[Rd] != test.postRdValue)
+    if(test.checkRd == 1 && (uint64_t)regs[Rd] != test.postRdValue)
     {
         printf("Test %x failed, Expected(%" PRIx64 "), Actual(%" PRIx64 ")\n",
                test.id, test.postRdValue, regs[Rd]);

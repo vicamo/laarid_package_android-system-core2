@@ -115,7 +115,7 @@ static char * alt_arm_reg_name[32] = {  // hacked names for comparison with ARM 
     "t8",   "t9",   "k0",   "k1",   "gp",   "sp",   "s8",   "ra"
 };
 
-static char ** reg_name =  &mips_reg_name[0];
+static char * const * reg_name =  &mips_reg_name[0];
 
 static const char * const c0_opname[64] = {
     "c0op00","tlbr",  "tlbwi", "c0op03","c0op04","c0op05","tlbwr", "c0op07",
