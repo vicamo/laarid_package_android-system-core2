@@ -192,6 +192,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
             break;
         }
 
+#if __mips_isa_rev >= 6
         if (i.RType.func == OP_SOP30) {
             if (i.RType.shamt == OP_MUL) {
                 db_printf("mul");
@@ -212,6 +213,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
                 reg_name[i.RType.rs], reg_name[i.RType.rt]);
             break;
         }
+#endif
 
         if (i.RType.func == OP_JALR && i.RType.rd == 0) {
             db_printf("jr\t%s", reg_name[i.RType.rs]);
@@ -249,6 +251,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
                 reg_name[i.RType.rs]);
             break;
 
+#if __mips_isa_rev >= 6
         case OP_CLZ:
         case OP_CLO:
         case OP_DCLZ:
@@ -257,6 +260,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
                 reg_name[i.RType.rd],
                 reg_name[i.RType.rs]);
             break;
+#endif
 
         case OP_JALR:
             db_printf("\t");
@@ -503,6 +507,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
             i.IType.imm);
         break;
 
+#if __mips_isa_rev >= 6
     case OP_AUI:
         if (i.IType.rs == 0) {
             db_printf("lui\t%s,0x%x", reg_name[i.IType.rt],
@@ -513,6 +518,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
             (short)i.IType.imm);
         }
         break;
+#endif
 
     case OP_ADDIU:
     case OP_DADDIU:
