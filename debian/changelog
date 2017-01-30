@@ -1,3 +1,9 @@
+android-system-core (0.0.13+b1) stretch; urgency=low
+
+  * debian: install libsync headers
+
+ -- You-Sheng Yang <vicamo@gmail.com>  Mon, 30 Jan 2017 20:48:28 +0800
+
 android-system-core (0.0.13) stretch; urgency=low
 
   * build libsync
