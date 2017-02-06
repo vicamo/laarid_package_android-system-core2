@@ -52,6 +52,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <inttypes.h>
 #include <cutils/log.h>
 #include <cutils/properties.h>
 
@@ -1348,7 +1349,7 @@ void MIPSAssembler::disassemble(const char* name)
     // mArmPC[iArm] holds the value of the Mips-PC for the first MIPS
     // instruction corresponding to that Arm instruction number
 
-    int iArm = 0;
+    //int iArm = 0;
     size_t count = pc()-base();
     uint32_t* mipsPC = base();
     while (count--) {
@@ -1364,7 +1365,7 @@ void MIPSAssembler::disassemble(const char* name)
         ::mips_disassem(mipsPC, di_buf, arm_disasm_fmt);
         string_detab(di_buf);
         string_pad(di_buf, 30);
-        ALOGW("%08x:    %08x    %s", uintptr_t(mipsPC), uint32_t(*mipsPC), di_buf);
+        ALOGW("%" PRIxPTR ":    %08x    %s", uintptr_t(mipsPC), uint32_t(*mipsPC), di_buf);
         mipsPC++;
     }
 }
@@ -1408,7 +1409,7 @@ int MIPSAssembler::generate(const char* name)
 
     // the instruction & data caches are flushed by CodeCache
     const int64_t duration = ggl_system_time() - mDuration;
-    const char * const format = "generated %s (%d ins) at [%p:%p] in %lld ns\n";
+    const char * const format = "generated %s (%d ins) at [%p:%p] in %" PRId64 " ns\n";
     ALOGI(format, name, int(pc()-base()), base(), pc(), duration);
 
 #if defined(WITH_LIB_HARDWARE)

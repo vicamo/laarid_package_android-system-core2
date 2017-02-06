@@ -1,18 +1,18 @@
-LOCAL_PATH:= $(call my-dir)
-include $(CLEAR_VARS)
+if HAVE_GTEST
+check_PROGRAMS += \
+    %reldir%/test-pixelflinger-mips-col32cb16blend
 
-LOCAL_SRC_FILES:= \
-    col32cb16blend_test.c \
-    ../../../arch-mips/col32cb16blend.S
+TESTS += \
+    %reldir%/test-pixelflinger-mips-col32cb16blend
 
-LOCAL_SHARED_LIBRARIES :=
-
-LOCAL_C_INCLUDES :=
-
-LOCAL_MODULE:= test-pixelflinger-mips-col32cb16blend
-
-LOCAL_MODULE_TAGS := tests
-
-LOCAL_MULTILIB := 32
-
-include $(BUILD_NATIVE_TEST)
+%canon_reldir%_test_pixelflinger_mips_col32cb16blend_SOURCES = \
+    %reldir%/col32cb16blend_test.c \
+    libpixelflinger/arch-mips/col32cb16blend.S
+%canon_reldir%_test_pixelflinger_mips_col32cb16blend_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS)
+%canon_reldir%_test_pixelflinger_mips_col32cb16blend_LDADD = \
+    $(GTEST_LIBS)
+%canon_reldir%_test_pixelflinger_mips_col32cb16blend_DEPENDENCIES = \
+    $(GTEST_LIBS)
+endif # HAVE_GTEST

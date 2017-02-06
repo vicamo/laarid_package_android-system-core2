@@ -115,7 +115,7 @@ static char * alt_arm_reg_name[32] = {  // hacked names for comparison with ARM 
     "t8",   "t9",   "k0",   "k1",   "gp",   "sp",   "s8",   "ra"
 };
 
-static char ** reg_name =  &mips_reg_name[0];
+static char * const * reg_name =  &mips_reg_name[0];
 
 static const char * const c0_opname[64] = {
     "c0op00","tlbr",  "tlbwi", "c0op03","c0op04","c0op05","tlbwr", "c0op07",
@@ -150,7 +150,7 @@ db_addr_t mips_disassem(db_addr_t loc, char *di_buffer, int alt_dis_format);
 static db_addr_t
 db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
 {
-    bool bdslot = false;
+    //bool bdslot = false;
     InstFmt i;
 
     i.word = insn;
@@ -192,6 +192,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
             break;
         }
 
+#if __mips_isa_rev >= 6
         if (i.RType.func == OP_SOP30) {
             if (i.RType.shamt == OP_MUL) {
                 db_printf("mul");
@@ -212,10 +213,11 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
                 reg_name[i.RType.rs], reg_name[i.RType.rt]);
             break;
         }
+#endif
 
         if (i.RType.func == OP_JALR && i.RType.rd == 0) {
             db_printf("jr\t%s", reg_name[i.RType.rs]);
-            bdslot = true;
+            //bdslot = true;
             break;
         }
 
@@ -249,6 +251,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
                 reg_name[i.RType.rs]);
             break;
 
+#if __mips_isa_rev >= 6
         case OP_CLZ:
         case OP_CLO:
         case OP_DCLZ:
@@ -257,6 +260,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
                 reg_name[i.RType.rd],
                 reg_name[i.RType.rs]);
             break;
+#endif
 
         case OP_JALR:
             db_printf("\t");
@@ -264,7 +268,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
                 db_printf("%s,", reg_name[i.RType.rd]);
             }
             db_printf("%s", reg_name[i.RType.rs]);
-            bdslot = true;
+            //bdslot = true;
             break;
 
         case OP_SYSCALL:
@@ -375,7 +379,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
             reg_name[i.IType.rt]);
     pr_displ:
         print_addr(loc + 4 + ((short)i.IType.imm << 2));
-        bdslot = true;
+        //bdslot = true;
         break;
 
     case OP_COP0:
@@ -460,7 +464,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
     case OP_JAL:
         db_printf("%s\t", op_name[i.JType.op]);
         print_addr((loc & 0xFFFFFFFFF0000000) | (i.JType.target << 2));
-        bdslot = true;
+        //bdslot = true;
         break;
 
     case OP_LWC1:
@@ -503,6 +507,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
             i.IType.imm);
         break;
 
+#if __mips_isa_rev >= 6
     case OP_AUI:
         if (i.IType.rs == 0) {
             db_printf("lui\t%s,0x%x", reg_name[i.IType.rt],
@@ -513,6 +518,7 @@ db_disasm_insn(int insn, db_addr_t loc, bool altfmt)
             (short)i.IType.imm);
         }
         break;
+#endif
 
     case OP_ADDIU:
     case OP_DADDIU:

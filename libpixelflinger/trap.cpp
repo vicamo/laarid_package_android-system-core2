@@ -48,8 +48,10 @@ static void recti(void* c, GGLint l, GGLint t, GGLint r, GGLint b);
 
 static void trianglex_validate(void*,
         const GGLcoord*, const GGLcoord*, const GGLcoord*);
+#if DEBUG_TRANGLES
 static void trianglex_small(void*,
         const GGLcoord*, const GGLcoord*, const GGLcoord*);
+#endif
 static void trianglex_big(void*,
         const GGLcoord*, const GGLcoord*, const GGLcoord*);
 static void aa_trianglex(void*,
@@ -91,6 +93,7 @@ static inline void swap(T& a, T& b) {
     b = t;
 }
 
+#if DEBUG_TRANGLES
 static void
 triangle_dump_points( const GGLcoord*  v0,
                       const GGLcoord*  v1,
@@ -104,6 +107,7 @@ triangle_dump_points( const GGLcoord*  v0,
           v1[0]*tri, v1[1]*tri, v1[0], v1[1],
           v2[0]*tri, v2[1]*tri, v2[0], v2[1] );
 }
+#endif
 
 // ----------------------------------------------------------------------------
 #if 0
@@ -347,7 +351,6 @@ void linex_validate(void *con, const GGLcoord* v0, const GGLcoord* v1, GGLcoord 
 
 static void linex(void *con, const GGLcoord* v0, const GGLcoord* v1, GGLcoord width)
 {
-    GGL_CONTEXT(c, con);
     GGLcoord v[4][2];
     v[0][0] = v0[0];    v[0][1] = v0[1];
     v[1][0] = v1[0];    v[1][1] = v1[1];
@@ -375,7 +378,6 @@ static void linex(void *con, const GGLcoord* v0, const GGLcoord* v1, GGLcoord wi
 
 static void aa_linex(void *con, const GGLcoord* v0, const GGLcoord* v1, GGLcoord width)
 {
-    GGL_CONTEXT(c, con);
     GGLcoord v[4][2];
     v[0][0] = v0[0];    v[0][1] = v0[1];
     v[1][0] = v1[0];    v[1][1] = v1[1];
@@ -476,12 +478,14 @@ static void trianglex_debug(void* con,
     c->scanline = save_scanline;
 }
 
+#if DEBUG_TRANGLES
 static void trianglex_xor(void* con,
         const GGLcoord* v0, const GGLcoord* v1, const GGLcoord* v2)
 {
     trianglex_big(con,v0,v1,v2);
     trianglex_small(con,v0,v1,v2);
 }
+#endif
 
 // ----------------------------------------------------------------------------
 #if 0
@@ -504,6 +508,7 @@ void trianglex_validate(void *con,
 
 // ----------------------------------------------------------------------------
 
+#if DEBUG_TRANGLES
 void trianglex_small(void* con,
         const GGLcoord* v0, const GGLcoord* v1, const GGLcoord* v2)
 {
@@ -595,6 +600,7 @@ void trianglex_small(void* con,
         ey2 += dx20 << TRI_FRACTION_BITS;
     }
 }
+#endif // DEBUG_TRANGLES
 
 // ----------------------------------------------------------------------------
 #if 0
@@ -636,6 +642,7 @@ struct Edge
   int32_t  y_bot;
 };
 
+#if DEBUG_TRANGLES
 static void
 edge_dump( Edge*  edge )
 {
@@ -654,6 +661,7 @@ triangle_dump_edges( Edge*  edges,
 	for ( ; count > 0; count--, edges++ )
 	  edge_dump( edges );
 }
+#endif
 
 // the following function sets up an edge, it assumes
 // that ymin and ymax are in already in the 'reduced'

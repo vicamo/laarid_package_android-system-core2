@@ -1,18 +1,18 @@
-LOCAL_PATH:= $(call my-dir)
-include $(CLEAR_VARS)
+if HAVE_GTEST
+check_PROGRAMS += \
+    %reldir%/test-pixelflinger-arm64-t32cb16blend
 
-LOCAL_SRC_FILES:= \
-    t32cb16blend_test.c \
-    ../../../arch-arm64/t32cb16blend.S
+TESTS += \
+    %reldir%/test-pixelflinger-arm64-t32cb16blend
 
-LOCAL_SHARED_LIBRARIES :=
-
-LOCAL_C_INCLUDES :=
-
-LOCAL_MODULE:= test-pixelflinger-arm64-t32cb16blend
-
-LOCAL_MODULE_TAGS := tests
-
-LOCAL_MULTILIB := 64
-
-include $(BUILD_NATIVE_TEST)
+%canon_reldir%_test_pixelflinger_arm64_t32cb16blend_SOURCES = \
+    %reldir%/t32cb16blend_test.c \
+    libpixelflinger/arch-arm64/t32cb16blend.S
+%canon_reldir%_test_pixelflinger_arm64_t32cb16blend_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS)
+%canon_reldir%_test_pixelflinger_arm64_t32cb16blend_LDADD = \
+    $(GTEST_LIBS)
+%canon_reldir%_test_pixelflinger_arm64_t32cb16blend_DEPENDENCIES = \
+    $(GTEST_LIBS)
+endif # HAVE_GTEST

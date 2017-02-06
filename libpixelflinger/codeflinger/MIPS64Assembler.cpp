@@ -1297,14 +1297,14 @@ void ArmToMips64Assembler::ADDR_STR(int cc, int Rd, int Rn, uint32_t offset) {
 */
 
 MIPS64Assembler::MIPS64Assembler(const sp<Assembly>& assembly, ArmToMips64Assembler *parent)
-    : mParent(parent),
-    MIPSAssembler::MIPSAssembler(assembly, NULL)
+    : MIPSAssembler::MIPSAssembler(assembly, NULL)
+    , mParent(parent)
 {
 }
 
 MIPS64Assembler::MIPS64Assembler(void* assembly, ArmToMips64Assembler *parent)
-    : mParent(parent),
-    MIPSAssembler::MIPSAssembler(assembly)
+    : MIPSAssembler::MIPSAssembler(assembly)
+    , mParent(parent)
 {
 }
 
@@ -1345,7 +1345,7 @@ void MIPS64Assembler::disassemble(const char* name)
     // mArmPC[iArm] holds the value of the Mips-PC for the first MIPS
     // instruction corresponding to that Arm instruction number
 
-    int iArm = 0;
+    //int iArm = 0;
     size_t count = pc()-base();
     uint32_t* mipsPC = base();
 

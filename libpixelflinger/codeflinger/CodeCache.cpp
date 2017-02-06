@@ -48,6 +48,9 @@ namespace android {
 // ----------------------------------------------------------------------------
 
 // A dlmalloc mspace is used to manage the code cache over a mmaped region.
+#if defined(HAVE_MMAP)
+#undef HAVE_MMAP
+#endif
 #define HAVE_MMAP 0
 #define HAVE_MREMAP 0
 #define HAVE_MORECORE 0
@@ -63,7 +66,7 @@ static void heap_error(const char* msg, const char* function, void* p);
 #define USAGE_ERROR_ACTION(m,p) \
     heap_error("ARGUMENT IS INVALID HEAP ADDRESS", __FUNCTION__, p)
 
-#include "../../../../external/dlmalloc/malloc.c"
+#include "dlmalloc/malloc.c"
 
 static void heap_error(const char* msg, const char* function, void* p) {
     ALOG(LOG_FATAL, LOG_TAG, "@@@ ABORTING: CODE FLINGER: %s IN %s addr=%p",

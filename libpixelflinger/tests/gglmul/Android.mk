@@ -1,16 +1,19 @@
-LOCAL_PATH:= $(call my-dir)
-include $(CLEAR_VARS)
+if HAVE_GTEST
+check_PROGRAMS += \
+	%reldir%/test-pixelflinger-gglmul
 
-LOCAL_SRC_FILES:= \
-	gglmul_test.cpp
+TESTS += \
+	%reldir%/test-pixelflinger-gglmul
 
-LOCAL_SHARED_LIBRARIES :=
+%canon_reldir%_test_pixelflinger_gglmul_SOURCES = \
+	%reldir%/gglmul_test.cpp
 
-LOCAL_C_INCLUDES := \
-	$(LOCAL_PATH)/../../include
-
-LOCAL_MODULE:= test-pixelflinger-gglmul
-
-LOCAL_MODULE_TAGS := tests
-
-include $(BUILD_NATIVE_TEST)
+%canon_reldir%_test_pixelflinger_gglmul_CPPFLAGS = \
+	$(AM_CPPFLAGS) \
+	$(GTEST_CPPFLAGS) \
+	-I$(top_srcdir)/libpixelflinger/include
+%canon_reldir%_test_pixelflinger_gglmul_LDADD = \
+	$(GTEST_LIBS)
+%canon_reldir%_test_pixelflinger_gglmul_DEPENDENCIES = \
+	$(GTEST_LIBS)
+endif

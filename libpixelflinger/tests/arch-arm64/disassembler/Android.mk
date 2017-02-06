@@ -1,16 +1,19 @@
-LOCAL_PATH:= $(call my-dir)
-include $(CLEAR_VARS)
+if HAVE_GTEST
+check_PROGRAMS += \
+    %reldir%/test-pixelflinger-arm64-disassembler-test
 
-LOCAL_SRC_FILES:= \
-    arm64_diassembler_test.cpp \
-    ../../../codeflinger/Arm64Disassembler.cpp
+TESTS += \
+    %reldir%/test-pixelflinger-arm64-disassembler-test
 
-LOCAL_SHARED_LIBRARIES :=
-
-LOCAL_MODULE:= test-pixelflinger-arm64-disassembler-test
-
-LOCAL_MODULE_TAGS := tests
-
-LOCAL_MULTILIB := 64
-
-include $(BUILD_NATIVE_TEST)
+%canon_reldir%_test_pixelflinger_arm64_disassembler_test_SOURCES = \
+    %reldir%/arm64_diassembler_test.cpp \
+    libpixelflinger/codeflinger/Arm64Disassembler.cpp \
+    libpixelflinger/codeflinger/Arm64Disassembler.h
+%canon_reldir%_test_pixelflinger_arm64_disassembler_test_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(GTEST_CPPFLAGS)
+%canon_reldir%_test_pixelflinger_arm64_disassembler_test_LDADD = \
+    $(GTEST_LIBS)
+%canon_reldir%_test_pixelflinger_arm64_disassembler_test_DEPENDENCIES = \
+    $(GTEST_LIBS)
+endif # HAVE_GTEST
