@@ -1,0 +1,4 @@
+usr/include/android/system-core-*/pixelflinger/*
+usr/lib/*/libandroid-pixelflinger.a
+usr/lib/*/libandroid-pixelflinger.so
+usr/lib/*/pkgconfig/android-pixelflinger-*.pc

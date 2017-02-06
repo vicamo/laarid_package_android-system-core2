@@ -1,0 +1,3 @@
+usr/lib/*/libandroid-processgroup.a
+usr/lib/*/libandroid-processgroup.so
+usr/lib/*/pkgconfig/android-processgroup-*.pc

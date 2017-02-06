@@ -12,6 +12,9 @@ CONFFLAGS =
 ifneq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
 CONFFLAGS += --without-gtest
 endif
+ifneq ($(filter pkg.android-system-core.stage2,$(DEB_BUILD_PROFILES)),)
+CONFFLAGS += --with-stage=2
+endif
 
 # main packaging script based on dh7 syntax
 %:
