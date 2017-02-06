@@ -21,6 +21,10 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	--build=$(build) \
 	--disable-dependency-tracking \
 	--disable-maintainer-mode
+if WITH_STAGE_2
+DISTCHECK_CONFIGURE_FLAGS += \
+	--with-stage=2
+endif
 
 GITIGNOREFILES = \
 	build \
@@ -74,6 +78,7 @@ include $(srcdir)/include/Makefile.am
 #  collect2: error: ld returned 1 exit status
 #  libtool: install: error: relink `libandroid-cutils-0.la' with the above command before installing it
 
+if WITH_STAGE_1
 # Stage 1-1: depends on only external packages
 include $(srcdir)/liblog/Android.mk
 include $(srcdir)/libmincrypt/Android.mk
@@ -92,6 +97,21 @@ include $(srcdir)/libnetutils/Android.mk
 include $(srcdir)/libsuspend/Android.mk
 include $(srcdir)/libsysutils/Android.mk
 include $(srcdir)/libusbhost/Android.mk
+else
+if WITH_STAGE_2
+# Stage 2-1: depends on external packages that depend on stage 0 packages
+include $(srcdir)/libbacktrace/Android.mk
+include $(srcdir)/libnativebridge/Android.mk
+
+# Stage 2-2: depends on any of above packages
+include $(srcdir)/libutils/Android.mk
+
+# Stage 2-3: depends on any of above packages
+include $(srcdir)/libpixelflinger/Android.mk
+include $(srcdir)/libprocessgroup/Android.mk
+include $(srcdir)/libziparchive/Android.mk
+endif # WITH_STAGE_2
+endif # WITH_STAGE_1
 
 # PKG-CONFIG data files
 # ---------------------

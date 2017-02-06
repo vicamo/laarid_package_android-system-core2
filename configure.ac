@@ -134,30 +134,91 @@ m4_define([lt_age], [lt_current])
 LT_VERSION_INFO="lt_current:lt_revision:lt_age"
 AC_SUBST(LT_VERSION_INFO)
 
+# System dlloader
+# ---------------
+LT_LIB_DLLOAD
+
 LT_OUTPUT
+
+# Build stages
+# ------------
+# Android source code might have circular dependency between two or more
+# source repositories, so spliting them into some stages is necessary. Here
+# we have currently stage 1 and 2 only.
+AC_ARG_WITH([stage],
+  [AS_HELP_STRING([--with-stage], [Stage to build with @<:@default=1@:>@])],
+  [AS_CASE([${with_stage}],
+    [1|2], [AC_MSG_RESULT([Building for stage ${with_stage}])],
+    [AC_MSG_ERROR([Unknown stage "${with_stage}"])])],
+  [with_stage=1])
+AM_CONDITIONAL([WITH_STAGE_1], [test "x${with_stage}" = x1])
+AM_CONDITIONAL([WITH_STAGE_2], [test "x${with_stage}" = x2])
 
 # Required libraries
 # ------------------
-BIONIC_API_VERSION=0.0
-BIONIC_REQUIRED_VERSION=0.1.4
-AC_SUBST([BIONIC_API_VERSION])
-AC_SUBST([BIONIC_REQUIRED_VERSION])
-
-PKG_CHECK_MODULES([BIONIC], [android-bionic-$BIONIC_API_VERSION >= $BIONIC_REQUIRED_VERSION])
-AC_SUBST([BIONIC_CFLAGS])
-AC_SUBST([BIONIC_LIBS])
 
 PKG_CHECK_MODULES([ZLIB], [zlib])
 AC_SUBST([ZLIB_CFLAGS])
 AC_SUBST([ZLIB_LIBS])
 
-PKG_CHECK_MODULES([NL], [libnl-3.0])
-AC_SUBST([NL_CFLAGS])
-AC_SUBST([NL_LIBS])
+BIONIC_API_VERSION=0.0
+BIONIC_REQUIRED_VERSION=0.1.4
+AC_SUBST([BIONIC_API_VERSION])
+AC_SUBST([BIONIC_REQUIRED_VERSION])
+PKG_CHECK_MODULES([BIONIC], [android-bionic-$BIONIC_API_VERSION >= $BIONIC_REQUIRED_VERSION])
+AC_SUBST([BIONIC_CFLAGS])
+AC_SUBST([BIONIC_LIBS])
+
+AS_IF([test "x${with_stage}" = x1], [
+  PKG_CHECK_MODULES([NL], [libnl-3.0])
+  AC_SUBST([NL_CFLAGS])
+  AC_SUBST([NL_LIBS])
+  ],
+  [test "x${with_stage}" = x2], [
+  LOG_API_VERSION=0.0
+  LOG_REQUIRED_VERSION=0.0.12
+  AC_SUBST([LOG_API_VERSION])
+  AC_SUBST([LOG_REQUIRED_VERSION])
+  PKG_CHECK_MODULES([LOG], [android-log-$LOG_API_VERSION >= $LOG_REQUIRED_VERSION])
+  AC_SUBST([LOG_CFLAGS])
+  AC_SUBST([LOG_LIBS])
+
+  BASE_API_VERSION=0.0
+  BASE_REQUIRED_VERSION=0.0.12
+  AC_SUBST([BASE_API_VERSION])
+  AC_SUBST([BASE_REQUIRED_VERSION])
+  PKG_CHECK_MODULES([BASE], [android-base-$BASE_API_VERSION >= $BASE_REQUIRED_VERSION])
+  AC_SUBST([BASE_CFLAGS])
+  AC_SUBST([BASE_LIBS])
+
+  CUTILS_API_VERSION=0.0
+  CUTILS_REQUIRED_VERSION=0.0.12
+  AC_SUBST([CUTILS_API_VERSION])
+  AC_SUBST([CUTILS_REQUIRED_VERSION])
+  PKG_CHECK_MODULES([CUTILS], [android-cutils-$CUTILS_API_VERSION >= $CUTILS_REQUIRED_VERSION])
+  AC_SUBST([CUTILS_CFLAGS])
+  AC_SUBST([CUTILS_LIBS])
+
+  NATIVEHELPER_API_VERSION=0.0
+  NATIVEHELPER_REQUIRED_VERSION=0.0.4
+  AC_SUBST([NATIVEHELPER_API_VERSION])
+  AC_SUBST([NATIVEHELPER_REQUIRED_VERSION])
+  PKG_CHECK_MODULES([NATIVEHELPER], [android-nativehelper-$NATIVEHELPER_API_VERSION >= $NATIVEHELPER_REQUIRED_VERSION])
+  AC_SUBST([NATIVEHELPER_CFLAGS])
+  AC_SUBST([NATIVEHELPER_LIBS])
+
+  UNWIND_API_VERSION=0.0
+  UNWIND_REQUIRED_VERSION=0.0.3
+  AC_SUBST([UNWIND_API_VERSION])
+  AC_SUBST([UNWIND_REQUIRED_VERSION])
+  PKG_CHECK_MODULES([UNWIND], [android-unwind-$UNWIND_API_VERSION >= $UNWIND_REQUIRED_VERSION])
+  AC_SUBST([UNWIND_CFLAGS])
+  AC_SUBST([UNWIND_LIBS])
+])
 
 # Required headers
 # ----------------
-AC_CHECK_HEADERS([linux/android_alarm.h linux/ioprio.h sched.h sys/socket.h linux/netfilter_ipv4/ipt_ULOG.h])
+AC_CHECK_HEADERS([linux/android_alarm.h linux/ioprio.h sched.h sys/socket.h linux/netfilter_ipv4/ipt_ULOG.h safe_iop.h])
 
 # Required functions
 # ------------------
@@ -251,10 +312,6 @@ else
   fi
 fi
 
-# Android Alarm driver
-# --------------------
-AC_CHECK_HEADERS([linux/android_alarm.h])
-
 AC_DEFINE([OS_PATH_SEPARATOR], ['/'],
   [The default path separator for the platform.])
 
@@ -276,6 +333,12 @@ AM_CONDITIONAL([ENABLE_CPUSETS], [test x$enable_cpusets = xyes])
 AC_ARG_ENABLE([schedboost],
   [AS_HELP_STRING([--enable-schedboost], [enable use of /dev/stune/* @<:@default=no@:>@])])
 AM_CONDITIONAL([ENABLE_SCHEDBOOST], [test x$enable_schedboost = xyes])
+
+AC_ARG_ENABLE([arm-neon],
+  [AS_HELP_STRING([--enable-arm-neon], [Enable ARM NEON optimizations])],
+  [AS_IF([test "x${enable_arm_neon}" = xyes],
+    [AS_IF([test "x${cpu_arm}" != xyes], [enable_arm_neon=no])])])
+AM_CONDITIONAL([CPU_ARM_HAVE_NEON], [test "x${enable_arm_neon}" = xyes])
 
 # GTest
 # -----
@@ -310,6 +373,8 @@ AM_CONDITIONAL([HAVE_DEV_ION], [test "x${c_cv_file_dev_ion}" = xyes])
 
 AC_CONFIG_FILES([
   Makefile
+])
+AS_IF([test "x${with_stage}" = x1], [AC_CONFIG_FILES([
   base/android-base-$LAARID_API_VERSION.pc
   libcutils/android-cutils-$LAARID_API_VERSION.pc
   libdiskconfig/android-diskconfig-$LAARID_API_VERSION.pc
@@ -323,5 +388,13 @@ AC_CONFIG_FILES([
   libsysutils/android-sysutils-$LAARID_API_VERSION.pc
   libusbhost/android-usbhost-$LAARID_API_VERSION.pc
   logwrapper/android-logwrap-$LAARID_API_VERSION.pc
-])
+  ])],
+  [test "x${with_stage}" = x2], [AC_CONFIG_FILES([
+  libbacktrace/android-backtrace-$LAARID_API_VERSION.pc
+  libnativebridge/android-nativebridge-$LAARID_API_VERSION.pc
+  libpixelflinger/android-pixelflinger-$LAARID_API_VERSION.pc
+  libprocessgroup/android-processgroup-$LAARID_API_VERSION.pc
+  libutils/android-utils-$LAARID_API_VERSION.pc
+  libziparchive/android-ziparchive-$LAARID_API_VERSION.pc
+  ])])
 AC_OUTPUT
