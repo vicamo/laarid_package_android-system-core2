@@ -1,4 +1,4 @@
-androidincdir = $(includedir)/android/system-core-$(SYSTEMCORE_API_VERSION)
+androidincdir = $(includedir)/android/system-core-$(LAARID_API_VERSION)
 
 # Only compiled when TARGET_USES_LOGD is set to false in liblog/Andoird.mk, but
 # we're trying to avoid Android specific kernel interface if possible.

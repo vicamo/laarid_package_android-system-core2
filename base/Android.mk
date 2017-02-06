@@ -64,7 +64,7 @@ endif
 	%reldir%/include/android-base/utf8.h
 
 pkgconfig_DATA += \
-	%reldir%/android-base-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-base-$(LAARID_API_VERSION).pc
 
 if HAVE_GTEST
 check_PROGRAMS += \

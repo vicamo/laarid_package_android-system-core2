@@ -27,4 +27,4 @@ bin_PROGRAMS += \
 	%reldir%/dhcptool.c
 
 pkgconfig_DATA += \
-	%reldir%/android-netutils-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-netutils-$(LAARID_API_VERSION).pc

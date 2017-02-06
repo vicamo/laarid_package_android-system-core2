@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: android-sync-@SYSTEMCORE_API_VERSION@
+Name: android-sync-@LAARID_API_VERSION@
 Description: Android System Core Libraries - sync
 Version: @VERSION@
 Requires.private: android-bionic-@BIONIC_API_VERSION@ >= @BIONIC_REQUIRED_VERSION@
 Libs: -L${libdir} -landroid-sync
-Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@
+Cflags: -I${includedir}/android/system-core-@LAARID_API_VERSION@

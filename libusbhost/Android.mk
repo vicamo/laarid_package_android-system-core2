@@ -26,4 +26,4 @@ lib_LTLIBRARIES += \
 	%reldir%/usbhost.c
 
 pkgconfig_DATA += \
-	%reldir%/android-usbhost-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-usbhost-$(LAARID_API_VERSION).pc

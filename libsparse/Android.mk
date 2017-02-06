@@ -65,4 +65,4 @@ bin_SCRIPTS += \
 	%reldir%/simg_dump.py
 
 pkgconfig_DATA += \
-	%reldir%/android-sparse-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-sparse-$(LAARID_API_VERSION).pc

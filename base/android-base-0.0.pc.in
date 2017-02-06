@@ -3,9 +3,9 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: android-base-@SYSTEMCORE_API_VERSION@
+Name: android-base-@LAARID_API_VERSION@
 Description: Android System Core Libraries - base
 Version: @VERSION@
-Requires.private: android-log-@SYSTEMCORE_API_VERSION@, android-bionic-@BIONIC_API_VERSION@ >= @BIONIC_REQUIRED_VERSION@
+Requires.private: android-log-@LAARID_API_VERSION@, android-bionic-@BIONIC_API_VERSION@ >= @BIONIC_REQUIRED_VERSION@
 Libs: -L${libdir} -landroid-base
-Cflags: -I${includedir}/android/system-core-@SYSTEMCORE_API_VERSION@
+Cflags: -I${includedir}/android/system-core-@LAARID_API_VERSION@

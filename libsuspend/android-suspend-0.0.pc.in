@@ -3,8 +3,8 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: android-suspend-@SYSTEMCORE_API_VERSION@
+Name: android-suspend-@LAARID_API_VERSION@
 Description: Android System Core Libraries - suspend
 Version: @VERSION@
-Requires.private: android-log-@SYSTEMCORE_API_VERSION@
+Requires.private: android-log-@LAARID_API_VERSION@
 Libs: -L${libdir} -landroid-suspend

@@ -19,4 +19,4 @@ lib_LTLIBRARIES += \
 	%reldir%/processgroup.cpp
 
 pkgconfig_DATA += \
-	%reldir%/android-processgroup-$(SYSTEMCORE2_API_VERSION).pc
+	%reldir%/android-processgroup-$(LAARID_API_VERSION).pc

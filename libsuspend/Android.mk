@@ -26,4 +26,4 @@ lib_LTLIBRARIES += \
 	%reldir%/strerror_r.c
 
 pkgconfig_DATA += \
-	%reldir%/android-suspend-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-suspend-$(LAARID_API_VERSION).pc

@@ -30,4 +30,4 @@ lib_LTLIBRARIES += \
 # %reldir%/src/FrameworkClient.cpp
 
 pkgconfig_DATA += \
-	%reldir%/android-sysutils-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-sysutils-$(LAARID_API_VERSION).pc

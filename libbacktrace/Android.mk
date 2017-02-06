@@ -51,4 +51,4 @@ lib_LTLIBRARIES += \
 	%reldir%/UnwindPtrace.h
 
 pkgconfig_DATA += \
-	%reldir%/android-backtrace-$(SYSTEMCORE2_API_VERSION).pc
+	%reldir%/android-backtrace-$(LAARID_API_VERSION).pc

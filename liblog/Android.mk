@@ -68,4 +68,4 @@ endif
 	%reldir%/pmsg_writer.c
 
 pkgconfig_DATA += \
-	%reldir%/android-log-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-log-$(LAARID_API_VERSION).pc

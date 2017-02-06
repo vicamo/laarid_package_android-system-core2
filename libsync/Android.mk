@@ -33,4 +33,4 @@ bin_PROGRAMS += \
 	%reldir%/sync_test.c
 
 pkgconfig_DATA += \
-	%reldir%/android-sync-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-sync-$(LAARID_API_VERSION).pc

@@ -3,7 +3,7 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: android-sparse-@SYSTEMCORE_API_VERSION@
+Name: android-sparse-@LAARID_API_VERSION@
 Description: Android System Core Libraries - sparse
 Version: @VERSION@
 Requires.private: zlib

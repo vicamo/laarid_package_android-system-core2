@@ -41,4 +41,4 @@ bin_PROGRAMS += \
 	%reldir%/logwrapper.c
 
 pkgconfig_DATA += \
-	%reldir%/android-logwrap-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-logwrap-$(LAARID_API_VERSION).pc

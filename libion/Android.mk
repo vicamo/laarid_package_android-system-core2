@@ -37,6 +37,6 @@ noinst_PROGRAMS += \
 	%reldir%/ion_test.c
 
 pkgconfig_DATA += \
-	%reldir%/android-ion-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-ion-$(LAARID_API_VERSION).pc
 
 include %reldir%/tests/Android.mk

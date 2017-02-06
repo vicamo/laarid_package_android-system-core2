@@ -2,39 +2,39 @@
 # -------------------------
 # To make new release:
 #
-#   systemcore_micro_version += 1
-#   systemcore_interface_revision += 1
+#   laarid_micro_version += 1
+#   laarid_interface_revision += 1
 #
 # if any functions have been added:
 #
-#   systemcore_micro_version += 1
-#   systemcore_interface_revision = 0
+#   laarid_micro_version += 1
+#   laarid_interface_revision = 0
 #
 #   or
 #
-#   systemcore_minor_version += 1
-#   systemcore_micro_version = 0
-#   systemcore_interface_revision = 0
+#   laarid_minor_version += 1
+#   laarid_micro_version = 0
+#   laarid_interface_revision = 0
 #
 # if backwards compatibility has been broken:
 #
-#   systemcore_major_version += 1
-#   systemcore_minor_version = 0
-#   systemcore_micro_version = 0
-#   systemcore_interface_revision = 0
-m4_define([systemcore_major_version], [0])
-m4_define([systemcore_minor_version], [0])
-m4_define([systemcore_micro_version], [13])
-m4_define([systemcore_interface_revision], [1])
-m4_define([systemcore_api_version], [systemcore_major_version.0])
-m4_define([systemcore_release_number], [systemcore_major_version])
-m4_define([systemcore_version],
-  [systemcore_major_version.systemcore_minor_version.systemcore_micro_version])
+#   laarid_major_version += 1
+#   laarid_minor_version = 0
+#   laarid_micro_version = 0
+#   laarid_interface_revision = 0
+m4_define([laarid_major_version], [0])
+m4_define([laarid_minor_version], [0])
+m4_define([laarid_micro_version], [13])
+m4_define([laarid_interface_revision], [1])
+m4_define([laarid_api_version], [laarid_major_version.0])
+m4_define([laarid_release_number], [laarid_major_version])
+m4_define([laarid_version],
+  [laarid_major_version.laarid_minor_version.laarid_micro_version])
 
 # Require autoconf 2.69 for aarch64
 AC_PREREQ(2.69)
 
-AC_INIT([android-system-core], [systemcore_version],
+AC_INIT([android-system-core], [laarid_version],
   [https://github.com/laarid/package_android-system-core/issues], [],
   [https://github.com/laarid/package_android-system-core])
 
@@ -47,16 +47,16 @@ AM_INIT_AUTOMAKE([-Wall -Werror foreign subdir-objects no-define tar-ustar])
 AM_MAINTAINER_MODE([enable])
 AM_SILENT_RULES([yes])
 
-SYSTEMCORE_MAJOR_VERSION=systemcore_major_version
-SYSTEMCORE_MINOR_VERSION=systemcore_minor_version
-SYSTEMCORE_MICRO_VERSION=systemcore_micro_version
-SYSTEMCORE_API_VERSION=systemcore_api_version
-SYSTEMCORE_RELEASE_NUMBER=systemcore_release_number
-AC_SUBST([SYSTEMCORE_MAJOR_VERSION])
-AC_SUBST([SYSTEMCORE_MINOR_VERSION])
-AC_SUBST([SYSTEMCORE_MICRO_VERSION])
-AC_SUBST([SYSTEMCORE_API_VERSION])
-AC_SUBST([SYSTEMCORE_RELEASE_NUMBER])
+LAARID_MAJOR_VERSION=laarid_major_version
+LAARID_MINOR_VERSION=laarid_minor_version
+LAARID_MICRO_VERSION=laarid_micro_version
+LAARID_API_VERSION=laarid_api_version
+LAARID_RELEASE_NUMBER=laarid_release_number
+AC_SUBST([LAARID_MAJOR_VERSION])
+AC_SUBST([LAARID_MINOR_VERSION])
+AC_SUBST([LAARID_MICRO_VERSION])
+AC_SUBST([LAARID_API_VERSION])
+AC_SUBST([LAARID_RELEASE_NUMBER])
 
 # Define _GNU_SOURCE etc. where appropriate, e.g. for strptime() on glibc
 AC_USE_SYSTEM_EXTENSIONS
@@ -121,12 +121,12 @@ AC_PROG_CXX
 # ------------------
 LT_INIT
 
-LT_RELEASE="systemcore_api_version"
+LT_RELEASE="laarid_api_version"
 AC_SUBST(LT_RELEASE)
 
-m4_define([systemcore_binary_age], [m4_eval(100 * systemcore_minor_version + systemcore_micro_version)])
-m4_define([lt_current], [m4_eval(systemcore_binary_age - systemcore_interface_revision)])
-m4_define([lt_revision], [systemcore_interface_revision])
+m4_define([laarid_binary_age], [m4_eval(100 * laarid_minor_version + laarid_micro_version)])
+m4_define([lt_current], [m4_eval(laarid_binary_age - laarid_interface_revision)])
+m4_define([lt_revision], [laarid_interface_revision])
 # Whenever backward compatibility is broken, we generate libraries of different
 # release number. That follows the library files of the same release are always
 # compatible, and they have their lt_age equal to lt_current.
@@ -310,18 +310,18 @@ AM_CONDITIONAL([HAVE_DEV_ION], [test "x${c_cv_file_dev_ion}" = xyes])
 
 AC_CONFIG_FILES([
   Makefile
-  base/android-base-$SYSTEMCORE_API_VERSION.pc
-  libcutils/android-cutils-$SYSTEMCORE_API_VERSION.pc
-  libdiskconfig/android-diskconfig-$SYSTEMCORE_API_VERSION.pc
-  libion/android-ion-$SYSTEMCORE_API_VERSION.pc
-  liblog/android-log-$SYSTEMCORE_API_VERSION.pc
-  libmincrypt/android-mincrypt-$SYSTEMCORE_API_VERSION.pc
-  libnetutils/android-netutils-$SYSTEMCORE_API_VERSION.pc
-  libsparse/android-sparse-$SYSTEMCORE_API_VERSION.pc
-  libsuspend/android-suspend-$SYSTEMCORE_API_VERSION.pc
-  libsync/android-sync-$SYSTEMCORE_API_VERSION.pc
-  libsysutils/android-sysutils-$SYSTEMCORE_API_VERSION.pc
-  libusbhost/android-usbhost-$SYSTEMCORE_API_VERSION.pc
-  logwrapper/android-logwrap-$SYSTEMCORE_API_VERSION.pc
+  base/android-base-$LAARID_API_VERSION.pc
+  libcutils/android-cutils-$LAARID_API_VERSION.pc
+  libdiskconfig/android-diskconfig-$LAARID_API_VERSION.pc
+  libion/android-ion-$LAARID_API_VERSION.pc
+  liblog/android-log-$LAARID_API_VERSION.pc
+  libmincrypt/android-mincrypt-$LAARID_API_VERSION.pc
+  libnetutils/android-netutils-$LAARID_API_VERSION.pc
+  libsparse/android-sparse-$LAARID_API_VERSION.pc
+  libsuspend/android-suspend-$LAARID_API_VERSION.pc
+  libsync/android-sync-$LAARID_API_VERSION.pc
+  libsysutils/android-sysutils-$LAARID_API_VERSION.pc
+  libusbhost/android-usbhost-$LAARID_API_VERSION.pc
+  logwrapper/android-logwrap-$LAARID_API_VERSION.pc
 ])
 AC_OUTPUT

@@ -121,6 +121,6 @@ EXTRA_DIST += \
 	$(srcdir)/include/private/canned_fs_config.h
 
 pkgconfig_DATA += \
-	%reldir%/android-cutils-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-cutils-$(LAARID_API_VERSION).pc
 
 include $(srcdir)/libcutils/tests/Android.mk

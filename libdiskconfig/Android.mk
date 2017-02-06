@@ -17,4 +17,4 @@ lib_LTLIBRARIES += \
 	%reldir%/write_lst.c
 
 pkgconfig_DATA += \
-	%reldir%/android-diskconfig-$(SYSTEMCORE_API_VERSION).pc
+	%reldir%/android-diskconfig-$(LAARID_API_VERSION).pc
