@@ -34,6 +34,7 @@ env:
   - BINTRAY_REPO=main
   - BINTRAY_COMPONENT=main
   - BINTRAY_DESC="Android system core libraries"
+  - BUILD_STAGE=1
 
 matrix:
   fast_finish: true
@@ -62,22 +63,29 @@ before_install:
 - |
   sudo docker run --detach --interactive --tty \
     --name test_container \
-    -v ${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}}:${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}} \
+    --volume ${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}}:${TRAVIS_BUILD_DIR%${TRAVIS_REPO_SLUG}} \
+    --workdir ${TRAVIS_BUILD_DIR} \
     --add-host dl.bintray.com:$(nslookup dl.bintray.com | grep -m1 -A1 Name: | grep Address: | awk '{print $2}') \
     laarid/devel:${BUILD_FLAVOR%_*} \
     /bin/bash
 
 install:
 - ${DOCKER_EXEC_ROOT} apt-get update -qq
-- ${DOCKER_EXEC_ROOT} mk-build-deps -i -s sudo -t 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y --allow-unauthenticated' ${TRAVIS_BUILD_DIR}/debian/control
+- |
+  ${DOCKER_EXEC_ROOT} \
+    env "DEB_BUILD_PROFILES=pkg.$(cat debian/control | grep ^Source: | awk '{print $2}').stage${BUILD_STAGE}" \
+    mk-build-deps --install --remove \
+      --root-cmd sudo \
+      --tool 'apt-get -o Debug::pkgProblemResolver=yes --no-install-recommends -y --allow-unauthenticated'
 
 script:
-- case "${BUILD_FLAVOR#*_}" in
+- |
+  case "${BUILD_FLAVOR#*_}" in
     deb)
-      ${DOCKER_EXEC} /bin/sh -c "cd ${TRAVIS_BUILD_DIR}; debuild --preserve-env --preserve-envvar PATH --set-envvar=DEB_BUILD_OPTIONS=nocheck -i -us -uc -b";
+      ${DOCKER_EXEC} env "DEB_BUILD_PROFILES=pkg.$(cat debian/control | grep ^Source: | awk '{print $2}').stage${BUILD_STAGE} nocheck" "DEB_BUILD_OPTIONS=nocheck" debuild -i -us -uc -b;
       ;;
     distcheck)
-      ${DOCKER_EXEC} /bin/sh -c "cd ${TRAVIS_BUILD_DIR}; (mkdir build && cd build && autoreconf -i --warnings=all .. && ../configure --build=\$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --host=\$(dpkg-architecture -qDEB_HOST_GNU_TYPE) --disable-dependency-tracking && make -j \$(nproc) .gitignore distcheck)";
+      ${DOCKER_EXEC} /bin/sh -c "(mkdir build && cd build && autoreconf -i --warnings=all .. && ../configure --build=\$(dpkg-architecture -qDEB_BUILD_GNU_TYPE) --host=\$(dpkg-architecture -qDEB_HOST_GNU_TYPE) --with-stage=${BUILD_STAGE} --disable-dependency-tracking && make -j \$(nproc) .gitignore distcheck)";
       ;;
   esac
 - git status | grep 'working tree clean'
