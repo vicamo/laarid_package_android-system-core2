@@ -23,6 +23,20 @@ Homepage: https://github.com/laarid/package_android-system-core
 Vcs-Git: https://github.com/laarid/package_android-system-core.git
 Vcs-Browser: https://github.com/laarid/package_android-system-core
 
+Package: libandroid-backtrace0
+Build-Profiles: <pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android libbacktrace
+ This package contains libbacktrace built from Android platform/system/core.
+
 Package: libandroid-backtrace0-dev
 Build-Profiles: <pkg.android-system-core.stage2>
 Priority: extra
@@ -41,8 +55,8 @@ Description: Android libbacktrace - development
  .
  This package contains the development files.
 
-Package: libandroid-backtrace0
-Build-Profiles: <pkg.android-system-core.stage2>
+Package: libandroid-base0
+Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
 Section: libs
 Architecture: any
@@ -52,21 +66,112 @@ Pre-Depends:
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
-Description: Android libbacktrace
- This package contains libbacktrace built from Android platform/system/core.
+Description: Android libbase
+ This package contains libbase built from Android platform/system/core.
 
-Package: libandroid-log0-dev
+Package: libandroid-base0-dev
 Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
 Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends:
- libandroid-log0 (= ${binary:Version}),
+ libandroid-base0 (= ${binary:Version}),
+ libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-log0-dev,
+ ${misc:Depends},
+Description: Android libbase - development
+ This package contains libbase built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-cutils0
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android libcutils
+ This package contains libcutils built from Android platform/system/core.
+
+Package: libandroid-cutils0-dev
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libandroid-cutils0 (= ${binary:Version}),
+ libandroid-log0-dev,
  libandroid-bionic0-dev (>= 0.1.4),
  ${misc:Depends},
-Description: Android liblog - development
- This package contains liblog built from Android platform/system/core.
+Description: Android libcutils - development
+ This package contains libcutils built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-diskconfig0
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android libdiskconfig
+ This package contains libdiskconfig built from Android platform/system/core.
+
+Package: libandroid-diskconfig0-dev
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libandroid-diskconfig0 (= ${binary:Version}),
+ libandroid-cutils0-dev,
+ libandroid-log0-dev,
+ ${misc:Depends},
+Description: Android libdiskconfig - development
+ This package contains libdiskconfig built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-ion0
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends}
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android libion
+ This package contains libion built from Android platform/system/core.
+
+Package: libandroid-ion0-dev
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libandroid-ion0 (= ${binary:Version}),
+ libandroid-log0-dev,
+ libandroid-bionic0-dev (>= 0.1.4),
+ ${misc:Depends},
+Description: Android libion - development
+ This package contains libion built from Android platform/system/core.
  .
  This package contains the development files.
 
@@ -84,17 +189,48 @@ Depends:
 Description: Android liblog
  This package contains liblog built from Android platform/system/core.
 
-Package: libandroid-mincrypt0-dev
+Package: libandroid-log0-dev
 Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
 Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends:
- libandroid-mincrypt0 (= ${binary:Version}),
+ libandroid-log0 (= ${binary:Version}),
+ libandroid-bionic0-dev (>= 0.1.4),
  ${misc:Depends},
-Description: Android libmincrypt - development
- This package contains libmincrypt built from Android platform/system/core.
+Description: Android liblog - development
+ This package contains liblog built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-logwrap0
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android liblogwrap
+ This package contains liblogwrap built from Android platform/system/core.
+
+Package: libandroid-logwrap0-dev
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libandroid-logwrap0 (= ${binary:Version}),
+ libandroid-cutils0-dev,
+ libandroid-log0-dev,
+ ${misc:Depends},
+Description: Android liblogwrap - development
+ This package contains liblogwrap built from Android platform/system/core.
  .
  This package contains the development files.
 
@@ -112,19 +248,17 @@ Depends:
 Description: Android libmincrypt
  This package contains libmincrypt built from Android platform/system/core.
 
-Package: libandroid-nativebridge0-dev
-Build-Profiles: <pkg.android-system-core.stage2>
+Package: libandroid-mincrypt0-dev
+Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
 Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends:
- libandroid-nativebridge0 (= ${binary:Version}),
- libandroid-log0-dev (>= 0.0.12),
- libandroid-nativehelper0-dev (>= 0.0.4),
+ libandroid-mincrypt0 (= ${binary:Version}),
  ${misc:Depends},
-Description: Android libnativebridge - development
- This package contains libnativebridge built from Android platform/system/core.
+Description: Android libmincrypt - development
+ This package contains libmincrypt built from Android platform/system/core.
  .
  This package contains the development files.
 
@@ -141,6 +275,128 @@ Depends:
  ${misc:Depends},
 Description: Android libnativebridge
  This package contains libnativebridge built from Android platform/system/core.
+
+Package: libandroid-nativebridge0-dev
+Build-Profiles: <pkg.android-system-core.stage2>
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libandroid-nativebridge0 (= ${binary:Version}),
+ libandroid-log0-dev (>= 0.0.12),
+ libandroid-nativehelper0-dev (>= 0.0.4),
+ ${misc:Depends},
+Description: Android libnativebridge - development
+ This package contains libnativebridge built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-netutils0
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android libnetutils
+ This package contains libnetutils built from Android platform/system/core.
+
+Package: libandroid-netutils0-dev
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libandroid-netutils0 (= ${binary:Version}),
+ libandroid-cutils0-dev,
+ libandroid-log0-dev,
+ ${misc:Depends},
+Description: Android libnetutils - development
+ This package contains libnetutils built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-pixelflinger0
+Build-Profiles: <pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android libpixelflinger
+ This package contains libpixelflinger built from Android platform/system/core.
+
+Package: libandroid-pixelflinger0-dev
+Build-Profiles: <pkg.android-system-core.stage2>
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libandroid-pixelflinger0 (= ${binary:Version}),
+ libandroid-log0-dev (>= 0.0.12),
+ libandroid-cutils0-dev (>= 0.0.12),
+ libandroid-utils0-dev,
+ ${misc:Depends},
+Description: Android libpixelflinger - development
+ This package contains libpixelflinger built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-processgroup0
+Build-Profiles: <pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android libprocessgroup
+ This package contains libprocessgroup built from Android platform/system/core.
+
+Package: libandroid-processgroup0-dev
+Build-Profiles: <pkg.android-system-core.stage2>
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libandroid-processgroup0 (= ${binary:Version}),
+ libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-log0-dev (>= 0.0.12),
+ libandroid-utils0-dev,
+ ${misc:Depends},
+Description: Android libprocessgroup - development
+ This package contains libprocessgroup built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-sparse0
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android libsparse
+ This package contains libsparse built from Android platform/system/core.
 
 Package: libandroid-sparse0-bin
 Build-Profiles: <!pkg.android-system-core.stage2>
@@ -174,7 +430,7 @@ Description: Android libsparse - development
  .
  This package contains the development files.
 
-Package: libandroid-sparse0
+Package: libandroid-suspend0
 Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
 Section: libs
@@ -185,26 +441,25 @@ Pre-Depends:
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
-Description: Android libsparse
- This package contains libsparse built from Android platform/system/core.
+Description: Android libsuspend
+ This package contains libsuspend built from Android platform/system/core.
 
-Package: libandroid-cutils0-dev
+Package: libandroid-suspend0-dev
 Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
 Section: libdevel
 Architecture: any
 Multi-Arch: same
 Depends:
- libandroid-cutils0 (= ${binary:Version}),
+ libandroid-suspend0 (= ${binary:Version}),
  libandroid-log0-dev,
- libandroid-bionic0-dev (>= 0.1.4),
  ${misc:Depends},
-Description: Android libcutils - development
- This package contains libcutils built from Android platform/system/core.
+Description: Android libsuspend - development
+ This package contains libsuspend built from Android platform/system/core.
  .
  This package contains the development files.
 
-Package: libandroid-cutils0
+Package: libandroid-sync0
 Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
 Section: libs
@@ -215,38 +470,8 @@ Pre-Depends:
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
-Description: Android libcutils
- This package contains libcutils built from Android platform/system/core.
-
-Package: libandroid-ion0-dev
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends:
- libandroid-ion0 (= ${binary:Version}),
- libandroid-log0-dev,
- libandroid-bionic0-dev (>= 0.1.4),
- ${misc:Depends},
-Description: Android libion - development
- This package contains libion built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-ion0
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends:
- ${misc:Pre-Depends}
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
-Description: Android libion
- This package contains libion built from Android platform/system/core.
+Description: Android libsync
+ This package contains libsync built from Android platform/system/core.
 
 Package: libandroid-sync0-dev
 Build-Profiles: <!pkg.android-system-core.stage2>
@@ -277,7 +502,7 @@ Description: Android libsync - test tools
  .
  This package contains the test tools.
 
-Package: libandroid-sync0
+Package: libandroid-sysutils0
 Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
 Section: libs
@@ -288,231 +513,8 @@ Pre-Depends:
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
-Description: Android libsync
- This package contains libsync built from Android platform/system/core.
-
-Package: libandroid-base0-dev
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends:
- libandroid-base0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.4),
- libandroid-log0-dev,
- ${misc:Depends},
-Description: Android libbase - development
- This package contains libbase built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-base0
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends:
- ${misc:Pre-Depends},
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
-Description: Android libbase
- This package contains libbase built from Android platform/system/core.
-
-Package: libandroid-diskconfig0-dev
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends:
- libandroid-diskconfig0 (= ${binary:Version}),
- libandroid-cutils0-dev,
- libandroid-log0-dev,
- ${misc:Depends},
-Description: Android libdiskconfig - development
- This package contains libdiskconfig built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-diskconfig0
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends:
- ${misc:Pre-Depends},
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
-Description: Android libdiskconfig
- This package contains libdiskconfig built from Android platform/system/core.
-
-Package: logwrapper
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: misc
-Architecture: any
-Multi-Arch: no
-Depends:
- ${misc:Depends},
- ${shlibs:Depends}
-Description: Android logwrapper
- This package contains logwrapper.
-
-Package: libandroid-logwrap0-dev
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends:
- libandroid-logwrap0 (= ${binary:Version}),
- libandroid-cutils0-dev,
- libandroid-log0-dev,
- ${misc:Depends},
-Description: Android liblogwrap - development
- This package contains liblogwrap built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-logwrap0
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends:
- ${misc:Pre-Depends},
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
-Description: Android liblogwrap
- This package contains liblogwrap built from Android platform/system/core.
-
-Package: libandroid-netutils0-dev
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends:
- libandroid-netutils0 (= ${binary:Version}),
- libandroid-cutils0-dev,
- libandroid-log0-dev,
- ${misc:Depends},
-Description: Android libnetutils - development
- This package contains libnetutils built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-netutils0
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends:
- ${misc:Pre-Depends},
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
-Description: Android libnetutils
- This package contains libnetutils built from Android platform/system/core.
-
-Package: libandroid-pixelflinger0-dev
-Build-Profiles: <pkg.android-system-core.stage2>
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends:
- libandroid-pixelflinger0 (= ${binary:Version}),
- libandroid-log0-dev (>= 0.0.12),
- libandroid-cutils0-dev (>= 0.0.12),
- libandroid-utils0-dev,
- ${misc:Depends},
-Description: Android libpixelflinger - development
- This package contains libpixelflinger built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-pixelflinger0
-Build-Profiles: <pkg.android-system-core.stage2>
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends:
- ${misc:Pre-Depends},
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
-Description: Android libpixelflinger
- This package contains libpixelflinger built from Android platform/system/core.
-
-Package: libandroid-processgroup0-dev
-Build-Profiles: <pkg.android-system-core.stage2>
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends:
- libandroid-processgroup0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.4),
- libandroid-log0-dev (>= 0.0.12),
- libandroid-utils0-dev,
- ${misc:Depends},
-Description: Android libprocessgroup - development
- This package contains libprocessgroup built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-processgroup0
-Build-Profiles: <pkg.android-system-core.stage2>
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends:
- ${misc:Pre-Depends},
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
-Description: Android libprocessgroup
- This package contains libprocessgroup built from Android platform/system/core.
-
-Package: libandroid-suspend0-dev
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libdevel
-Architecture: any
-Multi-Arch: same
-Depends:
- libandroid-suspend0 (= ${binary:Version}),
- libandroid-log0-dev,
- ${misc:Depends},
-Description: Android libsuspend - development
- This package contains libsuspend built from Android platform/system/core.
- .
- This package contains the development files.
-
-Package: libandroid-suspend0
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: libs
-Architecture: any
-Multi-Arch: same
-Pre-Depends:
- ${misc:Pre-Depends},
-Depends:
- ${shlibs:Depends},
- ${misc:Depends},
-Description: Android libsuspend
- This package contains libsuspend built from Android platform/system/core.
+Description: Android libsysutils
+ This package contains libsysutils built from Android platform/system/core.
 
 Package: libandroid-sysutils0-dev
 Build-Profiles: <!pkg.android-system-core.stage2>
@@ -531,7 +533,7 @@ Description: Android libsysutils - development
  .
  This package contains the development files.
 
-Package: libandroid-sysutils0
+Package: libandroid-usbhost0
 Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
 Section: libs
@@ -542,8 +544,8 @@ Pre-Depends:
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
-Description: Android libsysutils
- This package contains libsysutils built from Android platform/system/core.
+Description: Android libusbhost
+ This package contains libusbhost built from Android platform/system/core.
 
 Package: libandroid-usbhost0-dev
 Build-Profiles: <!pkg.android-system-core.stage2>
@@ -560,8 +562,8 @@ Description: Android libusbhost - development
  .
  This package contains the development files.
 
-Package: libandroid-usbhost0
-Build-Profiles: <!pkg.android-system-core.stage2>
+Package: libandroid-utils0
+Build-Profiles: <pkg.android-system-core.stage2>
 Priority: extra
 Section: libs
 Architecture: any
@@ -571,8 +573,8 @@ Pre-Depends:
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
-Description: Android libusbhost
- This package contains libusbhost built from Android platform/system/core.
+Description: Android libutils
+ This package contains libutils built from Android platform/system/core.
 
 Package: libandroid-utils0-dev
 Build-Profiles: <pkg.android-system-core.stage2>
@@ -592,7 +594,7 @@ Description: Android libutils - development
  .
  This package contains the development files.
 
-Package: libandroid-utils0
+Package: libandroid-ziparchive0
 Build-Profiles: <pkg.android-system-core.stage2>
 Priority: extra
 Section: libs
@@ -603,8 +605,8 @@ Pre-Depends:
 Depends:
  ${shlibs:Depends},
  ${misc:Depends},
-Description: Android libutils
- This package contains libutils built from Android platform/system/core.
+Description: Android libziparchive
+ This package contains libziparchive built from Android platform/system/core.
 
 Package: libandroid-ziparchive0-dev
 Build-Profiles: <pkg.android-system-core.stage2>
@@ -624,16 +626,14 @@ Description: Android libziparchive - development
  .
  This package contains the development files.
 
-Package: libandroid-ziparchive0
-Build-Profiles: <pkg.android-system-core.stage2>
+Package: logwrapper
+Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
-Section: libs
+Section: misc
 Architecture: any
-Multi-Arch: same
-Pre-Depends:
- ${misc:Pre-Depends},
+Multi-Arch: no
 Depends:
- ${shlibs:Depends},
  ${misc:Depends},
-Description: Android libziparchive
- This package contains libziparchive built from Android platform/system/core.
+ ${shlibs:Depends}
+Description: Android logwrapper
+ This package contains logwrapper.
