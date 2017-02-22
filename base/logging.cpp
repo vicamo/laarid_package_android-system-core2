@@ -22,12 +22,7 @@
 
 #include <libgen.h>
 
-// For getprogname(3) or program_invocation_short_name.
-#if defined(__APPLE__)
-#include <stdlib.h>
-#elif defined(__GLIBC__)
-#include <errno.h>
-#endif
+#include <bionic/bionic.h> // getprogname
 
 #include <iostream>
 #include <limits>
@@ -55,33 +50,7 @@ namespace {
 #ifndef _WIN32
 using std::mutex;
 using std::lock_guard;
-
-#if defined(__GLIBC__)
-const char* getprogname() {
-  return program_invocation_short_name;
-}
-#endif
-
 #else
-const char* getprogname() {
-  static bool first = true;
-  static char progname[MAX_PATH] = {};
-
-  if (first) {
-    CHAR longname[MAX_PATH];
-    DWORD nchars = GetModuleFileNameA(nullptr, longname, arraysize(longname));
-    if ((nchars >= arraysize(longname)) || (nchars == 0)) {
-      // String truncation or some other error.
-      strcpy(progname, "<unknown>");
-    } else {
-      strcpy(progname, basename(longname));
-    }
-    first = false;
-  }
-
-  return progname;
-}
-
 class mutex {
  public:
   mutex() {

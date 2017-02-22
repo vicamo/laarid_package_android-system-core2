@@ -7,7 +7,7 @@ Build-Depends:
  autoconf-archive,
  pkg-config,
  libandroid-base0-dev (>= 0.0.12) <pkg.android-system-core.stage2>,
- libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-bionic0-dev (>= 0.1.5),
  libandroid-cutils0-dev (>= 0.0.12) <pkg.android-system-core.stage2>,
  libandroid-log0-dev (>= 0.0.12) <pkg.android-system-core.stage2>,
  libandroid-nativehelper0-dev (>= 0.0.4) <pkg.android-system-core.stage2>,
@@ -46,7 +46,7 @@ Multi-Arch: same
 Depends:
  libandroid-backtrace0 (= ${binary:Version}),
  libandroid-base0-dev (>= 0.0.12),
- libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-bionic0-dev (>= 0.1.5),
  libandroid-log0-dev (>= 0.0.12),
  libandroid-unwind8-dev (>= 0.0.3),
  ${misc:Depends},
@@ -77,7 +77,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  libandroid-base0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-bionic0-dev (>= 0.1.5),
  libandroid-log0-dev,
  ${misc:Depends},
 Description: Android libbase - development
@@ -108,7 +108,7 @@ Multi-Arch: same
 Depends:
  libandroid-cutils0 (= ${binary:Version}),
  libandroid-log0-dev,
- libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-bionic0-dev (>= 0.1.5),
  ${misc:Depends},
 Description: Android libcutils - development
  This package contains libcutils built from Android platform/system/core.
@@ -168,7 +168,7 @@ Multi-Arch: same
 Depends:
  libandroid-ion0 (= ${binary:Version}),
  libandroid-log0-dev,
- libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-bionic0-dev (>= 0.1.5),
  ${misc:Depends},
 Description: Android libion - development
  This package contains libion built from Android platform/system/core.
@@ -197,7 +197,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  libandroid-log0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-bionic0-dev (>= 0.1.5),
  ${misc:Depends},
 Description: Android liblog - development
  This package contains liblog built from Android platform/system/core.
@@ -387,7 +387,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  libandroid-processgroup0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-bionic0-dev (>= 0.1.5),
  libandroid-log0-dev (>= 0.0.12),
  libandroid-utils0-dev,
  ${misc:Depends},
@@ -493,7 +493,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  libandroid-sync0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-bionic0-dev (>= 0.1.5),
  ${misc:Depends},
 Description: Android libsync - development
  This package contains libsync built from Android platform/system/core.
@@ -596,7 +596,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  libandroid-utils0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.4),
+ libandroid-bionic0-dev (>= 0.1.5),
  libandroid-backtrace0-dev,
  libandroid-log0-dev (>= 0.0.12),
  libandroid-cutils0-dev (>= 0.0.12),
