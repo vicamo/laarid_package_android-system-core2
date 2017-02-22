@@ -218,6 +218,18 @@ Depends:
 Description: Android liblogwrap
  This package contains liblogwrap built from Android platform/system/core.
 
+Package: libandroid-logwrap0-bin
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: misc
+Architecture: any
+Multi-Arch: no
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends}
+Description: Android logwrapper
+ This package contains logwrapper.
+
 Package: libandroid-logwrap0-dev
 Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
@@ -625,15 +637,3 @@ Description: Android libziparchive - development
  This package contains libziparchive built from Android platform/system/core.
  .
  This package contains the development files.
-
-Package: logwrapper
-Build-Profiles: <!pkg.android-system-core.stage2>
-Priority: extra
-Section: misc
-Architecture: any
-Multi-Arch: no
-Depends:
- ${misc:Depends},
- ${shlibs:Depends}
-Description: Android logwrapper
- This package contains logwrapper.
