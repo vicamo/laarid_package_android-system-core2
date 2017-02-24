@@ -29,11 +29,13 @@
 #include <memory>
 
 #include <cutils/misc.h>
+#include <cutils/properties.h>
 #include <cutils/sockets.h>
 #include <cutils/multiuser.h>
 
-#define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
-#include <sys/_system_properties.h>
+#include <bionic/bionic.h>
+#define _REALLY_INCLUDE_BIONIC_PROPERTIES_IMPL_H_
+#include <bionic/properties_impl.h>
 
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -43,19 +45,28 @@
 #include <sys/mman.h>
 #include <private/android_filesystem_config.h>
 
+#if !defined(LAARID_APROPD)
 #include <selinux/selinux.h>
 #include <selinux/label.h>
 
 #include <fs_mgr.h>
+#endif
 #include <android-base/file.h>
-#include "bootimg.h"
+#if !defined(LAARID_APROPD)
+#include "mkbootimg/bootimg.h"
+#endif
 
 #include "property_service.h"
 #include "init.h"
 #include "util.h"
 #include "log.h"
 
-#define PERSISTENT_PROPERTY_DIR  "/data/property"
+#define PROP_PATH_RAMDISK_DEFAULT  RUNSTATEDIR "/default.prop"
+#define PROP_PATH_SYSTEM_BUILD     SYSCONFDIR "/property/system.prop"
+#define PROP_PATH_VENDOR_BUILD     SYSCONFDIR "/property/vendor.prop"
+#define PROP_PATH_LOCAL_OVERRIDE   LOCALSTATEDIR "/lib/property/local.prop"
+#define PROP_PATH_FACTORY          SYSCONFDIR "/property/factory.prop"
+#define PERSISTENT_PROPERTY_DIR    LOCALSTATEDIR "/lib/property/persist"
 #define FSTAB_PREFIX "/fstab."
 #define RECOVERY_MOUNT_POINT "/recovery"
 
@@ -72,6 +83,7 @@ void property_init() {
 
 static int check_mac_perms(const char *name, char *sctx, struct ucred *cr)
 {
+#if !defined(LAARID_APROPD)
     char *tctx = NULL;
     int result = 0;
     property_audit_data audit_data;
@@ -94,6 +106,9 @@ static int check_mac_perms(const char *name, char *sctx, struct ucred *cr)
     freecon(tctx);
  err:
     return result;
+#else
+    return 1;
+#endif /* !LAARID_APROPD */
 }
 
 static int check_control_mac_perms(const char *name, char *sctx, struct ucred *cr)
@@ -131,7 +146,7 @@ static void write_persistent_property(const char *name, const char *value)
         ERROR("Unable to write persistent property to temp file %s: %s\n", tempPath, strerror(errno));
         return;
     }
-    write(fd, value, strlen(value));
+    TEMP_FAILURE_RETRY(write(fd, value, strlen(value)));
     fsync(fd);
     close(fd);
 
@@ -175,6 +190,7 @@ static int property_set_impl(const char* name, const char* value) {
     if (!is_legal_property_name(name, namelen)) return -1;
     if (valuelen >= PROPERTY_VALUE_MAX) return -1;
 
+#if !defined(LAARID_APROPD)
     if (strcmp("selinux.reload_policy", name) == 0 && strcmp("1", value) == 0) {
         if (selinux_reload_policy() != 0) {
             ERROR("Failed to reload policy\n");
@@ -184,6 +200,7 @@ static int property_set_impl(const char* name, const char* value) {
             ERROR("Failed to restorecon_recursive %s\n", value);
         }
     }
+#endif
 
     prop_info* pi = (prop_info*) __system_property_find(name);
 
@@ -287,7 +304,9 @@ static void handle_property_set_fd()
             return;
         }
 
+#if !defined(LAARID_APROPD)
         getpeercon(s, &source_ctx);
+#endif
 
         if(memcmp(msg.name,"ctl.",4) == 0) {
             // Keep the old close-socket-early behavior when handling
@@ -312,7 +331,9 @@ static void handle_property_set_fd()
             // the property is written to memory.
             close(s);
         }
+#if !defined(LAARID_APROPD)
         freecon(source_ctx);
+#endif
         break;
 
     default:
@@ -480,6 +501,7 @@ void load_persist_props(void) {
 }
 
 void load_recovery_id_prop() {
+#if !defined(LAARID_APROPD)
     std::string ro_hardware = property_get("ro.hardware");
     if (ro_hardware.empty()) {
         ERROR("ro.hardware not set - unable to load recovery id\n");
@@ -515,6 +537,7 @@ void load_recovery_id_prop() {
     }
 
     close(fd);
+#endif /* !LAARID_APROPD */
 }
 
 void load_system_props() {

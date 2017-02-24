@@ -37,7 +37,9 @@ AM_CPPFLAGS = \
 	-include config.h \
 	-Iinclude \
 	-I$(top_srcdir)/include \
+	-DLOCALSTATEDIR=\"$(localstatedir)\" \
 	-DRUNSTATEDIR=\"$(runstatedir)\" \
+	-DSYSCONFDIR=\"$(sysconfdir)\" \
 	-DNDEBUG
 
 AM_CFLAGS = \
@@ -59,6 +61,7 @@ libtool_opts = \
 TESTS =
 bin_SCRIPTS =
 bin_PROGRAMS =
+sbin_PROGRAMS =
 noinst_PROGRAMS =
 check_LTLIBRARIES =
 check_PROGRAMS =
@@ -100,6 +103,9 @@ include $(srcdir)/libnetutils/Android.mk
 include $(srcdir)/libsuspend/Android.mk
 include $(srcdir)/libsysutils/Android.mk
 include $(srcdir)/libusbhost/Android.mk
+
+# Stage 1-4: depends on any of above packages
+include $(srcdir)/init/Android.mk
 else
 if WITH_STAGE_2
 # Stage 2-1: depends on external packages that depend on stage 0 packages

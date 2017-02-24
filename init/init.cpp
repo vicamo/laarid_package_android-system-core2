@@ -19,6 +19,7 @@
 #include <errno.h>
 #include <fcntl.h>
 #include <fstream>
+#include <algorithm>
 #include <libgen.h>
 #include <paths.h>
 #include <signal.h>
@@ -37,10 +38,13 @@
 
 #include <mtd/mtd-user.h>
 
+#if !defined(LAARID_APROPD)
 #include <selinux/selinux.h>
 #include <selinux/label.h>
 #include <selinux/android.h>
+#endif
 
+#include <bionic/bionic.h>
 #include <android-base/file.h>
 #include <android-base/stringprintf.h>
 #include <android-base/strings.h>
@@ -48,33 +52,46 @@
 #include <cutils/fs.h>
 #include <cutils/iosched_policy.h>
 #include <cutils/list.h>
+#include <cutils/properties.h>
 #include <cutils/sockets.h>
 #include <private/android_filesystem_config.h>
 
 #include <memory>
 
+#if !defined(LAARID_APROPD)
 #include "action.h"
 #include "bootchart.h"
 #include "devices.h"
 #include "import_parser.h"
+#endif
 #include "init.h"
+#if !defined(LAARID_APROPD)
 #include "init_parser.h"
 #include "keychords.h"
+#endif
+#include <syslog.h>
 #include "log.h"
 #include "property_service.h"
+#if !defined(LAARID_APROPD)
 #include "service.h"
 #include "signal_handler.h"
 #include "ueventd.h"
+#endif
 #include "util.h"
+#if !defined(LAARID_APROPD)
 #include "watchdogd.h"
+#endif
 
+#if !defined(LAARID_APROPD)
 struct selabel_handle *sehandle;
 struct selabel_handle *sehandle_prop;
 
 static int property_triggers_enabled = 0;
+#endif
 
 static char qemu[32];
 
+#if !defined(LAARID_APROPD)
 int have_console;
 std::string console_name = "/dev/console";
 static time_t process_needs_restart;
@@ -82,6 +99,7 @@ static time_t process_needs_restart;
 const char *ENV[32];
 
 bool waiting_for_exec = false;
+#endif
 
 static int epoll_fd = -1;
 
@@ -94,6 +112,7 @@ void register_epoll_handler(int fd, void (*fn)()) {
     }
 }
 
+#if !defined(LAARID_APROPD)
 /* add_environment - add "key=value" to the current environment */
 int add_environment(const char *key, const char *val)
 {
@@ -125,13 +144,19 @@ int add_environment(const char *key, const char *val)
 
     return -1;
 }
+#endif /* !LAARID_APROPD */
 
 void property_changed(const char *name, const char *value)
 {
+#if !defined(LAARID_APROPD)
     if (property_triggers_enabled)
         ActionManager::GetInstance().QueuePropertyTrigger(name, value);
+#else
+    // TODO: https://github.com/laarid/package_android-system-core/issues/33
+#endif /* LAARID_APROPD */
 }
 
+#if !defined(LAARID_APROPD)
 static void restart_processes()
 {
     process_needs_restart = 0;
@@ -140,8 +165,10 @@ static void restart_processes()
                 s->RestartIfNeeded(process_needs_restart);
             });
 }
+#endif /* !LAARID_APROPD */
 
 void handle_control_message(const std::string& msg, const std::string& name) {
+#if !defined(LAARID_APROPD)
     Service* svc = ServiceManager::GetInstance().FindServiceByName(name);
     if (svc == nullptr) {
         ERROR("no such service '%s'\n", name.c_str());
@@ -157,8 +184,12 @@ void handle_control_message(const std::string& msg, const std::string& name) {
     } else {
         ERROR("unknown control msg '%s'\n", msg.c_str());
     }
+#else
+    // TODO: https://github.com/laarid/package_android-system-core/issues/32
+#endif /* LAARID_APROPD */
 }
 
+#if !defined(LAARID_APROPD)
 static int wait_for_coldboot_done_action(const std::vector<std::string>& args) {
     Timer t;
 
@@ -387,6 +418,7 @@ static int console_init_action(const std::vector<std::string>& args)
 
     return 0;
 }
+#endif /* !LAARID_APROPD */
 
 static void import_kernel_nv(const std::string& key, const std::string& value, bool for_emulator) {
     if (key.empty()) return;
@@ -478,6 +510,7 @@ static void process_kernel_cmdline() {
     if (qemu[0]) import_kernel_cmdline(true, import_kernel_nv);
 }
 
+#if !defined(LAARID_APROPD)
 static int queue_property_triggers_action(const std::vector<std::string>& args)
 {
     ActionManager::GetInstance().QueueAllPropertyTriggers();
@@ -583,8 +616,10 @@ static void selinux_initialize(bool in_kernel_domain) {
         selinux_init_all_handles();
     }
 }
+#endif /* !LAARID_APROPD */
 
 int main(int argc, char** argv) {
+#if !defined(LAARID_APROPD)
     if (!strcmp(basename(argv[0]), "ueventd")) {
         return ueventd_main(argc, argv);
     }
@@ -611,20 +646,29 @@ int main(int argc, char** argv) {
         mount("proc", "/proc", "proc", 0, "hidepid=2,gid=" MAKE_STR(AID_READPROC));
         mount("sysfs", "/sys", "sysfs", 0, NULL);
     }
+#endif /* !LAARID_APROPD */
 
     // We must have some place other than / to create the device nodes for
     // kmsg and null, otherwise we won't be able to remount / read-only
     // later on. Now that tmpfs is mounted on /dev, we can actually talk
     // to the outside world.
     open_devnull_stdio();
+#if !defined(LAARID_APROPD)
     klog_init();
     klog_set_level(KLOG_NOTICE_LEVEL);
 
     NOTICE("init %s started!\n", is_first_stage ? "first stage" : "second stage");
+#else
+    openlog(getprogname(), LOG_PID, LOG_DAEMON);
 
+    NOTICE("%s started!\n", getprogname());
+#endif
+
+#if !defined(LAARID_APROPD)
     if (!is_first_stage) {
         // Indicate that booting is in progress to background fw loaders, etc.
         close(open("/dev/.booting", O_WRONLY | O_CREAT | O_CLOEXEC, 0000));
+#endif /* !LAARID_APROPD */
 
         property_init();
 
@@ -636,6 +680,7 @@ int main(int argc, char** argv) {
         // Propagate the kernel variables to internal variables
         // used by init as well as the current required properties.
         export_kernel_boot_props();
+#if !defined(LAARID_APROPD)
     }
 
     // Set up SELinux, including loading the SELinux policy if we're in the kernel domain.
@@ -665,6 +710,7 @@ int main(int argc, char** argv) {
     restorecon("/dev/__properties__");
     restorecon("/property_contexts");
     restorecon_recursive("/sys");
+#endif /* !LAARID_APROPD */
 
     epoll_fd = epoll_create1(EPOLL_CLOEXEC);
     if (epoll_fd == -1) {
@@ -672,12 +718,15 @@ int main(int argc, char** argv) {
         exit(1);
     }
 
+#if !defined(LAARID_APROPD)
     signal_handler_init();
+#endif
 
     property_load_boot_defaults();
     export_oem_lock_status();
     start_property_service();
 
+#if !defined(LAARID_APROPD)
     const BuiltinFunctionMap function_map;
     Action::set_function_map(&function_map);
 
@@ -716,14 +765,18 @@ int main(int argc, char** argv) {
 
     // Run all property triggers based on current state of the properties.
     am.QueueBuiltinAction(queue_property_triggers_action, "queue_property_triggers");
+#endif /* !LAARID_APROPD */
 
     while (true) {
+#if !defined(LAARID_APROPD)
         if (!waiting_for_exec) {
             am.ExecuteOneCommand();
             restart_processes();
         }
+#endif
 
         int timeout = -1;
+#if !defined(LAARID_APROPD)
         if (process_needs_restart) {
             timeout = (process_needs_restart - gettime()) * 1000;
             if (timeout < 0)
@@ -735,6 +788,7 @@ int main(int argc, char** argv) {
         }
 
         bootchart_sample(&timeout);
+#endif /* !LAARID_APROPD */
 
         epoll_event ev;
         int nr = TEMP_FAILURE_RETRY(epoll_wait(epoll_fd, &ev, 1, timeout));

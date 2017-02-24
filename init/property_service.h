@@ -19,8 +19,8 @@
 
 #include <stddef.h>
 #include <sys/socket.h>
-#include <sys/system_properties.h>
 #include <string>
+#include <bionic/bionic.h>
 
 struct property_audit_data {
     ucred *cr;
