@@ -35,7 +35,9 @@ GITIGNOREFILES = \
 # -------------------
 AM_CPPFLAGS = \
 	-include config.h \
+	-Iinclude \
 	-I$(top_srcdir)/include \
+	-DRUNSTATEDIR=\"$(runstatedir)\" \
 	-DNDEBUG
 
 AM_CFLAGS = \

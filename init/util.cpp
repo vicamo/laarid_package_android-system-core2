@@ -155,7 +155,7 @@ int create_socket(const char *name, int type, mode_t perm, uid_t uid,
         ERROR("Failed to lchown socket '%s': %s\n", addr.sun_path, strerror(errno));
         goto out_unlink;
     }
-    ret = fchmodat(AT_FDCWD, addr.sun_path, perm, AT_SYMLINK_NOFOLLOW);
+    ret = fchmodat(AT_FDCWD, addr.sun_path, perm, 0);
     if (ret) {
         ERROR("Failed to fchmodat socket '%s': %s\n", addr.sun_path, strerror(errno));
         goto out_unlink;

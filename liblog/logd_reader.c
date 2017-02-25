@@ -103,7 +103,7 @@ static int logdAvailable(log_id_t logId)
             return -EPERM;
         }
     }
-    if (access("/dev/socket/logdw", W_OK) == 0) {
+    if (access(ANDROID_SOCKET_DIR "/logdw", W_OK) == 0) {
         return 0;
     }
     return -EBADF;
@@ -128,7 +128,7 @@ LIBLOG_WEAK int socket_local_client(const char *name, int namespaceId, int type)
 
 /* Private copy of ../libcutils/socket_local.h prevent library loops */
 #define FILESYSTEM_SOCKET_PREFIX "/tmp/"
-#define ANDROID_RESERVED_SOCKET_PREFIX "/dev/socket/"
+#define ANDROID_RESERVED_SOCKET_PREFIX ANDROID_SOCKET_DIR "/"
 /* End of ../libcutils/socket_local.h */
 
 #define LISTEN_BACKLOG 4
