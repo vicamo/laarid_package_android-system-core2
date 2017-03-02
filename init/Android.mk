@@ -1,131 +1,30 @@
 # Copyright 2005 The Android Open Source Project
 
-LOCAL_PATH:= $(call my-dir)
+sbin_PROGRAMS += \
+    %reldir%/apropd
 
-# --
+%canon_reldir%_apropd_CPPFLAGS = \
+    $(AM_CPPFLAGS) \
+    $(BIONIC_CFLAGS) \
+    -I$(top_srcdir)/base/include \
+    -DLAARID_APROPD \
+    -DALLOW_LOCAL_PROP_OVERRIDE=1
 
-ifneq (,$(filter userdebug eng,$(TARGET_BUILD_VARIANT)))
-init_options += -DALLOW_LOCAL_PROP_OVERRIDE=1 -DALLOW_PERMISSIVE_SELINUX=1
-else
-init_options += -DALLOW_LOCAL_PROP_OVERRIDE=0 -DALLOW_PERMISSIVE_SELINUX=0
-endif
+%canon_reldir%_apropd_CXXFLAGS = \
+    $(AM_CXXFLAGS) \
+    -Wno-unused-parameter
 
-init_options += -DLOG_UEVENTS=0
+%canon_reldir%_apropd_SOURCES = \
+    %reldir%/init.cpp \
+    %reldir%/init.h \
+    %reldir%/log.cpp \
+    %reldir%/log.h \
+    %reldir%/property_service.cpp \
+    %reldir%/property_service.h \
+    %reldir%/util.cpp \
+    %reldir%/util.h
 
-init_cflags += \
-    $(init_options) \
-    -Wall -Wextra \
-    -Wno-unused-parameter \
-    -Werror \
-
-# --
-
-# If building on Linux, then build unit test for the host.
-ifeq ($(HOST_OS),linux)
-include $(CLEAR_VARS)
-LOCAL_CPPFLAGS := $(init_cflags)
-LOCAL_SRC_FILES:= \
-    parser/tokenizer.cpp \
-
-LOCAL_MODULE := libinit_parser
-LOCAL_CLANG := true
-include $(BUILD_HOST_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := init_parser_tests
-LOCAL_SRC_FILES := \
-    parser/tokenizer_test.cpp \
-
-LOCAL_STATIC_LIBRARIES := libinit_parser
-LOCAL_CLANG := true
-include $(BUILD_HOST_NATIVE_TEST)
-endif
-
-include $(CLEAR_VARS)
-LOCAL_CPPFLAGS := $(init_cflags)
-LOCAL_SRC_FILES:= \
-    action.cpp \
-    import_parser.cpp \
-    init_parser.cpp \
-    log.cpp \
-    parser.cpp \
-    service.cpp \
-    util.cpp \
-
-LOCAL_STATIC_LIBRARIES := libbase libselinux
-LOCAL_MODULE := libinit
-LOCAL_SANITIZE := integer
-LOCAL_CLANG := true
-include $(BUILD_STATIC_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_CPPFLAGS := $(init_cflags)
-LOCAL_SRC_FILES:= \
-    bootchart.cpp \
-    builtins.cpp \
-    devices.cpp \
-    init.cpp \
-    keychords.cpp \
-    property_service.cpp \
-    signal_handler.cpp \
-    ueventd.cpp \
-    ueventd_parser.cpp \
-    watchdogd.cpp \
-
-LOCAL_MODULE:= init
-LOCAL_C_INCLUDES += \
-    system/extras/ext4_utils \
-    system/core/mkbootimg
-
-LOCAL_FORCE_STATIC_EXECUTABLE := true
-LOCAL_MODULE_PATH := $(TARGET_ROOT_OUT)
-LOCAL_UNSTRIPPED_PATH := $(TARGET_ROOT_OUT_UNSTRIPPED)
-
-LOCAL_STATIC_LIBRARIES := \
-    libinit \
-    libbootloader_message_writer \
-    libfs_mgr \
-    libfec \
-    libfec_rs \
-    libsquashfs_utils \
-    liblogwrap \
-    libcutils \
-    libext4_utils_static \
-    libbase \
-    libutils \
-    libc \
-    libselinux \
-    liblog \
-    libmincrypt \
-    libcrypto_static \
-    libc++_static \
-    libdl \
-    libsparse_static \
-    libz
-
-# Create symlinks
-LOCAL_POST_INSTALL_CMD := $(hide) mkdir -p $(TARGET_ROOT_OUT)/sbin; \
-    ln -sf ../init $(TARGET_ROOT_OUT)/sbin/ueventd; \
-    ln -sf ../init $(TARGET_ROOT_OUT)/sbin/watchdogd
-
-LOCAL_SANITIZE := integer
-LOCAL_CLANG := true
-include $(BUILD_EXECUTABLE)
-
-
-
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := init_tests
-LOCAL_SRC_FILES := \
-    init_parser_test.cpp \
-    util_test.cpp \
-
-LOCAL_SHARED_LIBRARIES += \
-    libcutils \
-    libbase \
-
-LOCAL_STATIC_LIBRARIES := libinit
-LOCAL_SANITIZE := integer
-LOCAL_CLANG := true
-include $(BUILD_NATIVE_TEST)
+%canon_reldir%_apropd_LDADD = \
+    $(BIONIC_LIBS) \
+    libcutils/libandroid-cutils.la \
+    base/libandroid-base.la

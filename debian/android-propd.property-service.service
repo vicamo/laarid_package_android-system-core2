@@ -1,0 +1,10 @@
+[Unit]
+Description=Android property service
+Requires=property-service.socket
+
+[Service]
+ExecStartPre=-/bin/rm -f /run/__properties__
+ExecStart=/usr/sbin/apropd
+
+[Install]
+WantedBy=multi-user.target

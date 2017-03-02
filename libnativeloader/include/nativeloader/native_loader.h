@@ -17,11 +17,9 @@
 #ifndef NATIVE_LOADER_H_
 #define NATIVE_LOADER_H_
 
-#include "jni.h"
+#include "nativehelper/jni.h"
 #include <stdint.h>
-#if defined(__ANDROID__)
-#include <android/dlext.h>
-#endif
+#include <dlfcn.h>
 
 namespace android {
 
@@ -46,12 +44,10 @@ void* OpenNativeLibrary(JNIEnv* env,
 __attribute__((visibility("default")))
 bool CloseNativeLibrary(void* handle);
 
-#if defined(__ANDROID__)
-// Look up linker namespace by class_loader. Returns nullptr if
+// Look up linker namespace by class_loader. Returns LM_ID_BASE if
 // there is no namespace associated with the class_loader.
 __attribute__((visibility("default")))
-android_namespace_t* FindNamespaceByClassLoader(JNIEnv* env, jobject class_loader);
-#endif
+Lmid_t FindNamespaceByClassLoader(JNIEnv* env, jobject class_loader);
 
 __attribute__((visibility("default")))
 void ResetNativeLoader();

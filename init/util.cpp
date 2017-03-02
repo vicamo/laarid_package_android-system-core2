@@ -23,9 +23,13 @@
 #include <errno.h>
 #include <time.h>
 #include <ftw.h>
+#include <limits.h>
 
+#if !defined(LAARID_APROPD)
+#include <selinux/selinux.h>
 #include <selinux/label.h>
 #include <selinux/android.h>
+#endif /* !LAARID_APROPD */
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -103,6 +107,7 @@ int create_socket(const char *name, int type, mode_t perm, uid_t uid,
 {
     struct sockaddr_un addr;
     int fd, ret, savederrno;
+#if !defined(LAARID_APROPD)
     char *filecon;
 
     if (socketcon) {
@@ -111,6 +116,7 @@ int create_socket(const char *name, int type, mode_t perm, uid_t uid,
             return -1;
         }
     }
+#endif
 
     fd = socket(PF_UNIX, type, 0);
     if (fd < 0) {
@@ -118,8 +124,10 @@ int create_socket(const char *name, int type, mode_t perm, uid_t uid,
         return -1;
     }
 
+#if !defined(LAARID_APROPD)
     if (socketcon)
         setsockcreatecon(NULL);
+#endif
 
     memset(&addr, 0 , sizeof(addr));
     addr.sun_family = AF_UNIX;
@@ -132,18 +140,22 @@ int create_socket(const char *name, int type, mode_t perm, uid_t uid,
         goto out_close;
     }
 
+#if !defined(LAARID_APROPD)
     filecon = NULL;
     if (sehandle) {
         ret = selabel_lookup(sehandle, &filecon, addr.sun_path, S_IFSOCK);
         if (ret == 0)
             setfscreatecon(filecon);
     }
+#endif
 
     ret = bind(fd, (struct sockaddr *) &addr, sizeof (addr));
     savederrno = errno;
 
+#if !defined(LAARID_APROPD)
     setfscreatecon(NULL);
     freecon(filecon);
+#endif
 
     if (ret) {
         ERROR("Failed to bind socket '%s': %s\n", name, strerror(savederrno));
@@ -155,7 +167,7 @@ int create_socket(const char *name, int type, mode_t perm, uid_t uid,
         ERROR("Failed to lchown socket '%s': %s\n", addr.sun_path, strerror(errno));
         goto out_unlink;
     }
-    ret = fchmodat(AT_FDCWD, addr.sun_path, perm, AT_SYMLINK_NOFOLLOW);
+    ret = fchmodat(AT_FDCWD, addr.sun_path, perm, 0);
     if (ret) {
         ERROR("Failed to fchmodat socket '%s': %s\n", addr.sun_path, strerror(errno));
         goto out_unlink;
@@ -355,7 +367,7 @@ void make_link_init(const char *oldpath, const char *newpath)
 {
     int ret;
     char buf[256];
-    char *slash;
+    const char *slash;
     int width;
 
     slash = strrchr(newpath, '/');
@@ -442,25 +454,30 @@ int make_dir(const char *path, mode_t mode)
 {
     int rc;
 
+#if !defined(LAARID_APROPD)
     char *secontext = NULL;
 
     if (sehandle) {
         selabel_lookup(sehandle, &secontext, path, mode);
         setfscreatecon(secontext);
     }
+#endif
 
     rc = mkdir(path, mode);
 
+#if !defined(LAARID_APROPD)
     if (secontext) {
         int save_errno = errno;
         freecon(secontext);
         setfscreatecon(NULL);
         errno = save_errno;
     }
+#endif
 
     return rc;
 }
 
+#if !defined(LAARID_APROPD)
 int restorecon(const char* pathname)
 {
     return selinux_android_restorecon(pathname, 0);
@@ -470,6 +487,7 @@ int restorecon_recursive(const char* pathname)
 {
     return selinux_android_restorecon(pathname, SELINUX_ANDROID_RESTORECON_RECURSE);
 }
+#endif /* !LAARID_APROPD */
 
 /*
  * Writes hex_len hex characters (1/2 byte) to hex from bytes.

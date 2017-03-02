@@ -77,7 +77,7 @@ static int logdOpen()
             struct sockaddr_un un;
             memset(&un, 0, sizeof(struct sockaddr_un));
             un.sun_family = AF_UNIX;
-            strcpy(un.sun_path, "/dev/socket/logdw");
+            strcpy(un.sun_path, ANDROID_SOCKET_DIR "/logdw");
 
             if (TEMP_FAILURE_RETRY(connect(i, (struct sockaddr *)&un,
                                            sizeof(struct sockaddr_un))) < 0) {
@@ -106,7 +106,7 @@ static int logdAvailable(log_id_t logId)
         return -EINVAL;
     }
     if (logdLoggerWrite.context.sock < 0) {
-        if (access("/dev/socket/logdw", W_OK) == 0) {
+        if (access(ANDROID_SOCKET_DIR "/logdw", W_OK) == 0) {
             return 0;
         }
         return -EBADF;

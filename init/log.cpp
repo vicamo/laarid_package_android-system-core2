@@ -19,12 +19,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/uio.h>
+#include <syslog.h>
 
+#if !defined(LAARID_APROPD)
 #include <selinux/selinux.h>
+#endif
 
+#include <bionic/bionic.h>
 #include <android-base/stringprintf.h>
 
 static void init_klog_vwrite(int level, const char* fmt, va_list ap) {
+#if !defined(LAARID_APROPD)
     static const char* tag = basename(getprogname());
 
     if (level > klog_get_level()) return;
@@ -45,6 +50,9 @@ static void init_klog_vwrite(int level, const char* fmt, va_list ap) {
     iov[0].iov_len = prefix_size + msg_size;
 
     klog_writev(level, iov, 1);
+#else
+    vsyslog(level, fmt, ap);
+#endif /* !LAARID_APROPD */
 }
 
 void init_klog_write(int level, const char* fmt, ...) {
@@ -54,6 +62,7 @@ void init_klog_write(int level, const char* fmt, ...) {
     va_end(ap);
 }
 
+#if !defined(LAARID_APROPD)
 int selinux_klog_callback(int type, const char *fmt, ...) {
     int level = KLOG_ERROR_LEVEL;
     if (type == SELINUX_WARNING) {
@@ -67,3 +76,4 @@ int selinux_klog_callback(int type, const char *fmt, ...) {
     va_end(ap);
     return 0;
 }
+#endif /* !LAARID_APROPD */

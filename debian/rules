@@ -7,6 +7,11 @@
 DPKG_EXPORT_BUILDFLAGS = 1
 include /usr/share/dpkg/default.mk
 
+DH_ADDITIONAL_FLAGS =
+ifeq ($(filter pkg.android-system-core.stage2,$(DEB_BUILD_PROFILES)),)
+DH_ADDITIONAL_FLAGS += -with systemd
+endif
+
 CONFFLAGS =
 
 ifneq (,$(filter nocheck,$(DEB_BUILD_OPTIONS)))
@@ -18,7 +23,12 @@ endif
 
 # main packaging script based on dh7 syntax
 %:
-	dh $@ --with autoreconf --builddirectory=build --parallel
+	dh $@ --with autoreconf --builddirectory=build --parallel $(DH_ADDITIONAL_FLAGS)
 
 override_dh_auto_configure:
 	dh_auto_configure -- $(CONFFLAGS)
+
+override_dh_installinit:
+ifeq ($(filter pkg.android-system-core.stage2,$(DEB_BUILD_PROFILES)),)
+	dh_systemd_enable -pandroid-propd --name=property-service
+endif

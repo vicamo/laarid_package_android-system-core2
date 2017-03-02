@@ -4,10 +4,11 @@ Maintainer: You-Sheng Yang <vicamo@gmail.com>
 Build-Depends:
  debhelper (>= 9),
  dh-autoreconf,
+ dh-systemd <!pkg.android-system-core.stage2>,
  autoconf-archive,
  pkg-config,
  libandroid-base0-dev (>= 0.0.12) <pkg.android-system-core.stage2>,
- libandroid-bionic0-dev (>= 0.1.5),
+ libandroid-bionic0-dev (>= 0.1.6),
  libandroid-cutils0-dev (>= 0.0.12) <pkg.android-system-core.stage2>,
  libandroid-log0-dev (>= 0.0.12) <pkg.android-system-core.stage2>,
  libandroid-nativehelper0-dev (>= 0.0.4) <pkg.android-system-core.stage2>,
@@ -22,6 +23,18 @@ Section: libs
 Homepage: https://github.com/laarid/package_android-system-core
 Vcs-Git: https://github.com/laarid/package_android-system-core.git
 Vcs-Browser: https://github.com/laarid/package_android-system-core
+
+Package: android-propd
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: misc
+Architecture: any
+Multi-Arch: no
+Depends:
+ ${misc:Depends},
+ ${shlibs:Depends}
+Description: Android property service
+ This package contains Android property service apropd.
 
 Package: libandroid-backtrace0
 Build-Profiles: <pkg.android-system-core.stage2>
@@ -46,7 +59,7 @@ Multi-Arch: same
 Depends:
  libandroid-backtrace0 (= ${binary:Version}),
  libandroid-base0-dev (>= 0.0.12),
- libandroid-bionic0-dev (>= 0.1.5),
+ libandroid-bionic0-dev (>= 0.1.6),
  libandroid-log0-dev (>= 0.0.12),
  libandroid-unwind8-dev (>= 0.0.3),
  ${misc:Depends},
@@ -77,7 +90,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  libandroid-base0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.5),
+ libandroid-bionic0-dev (>= 0.1.6),
  libandroid-log0-dev,
  ${misc:Depends},
 Description: Android libbase - development
@@ -108,7 +121,7 @@ Multi-Arch: same
 Depends:
  libandroid-cutils0 (= ${binary:Version}),
  libandroid-log0-dev,
- libandroid-bionic0-dev (>= 0.1.5),
+ libandroid-bionic0-dev (>= 0.1.6),
  ${misc:Depends},
 Description: Android libcutils - development
  This package contains libcutils built from Android platform/system/core.
@@ -168,7 +181,7 @@ Multi-Arch: same
 Depends:
  libandroid-ion0 (= ${binary:Version}),
  libandroid-log0-dev,
- libandroid-bionic0-dev (>= 0.1.5),
+ libandroid-bionic0-dev (>= 0.1.6),
  ${misc:Depends},
 Description: Android libion - development
  This package contains libion built from Android platform/system/core.
@@ -197,7 +210,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  libandroid-log0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.5),
+ libandroid-bionic0-dev (>= 0.1.6),
  ${misc:Depends},
 Description: Android liblog - development
  This package contains liblog built from Android platform/system/core.
@@ -304,6 +317,35 @@ Description: Android libnativebridge - development
  .
  This package contains the development files.
 
+Package: libandroid-nativeloader0
+Build-Profiles: <pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android libnativeloader
+ This package contains libnativeloader built from Android platform/system/core.
+
+Package: libandroid-nativeloader0-dev
+Build-Profiles: <pkg.android-system-core.stage2>
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libandroid-nativeloader0 (= ${binary:Version}),
+ libandroid-nativehelper0-dev (>= 0.0.4),
+ ${misc:Depends},
+Description: Android libnativeloader - development
+ This package contains libnativeloader built from Android platform/system/core.
+ .
+ This package contains the development files.
+
 Package: libandroid-netutils0
 Build-Profiles: <!pkg.android-system-core.stage2>
 Priority: extra
@@ -331,6 +373,37 @@ Depends:
  ${misc:Depends},
 Description: Android libnetutils - development
  This package contains libnetutils built from Android platform/system/core.
+ .
+ This package contains the development files.
+
+Package: libandroid-packagelistparser0
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libs
+Architecture: any
+Multi-Arch: same
+Pre-Depends:
+ ${misc:Pre-Depends},
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+Description: Android libpackagelistparser
+ This package contains libpackagelistparser built from Android
+ platform/system/core.
+
+Package: libandroid-packagelistparser0-dev
+Build-Profiles: <!pkg.android-system-core.stage2>
+Priority: extra
+Section: libdevel
+Architecture: any
+Multi-Arch: same
+Depends:
+ libandroid-packagelistparser0 (= ${binary:Version}),
+ libandroid-log0-dev (>= 0.0.12),
+ ${misc:Depends},
+Description: Android libpackagelistparser - development
+ This package contains libpackagelistparser built from Android
+ platform/system/core.
  .
  This package contains the development files.
 
@@ -387,7 +460,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  libandroid-processgroup0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.5),
+ libandroid-bionic0-dev (>= 0.1.6),
  libandroid-log0-dev (>= 0.0.12),
  libandroid-utils0-dev,
  ${misc:Depends},
@@ -493,7 +566,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  libandroid-sync0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.5),
+ libandroid-bionic0-dev (>= 0.1.6),
  ${misc:Depends},
 Description: Android libsync - development
  This package contains libsync built from Android platform/system/core.
@@ -596,7 +669,7 @@ Architecture: any
 Multi-Arch: same
 Depends:
  libandroid-utils0 (= ${binary:Version}),
- libandroid-bionic0-dev (>= 0.1.5),
+ libandroid-bionic0-dev (>= 0.1.6),
  libandroid-backtrace0-dev,
  libandroid-log0-dev (>= 0.0.12),
  libandroid-cutils0-dev (>= 0.0.12),
