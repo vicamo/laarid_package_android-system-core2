@@ -1,0 +1,8 @@
+[Unit]
+Description=Android property service socket
+
+[Socket]
+ListenStream=/run/property_service
+
+[Install]
+WantedBy=sockets.target
