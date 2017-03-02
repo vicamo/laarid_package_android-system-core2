@@ -123,4 +123,16 @@ EXTRA_DIST += \
 pkgconfig_DATA += \
 	%reldir%/android-cutils-$(LAARID_API_VERSION).pc
 
+bin_PROGRAMS += \
+	%reldir%/getprop \
+	%reldir%/setprop
+%canon_reldir%_getprop_SOURCES = \
+	%reldir%/getprop.c
+%canon_reldir%_getprop_LDADD = \
+	%reldir%/libandroid-cutils.la
+%canon_reldir%_setprop_SOURCES = \
+	%reldir%/setprop.c
+%canon_reldir%_setprop_LDADD = \
+	%reldir%/libandroid-cutils.la
+
 include $(srcdir)/libcutils/tests/Android.mk
