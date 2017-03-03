@@ -43,6 +43,7 @@ lib_LTLIBRARIES += \
 	%reldir%/LinearTransform.cpp \
 	%reldir%/Log.cpp \
 	%reldir%/Looper.cpp \
+	%reldir%/NativeHandle.cpp \
 	%reldir%/Printer.cpp \
 	%reldir%/ProcessCallStack.cpp \
 	%reldir%/PropertyMap.cpp \
