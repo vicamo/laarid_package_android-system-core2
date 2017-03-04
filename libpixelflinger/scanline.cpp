@@ -124,7 +124,7 @@ static void scanline_clear(context_t* c);
 static void rect_generic(context_t* c, size_t yc);
 static void rect_memcpy(context_t* c, size_t yc);
 
-#if defined( __arm__)
+#if defined( __arm__) && defined(__ARM_FEATURE_DSP)
 extern "C" void scanline_t32cb16blend_arm(uint16_t*, uint32_t*, size_t);
 extern "C" void scanline_t32cb16_arm(uint16_t *dst, uint32_t *src, size_t ct);
 extern "C" void scanline_col32cb16blend_neon(uint16_t *dst, uint32_t *col, size_t ct);
@@ -2105,7 +2105,7 @@ void scanline_col32cb16blend(context_t* c)
     };
     dst = reinterpret_cast<uint16_t*>(cb->data) + (x+(cb->stride*y));
 
-#if ((ANDROID_CODEGEN >= ANDROID_CODEGEN_ASM) && defined(__arm__))
+#if ((ANDROID_CODEGEN >= ANDROID_CODEGEN_ASM) && defined(__arm__) && defined(__ARM_FEATURE_DSP))
 #if defined(__ARM_HAVE_NEON) && BYTE_ORDER == LITTLE_ENDIAN
     scanline_col32cb16blend_neon(dst, &(c->packed8888), ct);
 #else  // defined(__ARM_HAVE_NEON) && BYTE_ORDER == LITTLE_ENDIAN
@@ -2186,8 +2186,10 @@ last_one:
 
 void scanline_t32cb16blend(context_t* c)
 {
-#if ((ANDROID_CODEGEN >= ANDROID_CODEGEN_ASM) && (defined(__arm__) || defined(__aarch64__) || \
-    (defined(__mips__) && ((!defined(__LP64__) && __mips_isa_rev < 6) || defined(__LP64__)))))
+#if ((ANDROID_CODEGEN >= ANDROID_CODEGEN_ASM) && \
+     ((defined(__arm__) && defined(__ARM_FEATURE_DSP)) || \
+      defined(__aarch64__) || \
+      (defined(__mips__) && ((!defined(__LP64__) && __mips_isa_rev < 6) || defined(__LP64__)))))
     int32_t x = c->iterators.xl;
     size_t ct = c->iterators.xr - x;
     int32_t y = c->iterators.y;
@@ -2199,7 +2201,7 @@ void scanline_t32cb16blend(context_t* c)
     const int32_t v = (c->state.texture[0].shade.it0>>16) + y;
     uint32_t *src = reinterpret_cast<uint32_t*>(tex->data)+(u+(tex->stride*v));
 
-#ifdef __arm__
+#if defined(__arm__) && defined(__ARM_FEATURE_DSP)
     scanline_t32cb16blend_arm(dst, src, ct);
 #elif defined(__aarch64__)
     scanline_t32cb16blend_arm64(dst, src, ct);

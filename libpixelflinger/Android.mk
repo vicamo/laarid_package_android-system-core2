@@ -55,7 +55,9 @@ if CPU_ARM
 	%reldir%/codeflinger/ARMAssembler.h \
 	%reldir%/codeflinger/armreg.h \
 	%reldir%/codeflinger/disassem.c \
-	%reldir%/codeflinger/disassem.h \
+	%reldir%/codeflinger/disassem.h
+if CPU_ARM_HAVE_DSP
+%canon_reldir%_libandroid_pixelflinger_la_SOURCES += \
 	%reldir%/col32cb16blend.S \
 	%reldir%/t32cb16blend.S
 if CPU_ARM_HAVE_NEON
@@ -63,7 +65,8 @@ if CPU_ARM_HAVE_NEON
 	%reldir%/col32cb16blend_neon.S
 %canon_reldir%_libandroid_pixelflinger_la_CPPFLAGS += \
 	-D__ARM_HAVE_NEON
-endif
+endif # CPU_ARM_HAVE_NEON
+endif # CPU_ARM_HAVE_DSP
 else
 if CPU_AARCH64
 %canon_reldir%_libandroid_pixelflinger_la_SOURCES += \

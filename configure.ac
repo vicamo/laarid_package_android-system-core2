@@ -334,10 +334,24 @@ AC_ARG_ENABLE([schedboost],
   [AS_HELP_STRING([--enable-schedboost], [enable use of /dev/stune/* @<:@default=no@:>@])])
 AM_CONDITIONAL([ENABLE_SCHEDBOOST], [test x$enable_schedboost = xyes])
 
+AS_IF([test "x${cpu_arm}" = xyes],
+  [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#ifndef __ARM_FEATURE_DSP
+#error "DSP not supported"
+#endif
+], [])],
+    [enable_arm_dsp=yes],
+    [enable_arm_dsp=no])])
+AM_CONDITIONAL([CPU_ARM_HAVE_DSP], [test "x${enable_arm_dsp}" = xyes])
+
 AC_ARG_ENABLE([arm-neon],
   [AS_HELP_STRING([--enable-arm-neon], [Enable ARM NEON optimizations])],
-  [AS_IF([test "x${enable_arm_neon}" = xyes],
-    [AS_IF([test "x${cpu_arm}" != xyes], [enable_arm_neon=no])])])
+  [AS_IF([test "x${enable_arm_neon}" != xno],
+    [AC_COMPILE_IFELSE([AC_LANG_PROGRAM([#ifndef __ARM_NEON
+#error "NEON not supported"
+#endif
+], [])],
+      [enable_arm_neon=yes],
+      [enable_arm_neon=no])])])
 AM_CONDITIONAL([CPU_ARM_HAVE_NEON], [test "x${enable_arm_neon}" = xyes])
 
 # GTest
