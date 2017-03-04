@@ -12,6 +12,7 @@ lib_LTLIBRARIES += \
     $(AM_CXXFLAGS) \
     -std=gnu++14 -fvisibility=hidden
 %canon_reldir%_libandroid_nativeloader_la_SOURCES = \
+    %reldir%/dlext_namespaces.h \
     %reldir%/native_loader.cpp
 %canon_reldir%_libandroid_nativeloader_la_LDFLAGS = \
     $(AM_LDFLAGS) \
